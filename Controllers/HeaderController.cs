@@ -348,5 +348,29 @@ namespace ProductionHoursLosses.Controllers
             return Json(results, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetShiftList(string q, int page)
+        {
+            var results = new ResultSelect2<ItemIdText>();
+            results.results = new List<ItemIdText>();
+            results.pagination = new Pagination();
+
+            if (!string.IsNullOrWhiteSpace(q))
+                q = q.ToLower();
+            else
+                q = string.Empty;
+
+            List<ItemIdText> list = new List<ItemIdText>
+            {
+                new ItemIdText{id = "1", text = "1st"},
+                new ItemIdText{id = "2", text = "2nd"},
+                new ItemIdText{id = "3", text = "3rd"},
+            };
+
+            results.results.AddRange(list.Take(30));
+            results.pagination.more = false;
+
+            return Json(results, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

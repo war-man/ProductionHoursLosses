@@ -40,6 +40,7 @@ namespace ProductionHoursLosses.Models.ViewModels
         public int? SelectedShift { get; set; }
         public int? SelectedActualHours { get; set; }
         public decimal? SelectedUnitWeight { get; set; }
+
         public int? SelectedSpeedMachineRpm { get; set; }
         public decimal? SelectedActualQuantity { get; set; }
         public int? SelectedNumPeople { get; set; }

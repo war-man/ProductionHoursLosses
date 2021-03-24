@@ -152,48 +152,136 @@
             <span class="fa fa-plus"></span> Add
         </button>
     </div>*@
-    <button onclick="AddDetailClicked()" type="button" class="btn btn-warning"><span class="fa fa-plus"></span> Add</button>
+    <button id="addDetail" onclick="AddDetailClicked()" type="button" class="btn btn-default"><span class="fa fa-plus"></span> Add Detail</button>
 </div>
     
 
-    <div class="form-group" id="divDetailLosses" style="display:none">
-        <h4>Enter losses:</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-group" id="divDetailLosses" style="display:none">
+    <h4>Enter losses:</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.Label("Start Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedStartTime, new { htmlAttributes = new { @class = "form-control", id = "timepickerId" } })
-                @Html.ValidationMessageFor(model => model.SelectedStartTime, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.Label("Start Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedStartTime, new { htmlAttributes = new { @class = "form-control", id = "timepickerId" } })
+            @Html.ValidationMessageFor(model => model.SelectedStartTime, "", new { @class = "text-danger" })
         </div>
-
-        <div class="form-group">
-            @Html.Label("End Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedEndTime, new { htmlAttributes = new { @class = "form-control", id = "timepickerId" } })
-                @Html.ValidationMessageFor(model => model.SelectedEndTime, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Product: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                <select class="" id="SelectedProductDropDownId" style="" onchange="OnDropDownProductChange()">
-                    @if (Model.SelectedProductId != null)
-                    {
-                        <option value="@Model.SelectedProductId" selected>@Model.SelectedProduct.DESCRIPTION</option>
-                    }
-                </select>
-                @Html.ValidationMessageFor(model => model.SelectedProductId, "", new { @class = "text-danger" })
-                <br />
-                <br />
-            </div>
-        </div>
-
     </div>
+
+    <div class="form-group">
+        @Html.Label("End Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedEndTime, new { htmlAttributes = new { @class = "form-control", id = "timepickerId" } })
+            @Html.ValidationMessageFor(model => model.SelectedEndTime, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Product: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            <select class="" id="SelectedProductDropDownId" style="" onchange="OnDropDownProductChange()">
+                @if (Model.SelectedProductId != null)
+                {
+                    <option value="@Model.SelectedProductId" selected>@Model.SelectedProduct.DESCRIPTION</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.SelectedProductId, "", new { @class = "text-danger" })
+            <br />
+            <br />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Batch Number: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedBatchNo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SelectedBatchNo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Work Order: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedWorkOrder, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SelectedWorkOrder, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Shift: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            <select class="" id="SelectedShiftDropDownId" style="" onchange="OnDropDownShiftChange()">
+                @if (Model.SelectedShift != null)
+                {
+                    <option value="@Model.SelectedShift" selected>@Model.SelectedShift</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.SelectedShift, "", new { @class = "text-danger" })
+            <br />
+            <br />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Actual Hours:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            <select class="" id="SelectedActualHoursDropDownId" style="" onchange="OnDropDownActualHoursChange()">
+                @if (Model.SelectedActualHours != null)
+                {
+                    <option value="@Model.SelectedActualHours" selected>@Model.SelectedActualHours</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.SelectedActualHours, "", new { @class = "text-danger" })
+            <br />
+            <br />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Tablet weight (mg):", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedUnitWeight, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SelectedUnitWeight, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Speed Machine RPM:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedSpeedMachineRpm, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SelectedSpeedMachineRpm, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Actual Quantity (Kg):", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedActualQuantity, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SelectedActualQuantity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Num. of people:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedNumPeople, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SelectedNumPeople, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Tablets:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedUnits, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SelectedUnits, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

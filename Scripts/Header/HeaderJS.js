@@ -256,4 +256,98 @@ $("#SelectedProductDropDownId").select2({
 
 function AddDetailClicked() {
     document.getElementById("divDetailLosses").style.display = "block";
+
+    //if (document.getElementById("addDetail").clicked == true) {
+    //    document.getElementById("divDetailLosses").style.display = "block";
+    //}
+    //else {
+    //    document.getElementById("divDetailLosses").style.display = "none";
+    //}
+    
 }
+
+function OnDropDownShiftChange() {
+    var selectItem = $('#SelectedShiftDropDownId').val();
+    $('#SelectedShift').val(selectItem);
+
+    //if (selectItem !== "") {
+    //    GetUpdateSelectedMasterDetails();
+    //}
+}
+
+$("#SelectedShiftDropDownId").select2({
+    width: '500px',
+    ajax: {
+        url: "/Header/GetShiftList",
+        dataType: 'json',
+        type: "POST",
+        data: function (params) {
+            return {
+                q: params.term, // search term
+                page: params.page || 1
+            };
+        },
+        ProcessResults: function (data, params) {
+            params.page = params.page || 1;
+
+            return {
+                results: data.items,
+                pagination: {
+                    more: (params.page * 30) < data.total_count
+                }
+            };
+        },
+        cache: true
+    },
+    placeholder: 'Search for shift',
+    escapeMarkup: function (markup) { return markup; },
+    minimumInputLength: -1,
+    templateResult: formatRepoSelectId,
+    templateSelection: formatRepoSelection,
+    allowClear: true,
+    multiple: true,
+    maximumSelectionLength: 1
+});
+
+function OnDropDownActualHoursChange() {
+    var selectItem = $('#SelectedActualHoursDropDownId').val();
+    $('#SelectedActualHours').val(selectItem);
+
+    //if (selectItem !== "") {
+    //    GetUpdateSelectedMasterDetails();
+    //}
+}
+
+$("#SelectedActualHoursDropDownId").select2({
+    width: '500px',
+    ajax: {
+        url: "/Header/GetAvailHrsList",
+        dataType: 'json',
+        type: "POST",
+        data: function (params) {
+            return {
+                q: params.term, // search term
+                page: params.page || 1
+            };
+        },
+        ProcessResults: function (data, params) {
+            params.page = params.page || 1;
+
+            return {
+                results: data.items,
+                pagination: {
+                    more: (params.page * 30) < data.total_count
+                }
+            };
+        },
+        cache: true
+    },
+    placeholder: 'Search for actual hrs',
+    escapeMarkup: function (markup) { return markup; },
+    minimumInputLength: -1,
+    templateResult: formatRepoSelectId,
+    templateSelection: formatRepoSelection,
+    allowClear: true,
+    multiple: true,
+    maximumSelectionLength: 1
+});
