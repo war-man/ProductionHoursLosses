@@ -1,0 +1,60 @@
+﻿@model ProductionHoursLosses.Models.ViewModels.HeaderViewModel
+
+@using ProductionHoursLosses.Models
+@{
+    @Html.HiddenFor(x => Model.SelectedDate, new { @id = "SelectedDate" })
+    @Html.HiddenFor(x => Model.SelectedFactoryID, new { @id = "SelectedFactoryID" })
+    @Html.HiddenFor(x => Model.SelectedRoomID, new { @id = "SelectedRoomID" })
+    @Html.HiddenFor(x => Model.SelectedStatusID, new { @id = "SelectedStatusID" })
+    @Html.HiddenFor(x => Model.SelectedAvailHours, new { @id = "SelectedAvailHours" })
+
+    @Html.HiddenFor(x => Model.SelectedStartTime, new { @id = "SelectedStartTime" })
+    @Html.HiddenFor(x => Model.SelectedEndTime, new { @id = "SelectedEndTime" })
+    @Html.HiddenFor(x => Model.SelectedProductId, new { @id = "SelectedProductId" })
+    @Html.HiddenFor(x => Model.SelectedBatchNo, new { @id = "SelectedBatchNo" })
+    @Html.HiddenFor(x => Model.SelectedWorkOrder, new { @id = "SelectedWorkOrder" })
+    @Html.HiddenFor(x => Model.SelectedShift, new { @id = "SelectedShift" })
+    @Html.HiddenFor(x => Model.SelectedActualHours, new { @id = "SelectedActualHours" })
+    @Html.HiddenFor(x => Model.SelectedUnitWeight, new { @id = "SelectedUnitWeight" })
+    @Html.HiddenFor(x => Model.SelectedSpeedMachineRpm, new { @id = "SelectedSpeedMachineRpm" })
+    @Html.HiddenFor(x => Model.SelectedActualQuantity, new { @id = "SelectedActualQuantity" })
+    @Html.HiddenFor(x => Model.SelectedNumPeople, new { @id = "SelectedNumPeople" })
+    @Html.HiddenFor(x => Model.SelectedUnits, new { @id = "SelectedUnits" })
+
+    if (Model != null)
+    {
+        if (Model.DetailsList != null)
+        {
+            for (int i = 0; i < Model.DetailsList.Count; i++)
+            {
+                @Html.HiddenFor(x => Model.DetailsList[i].START_TIME)
+                @Html.HiddenFor(x => Model.DetailsList[i].END_TIME)
+                @Html.HiddenFor(x => Model.DetailsList[i].PRODUCT_ID)
+                @Html.HiddenFor(x => Model.DetailsList[i].PRODUCT.CODE)
+                @Html.HiddenFor(x => Model.DetailsList[i].PRODUCT.DESCRIPTION)
+                @Html.HiddenFor(x => Model.DetailsList[i].BATCH_NO)
+                @Html.HiddenFor(x => Model.DetailsList[i].WORK_ORDER)
+                @Html.HiddenFor(x => Model.DetailsList[i].SHIFT)
+                @Html.HiddenFor(x => Model.DetailsList[i].ACTUAL_HRS)
+                @Html.HiddenFor(x => Model.DetailsList[i].UNIT_WEIGHT)
+                @Html.HiddenFor(x => Model.DetailsList[i].SPEED_MACHINE_RPM)
+                @Html.HiddenFor(x => Model.DetailsList[i].ACTUAL_QTY)
+                @Html.HiddenFor(x => Model.DetailsList[i].NUM_PEOPLE)
+                @Html.HiddenFor(x => Model.DetailsList[i].UNITS)
+            }
+
+        }
+
+        if (Model.DetailLossesList != null)
+        {
+            for (int i = 0; i < Model.DetailLossesList.Count; i++)
+            {
+                @Html.HiddenFor(x => Model.DetailLossesList[i].DETAIL_ID)
+                @Html.HiddenFor(x => Model.DetailLossesList[i].LOSSES_ID)
+                @Html.HiddenFor(x => Model.DetailLossesList[i].HRS)
+            }
+
+        }
+    }
+
+}

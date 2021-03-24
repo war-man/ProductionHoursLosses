@@ -1,0 +1,618 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PRD_HRS_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DETAIL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HEADER_ID" Type="int" Nullable="false" />
+          <Property Name="START_TIME" Type="datetime" Nullable="false" />
+          <Property Name="END_TIME" Type="datetime" Nullable="false" />
+          <Property Name="PRODUCT_ID" Type="int" Nullable="false" />
+          <Property Name="BATCH_NO" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="WORK_ORDER" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="SHIFT" Type="tinyint" Nullable="false" />
+          <Property Name="ACTUAL_HRS" Type="tinyint" />
+          <Property Name="UNIT_WEIGHT" Type="decimal" Precision="7" Scale="3" />
+          <Property Name="SPEED_MACHINE_RPM" Type="tinyint" />
+          <Property Name="ACTUAL_QTY" Type="decimal" Precision="7" Scale="3" />
+          <Property Name="NUM_PEOPLE" Type="tinyint" />
+          <Property Name="UNITS" Type="int" />
+        </EntityType>
+        <EntityType Name="DETAIL_LOSSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DETAIL_ID" Type="int" Nullable="false" />
+          <Property Name="LOSSES_ID" Type="int" Nullable="false" />
+          <Property Name="HRS" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FACTORY">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NAME" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ADDRESS" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="HEADER">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DATE" Type="date" Nullable="false" />
+          <Property Name="FACTORY_ID" Type="int" Nullable="false" />
+          <Property Name="ROOM_ID" Type="int" Nullable="false" />
+          <Property Name="AVAIL_HRS" Type="int" />
+          <Property Name="STATUS_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LOG">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USER" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="DATE" Type="datetime" Nullable="false" />
+          <Property Name="ACTION" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ELEMENT" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ELEMENT_ID" Type="int" Nullable="false" />
+          <Property Name="OLD_VALUE" Type="nvarchar(max)" />
+          <Property Name="NEW_VALUE" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="LOSSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CODE" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PRODUCT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CODE" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ROOM">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NAME" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FACTORY_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="STATUS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NAME" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DETAIL_HEADER">
+          <End Role="HEADER" Type="Self.HEADER" Multiplicity="1" />
+          <End Role="DETAIL" Type="Self.DETAIL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HEADER">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DETAIL">
+              <PropertyRef Name="HEADER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETAIL_LOSSES_DETAIL">
+          <End Role="DETAIL" Type="Self.DETAIL" Multiplicity="1" />
+          <End Role="DETAIL_LOSSES" Type="Self.DETAIL_LOSSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DETAIL">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DETAIL_LOSSES">
+              <PropertyRef Name="DETAIL_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETAIL_LOSSES_LOSSES">
+          <End Role="LOSSES" Type="Self.LOSSES" Multiplicity="1" />
+          <End Role="DETAIL_LOSSES" Type="Self.DETAIL_LOSSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LOSSES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DETAIL_LOSSES">
+              <PropertyRef Name="LOSSES_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETAIL_PRODUCT">
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="1" />
+          <End Role="DETAIL" Type="Self.DETAIL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DETAIL">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HEADER_FACTORY">
+          <End Role="FACTORY" Type="Self.FACTORY" Multiplicity="1" />
+          <End Role="HEADER" Type="Self.HEADER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FACTORY">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HEADER">
+              <PropertyRef Name="FACTORY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HEADER_ROOM">
+          <End Role="ROOM" Type="Self.ROOM" Multiplicity="1" />
+          <End Role="HEADER" Type="Self.HEADER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROOM">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HEADER">
+              <PropertyRef Name="ROOM_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HEADER_STATUS">
+          <End Role="STATUS" Type="Self.STATUS" Multiplicity="1" />
+          <End Role="HEADER" Type="Self.HEADER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STATUS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HEADER">
+              <PropertyRef Name="STATUS_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ROOM_FACTORY">
+          <End Role="FACTORY" Type="Self.FACTORY" Multiplicity="1" />
+          <End Role="ROOM" Type="Self.ROOM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FACTORY">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ROOM">
+              <PropertyRef Name="FACTORY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PRD_HRS_DBModelStoreContainer">
+          <EntitySet Name="DETAIL" EntityType="Self.DETAIL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DETAIL_LOSSES" EntityType="Self.DETAIL_LOSSES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FACTORY" EntityType="Self.FACTORY" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HEADER" EntityType="Self.HEADER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOG" EntityType="Self.LOG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOSSES" EntityType="Self.LOSSES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCT" EntityType="Self.PRODUCT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ROOM" EntityType="Self.ROOM" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STATUS" EntityType="Self.STATUS" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DETAIL_HEADER" Association="Self.FK_DETAIL_HEADER">
+            <End Role="HEADER" EntitySet="HEADER" />
+            <End Role="DETAIL" EntitySet="DETAIL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETAIL_LOSSES_DETAIL" Association="Self.FK_DETAIL_LOSSES_DETAIL">
+            <End Role="DETAIL" EntitySet="DETAIL" />
+            <End Role="DETAIL_LOSSES" EntitySet="DETAIL_LOSSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETAIL_LOSSES_LOSSES" Association="Self.FK_DETAIL_LOSSES_LOSSES">
+            <End Role="LOSSES" EntitySet="LOSSES" />
+            <End Role="DETAIL_LOSSES" EntitySet="DETAIL_LOSSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETAIL_PRODUCT" Association="Self.FK_DETAIL_PRODUCT">
+            <End Role="PRODUCT" EntitySet="PRODUCT" />
+            <End Role="DETAIL" EntitySet="DETAIL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HEADER_FACTORY" Association="Self.FK_HEADER_FACTORY">
+            <End Role="FACTORY" EntitySet="FACTORY" />
+            <End Role="HEADER" EntitySet="HEADER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HEADER_ROOM" Association="Self.FK_HEADER_ROOM">
+            <End Role="ROOM" EntitySet="ROOM" />
+            <End Role="HEADER" EntitySet="HEADER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HEADER_STATUS" Association="Self.FK_HEADER_STATUS">
+            <End Role="STATUS" EntitySet="STATUS" />
+            <End Role="HEADER" EntitySet="HEADER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ROOM_FACTORY" Association="Self.FK_ROOM_FACTORY">
+            <End Role="FACTORY" EntitySet="FACTORY" />
+            <End Role="ROOM" EntitySet="ROOM" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PRD_HRS_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DETAIL">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HEADER_ID" Type="Int32" Nullable="false" />
+          <Property Name="START_TIME" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="END_TIME" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PRODUCT_ID" Type="Int32" Nullable="false" />
+          <Property Name="BATCH_NO" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="WORK_ORDER" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SHIFT" Type="Byte" Nullable="false" />
+          <Property Name="ACTUAL_HRS" Type="Byte" />
+          <Property Name="UNIT_WEIGHT" Type="Decimal" Precision="7" Scale="3" />
+          <Property Name="SPEED_MACHINE_RPM" Type="Byte" />
+          <Property Name="ACTUAL_QTY" Type="Decimal" Precision="7" Scale="3" />
+          <Property Name="NUM_PEOPLE" Type="Byte" />
+          <Property Name="UNITS" Type="Int32" />
+          <NavigationProperty Name="HEADER" Relationship="Self.FK_DETAIL_HEADER" FromRole="DETAIL" ToRole="HEADER" />
+          <NavigationProperty Name="DETAIL_LOSSES" Relationship="Self.FK_DETAIL_LOSSES_DETAIL" FromRole="DETAIL" ToRole="DETAIL_LOSSES" />
+          <NavigationProperty Name="PRODUCT" Relationship="Self.FK_DETAIL_PRODUCT" FromRole="DETAIL" ToRole="PRODUCT" />
+        </EntityType>
+        <EntityType Name="DETAIL_LOSSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DETAIL_ID" Type="Int32" Nullable="false" />
+          <Property Name="LOSSES_ID" Type="Int32" Nullable="false" />
+          <Property Name="HRS" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DETAIL" Relationship="Self.FK_DETAIL_LOSSES_DETAIL" FromRole="DETAIL_LOSSES" ToRole="DETAIL" />
+          <NavigationProperty Name="LOSSES" Relationship="Self.FK_DETAIL_LOSSES_LOSSES" FromRole="DETAIL_LOSSES" ToRole="LOSSES" />
+        </EntityType>
+        <EntityType Name="FACTORY">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ADDRESS" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="HEADER" Relationship="Self.FK_HEADER_FACTORY" FromRole="FACTORY" ToRole="HEADER" />
+          <NavigationProperty Name="ROOM" Relationship="Self.FK_ROOM_FACTORY" FromRole="FACTORY" ToRole="ROOM" />
+        </EntityType>
+        <EntityType Name="HEADER">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DATE" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FACTORY_ID" Type="Int32" Nullable="false" />
+          <Property Name="ROOM_ID" Type="Int32" Nullable="false" />
+          <Property Name="AVAIL_HRS" Type="Int32" />
+          <Property Name="STATUS_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DETAIL" Relationship="Self.FK_DETAIL_HEADER" FromRole="HEADER" ToRole="DETAIL" />
+          <NavigationProperty Name="FACTORY" Relationship="Self.FK_HEADER_FACTORY" FromRole="HEADER" ToRole="FACTORY" />
+          <NavigationProperty Name="ROOM" Relationship="Self.FK_HEADER_ROOM" FromRole="HEADER" ToRole="ROOM" />
+          <NavigationProperty Name="STATUS" Relationship="Self.FK_HEADER_STATUS" FromRole="HEADER" ToRole="STATUS" />
+        </EntityType>
+        <EntityType Name="LOG">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USER" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ACTION" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ELEMENT" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ELEMENT_ID" Type="Int32" Nullable="false" />
+          <Property Name="OLD_VALUE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NEW_VALUE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LOSSES">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CODE" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DETAIL_LOSSES" Relationship="Self.FK_DETAIL_LOSSES_LOSSES" FromRole="LOSSES" ToRole="DETAIL_LOSSES" />
+        </EntityType>
+        <EntityType Name="PRODUCT">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CODE" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DETAIL" Relationship="Self.FK_DETAIL_PRODUCT" FromRole="PRODUCT" ToRole="DETAIL" />
+        </EntityType>
+        <EntityType Name="ROOM">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FACTORY_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FACTORY" Relationship="Self.FK_ROOM_FACTORY" FromRole="ROOM" ToRole="FACTORY" />
+          <NavigationProperty Name="HEADER" Relationship="Self.FK_HEADER_ROOM" FromRole="ROOM" ToRole="HEADER" />
+        </EntityType>
+        <EntityType Name="STATUS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NAME" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="HEADER" Relationship="Self.FK_HEADER_STATUS" FromRole="STATUS" ToRole="HEADER" />
+        </EntityType>
+        <Association Name="FK_DETAIL_HEADER">
+          <End Role="HEADER" Type="Self.HEADER" Multiplicity="1" />
+          <End Role="DETAIL" Type="Self.DETAIL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HEADER">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DETAIL">
+              <PropertyRef Name="HEADER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETAIL_LOSSES_DETAIL">
+          <End Role="DETAIL" Type="Self.DETAIL" Multiplicity="1" />
+          <End Role="DETAIL_LOSSES" Type="Self.DETAIL_LOSSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DETAIL">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DETAIL_LOSSES">
+              <PropertyRef Name="DETAIL_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETAIL_PRODUCT">
+          <End Role="PRODUCT" Type="Self.PRODUCT" Multiplicity="1" />
+          <End Role="DETAIL" Type="Self.DETAIL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCT">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DETAIL">
+              <PropertyRef Name="PRODUCT_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETAIL_LOSSES_LOSSES">
+          <End Role="LOSSES" Type="Self.LOSSES" Multiplicity="1" />
+          <End Role="DETAIL_LOSSES" Type="Self.DETAIL_LOSSES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LOSSES">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DETAIL_LOSSES">
+              <PropertyRef Name="LOSSES_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HEADER_FACTORY">
+          <End Role="FACTORY" Type="Self.FACTORY" Multiplicity="1" />
+          <End Role="HEADER" Type="Self.HEADER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FACTORY">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HEADER">
+              <PropertyRef Name="FACTORY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ROOM_FACTORY">
+          <End Role="FACTORY" Type="Self.FACTORY" Multiplicity="1" />
+          <End Role="ROOM" Type="Self.ROOM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FACTORY">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ROOM">
+              <PropertyRef Name="FACTORY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HEADER_ROOM">
+          <End Role="ROOM" Type="Self.ROOM" Multiplicity="1" />
+          <End Role="HEADER" Type="Self.HEADER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROOM">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HEADER">
+              <PropertyRef Name="ROOM_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HEADER_STATUS">
+          <End Role="STATUS" Type="Self.STATUS" Multiplicity="1" />
+          <End Role="HEADER" Type="Self.HEADER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STATUS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HEADER">
+              <PropertyRef Name="STATUS_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PRD_HRS_DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DETAIL" EntityType="Self.DETAIL" />
+          <EntitySet Name="DETAIL_LOSSES" EntityType="Self.DETAIL_LOSSES" />
+          <EntitySet Name="FACTORY" EntityType="Self.FACTORY" />
+          <EntitySet Name="HEADER" EntityType="Self.HEADER" />
+          <EntitySet Name="LOG" EntityType="Self.LOG" />
+          <EntitySet Name="LOSSES" EntityType="Self.LOSSES" />
+          <EntitySet Name="PRODUCT" EntityType="Self.PRODUCT" />
+          <EntitySet Name="ROOM" EntityType="Self.ROOM" />
+          <EntitySet Name="STATUS" EntityType="Self.STATUS" />
+          <AssociationSet Name="FK_DETAIL_HEADER" Association="Self.FK_DETAIL_HEADER">
+            <End Role="HEADER" EntitySet="HEADER" />
+            <End Role="DETAIL" EntitySet="DETAIL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETAIL_LOSSES_DETAIL" Association="Self.FK_DETAIL_LOSSES_DETAIL">
+            <End Role="DETAIL" EntitySet="DETAIL" />
+            <End Role="DETAIL_LOSSES" EntitySet="DETAIL_LOSSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETAIL_PRODUCT" Association="Self.FK_DETAIL_PRODUCT">
+            <End Role="PRODUCT" EntitySet="PRODUCT" />
+            <End Role="DETAIL" EntitySet="DETAIL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETAIL_LOSSES_LOSSES" Association="Self.FK_DETAIL_LOSSES_LOSSES">
+            <End Role="LOSSES" EntitySet="LOSSES" />
+            <End Role="DETAIL_LOSSES" EntitySet="DETAIL_LOSSES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HEADER_FACTORY" Association="Self.FK_HEADER_FACTORY">
+            <End Role="FACTORY" EntitySet="FACTORY" />
+            <End Role="HEADER" EntitySet="HEADER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ROOM_FACTORY" Association="Self.FK_ROOM_FACTORY">
+            <End Role="FACTORY" EntitySet="FACTORY" />
+            <End Role="ROOM" EntitySet="ROOM" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HEADER_ROOM" Association="Self.FK_HEADER_ROOM">
+            <End Role="ROOM" EntitySet="ROOM" />
+            <End Role="HEADER" EntitySet="HEADER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HEADER_STATUS" Association="Self.FK_HEADER_STATUS">
+            <End Role="STATUS" EntitySet="STATUS" />
+            <End Role="HEADER" EntitySet="HEADER" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PRD_HRS_DBModelStoreContainer" CdmEntityContainer="PRD_HRS_DBEntities">
+          <EntitySetMapping Name="DETAIL">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.DETAIL">
+              <MappingFragment StoreEntitySet="DETAIL">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="HEADER_ID" ColumnName="HEADER_ID" />
+                <ScalarProperty Name="START_TIME" ColumnName="START_TIME" />
+                <ScalarProperty Name="END_TIME" ColumnName="END_TIME" />
+                <ScalarProperty Name="PRODUCT_ID" ColumnName="PRODUCT_ID" />
+                <ScalarProperty Name="BATCH_NO" ColumnName="BATCH_NO" />
+                <ScalarProperty Name="WORK_ORDER" ColumnName="WORK_ORDER" />
+                <ScalarProperty Name="SHIFT" ColumnName="SHIFT" />
+                <ScalarProperty Name="ACTUAL_HRS" ColumnName="ACTUAL_HRS" />
+                <ScalarProperty Name="UNIT_WEIGHT" ColumnName="UNIT_WEIGHT" />
+                <ScalarProperty Name="SPEED_MACHINE_RPM" ColumnName="SPEED_MACHINE_RPM" />
+                <ScalarProperty Name="ACTUAL_QTY" ColumnName="ACTUAL_QTY" />
+                <ScalarProperty Name="NUM_PEOPLE" ColumnName="NUM_PEOPLE" />
+                <ScalarProperty Name="UNITS" ColumnName="UNITS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DETAIL_LOSSES">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.DETAIL_LOSSES">
+              <MappingFragment StoreEntitySet="DETAIL_LOSSES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DETAIL_ID" ColumnName="DETAIL_ID" />
+                <ScalarProperty Name="LOSSES_ID" ColumnName="LOSSES_ID" />
+                <ScalarProperty Name="HRS" ColumnName="HRS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FACTORY">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.FACTORY">
+              <MappingFragment StoreEntitySet="FACTORY">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="ADDRESS" ColumnName="ADDRESS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HEADER">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.HEADER">
+              <MappingFragment StoreEntitySet="HEADER">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="FACTORY_ID" ColumnName="FACTORY_ID" />
+                <ScalarProperty Name="ROOM_ID" ColumnName="ROOM_ID" />
+                <ScalarProperty Name="AVAIL_HRS" ColumnName="AVAIL_HRS" />
+                <ScalarProperty Name="STATUS_ID" ColumnName="STATUS_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOG">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.LOG">
+              <MappingFragment StoreEntitySet="LOG">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="USER" ColumnName="USER" />
+                <ScalarProperty Name="DATE" ColumnName="DATE" />
+                <ScalarProperty Name="ACTION" ColumnName="ACTION" />
+                <ScalarProperty Name="ELEMENT" ColumnName="ELEMENT" />
+                <ScalarProperty Name="ELEMENT_ID" ColumnName="ELEMENT_ID" />
+                <ScalarProperty Name="OLD_VALUE" ColumnName="OLD_VALUE" />
+                <ScalarProperty Name="NEW_VALUE" ColumnName="NEW_VALUE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOSSES">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.LOSSES">
+              <MappingFragment StoreEntitySet="LOSSES">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CODE" ColumnName="CODE" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCT">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.PRODUCT">
+              <MappingFragment StoreEntitySet="PRODUCT">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CODE" ColumnName="CODE" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ROOM">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.ROOM">
+              <MappingFragment StoreEntitySet="ROOM">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="FACTORY_ID" ColumnName="FACTORY_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STATUS">
+            <EntityTypeMapping TypeName="PRD_HRS_DBModel.STATUS">
+              <MappingFragment StoreEntitySet="STATUS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
