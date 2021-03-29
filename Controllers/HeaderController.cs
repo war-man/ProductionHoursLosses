@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using ProductionHoursLosses.Models;
 using ProductionHoursLosses.Models.ViewModels;
+using ProductionHoursLosses.Helper;
 
 namespace ProductionHoursLosses.Controllers
 {
@@ -51,7 +52,12 @@ namespace ProductionHoursLosses.Controllers
         public ActionResult Create(HeaderViewModel model)
         {
             if (model == null)
+            {
                 model = new HeaderViewModel();
+                model.DetailsList = new List<DetailExtended>();
+                model.DetailLossesList = new List<DETAIL_LOSSES>();
+            }
+                
 
             //model = InitializeModel(model);
             ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME");
@@ -65,19 +71,253 @@ namespace ProductionHoursLosses.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,DATE,FACTORY_ID,ROOM_ID,AVAIL_HRS,STATUS_ID")] HEADER hEADER)
+        public ActionResult Create(HeaderViewModel model, string save, string saveAndSubmit, string addDetail)//([Bind(Include = "ID,DATE,FACTORY_ID,ROOM_ID,AVAIL_HRS,STATUS_ID")] HEADER hEADER)
         {
-            if (ModelState.IsValid)
+            ModelState.Clear();
+
+            var dbPRD_HRS = new PRD_HRS_DBEntities();
+
+            var errorList = new List<string>();
+
+            model.SelectedFactory = dbPRD_HRS.FACTORY.FirstOrDefault(x => x.ID == model.SelectedFactoryID);
+            if (model.SelectedFactory == null)
+                model.SelectedFactory = new FACTORY();
+
+            model.SelectedRoom = dbPRD_HRS.ROOM.FirstOrDefault(x => x.ID == model.SelectedRoomID);
+            if (model.SelectedRoom == null)
+                model.SelectedRoom = new ROOM();
+
+            model.SelectedStatus = dbPRD_HRS.STATUS.FirstOrDefault(x => x.ID == model.SelectedStatusID);
+            if (model.SelectedStatus == null)
+                model.SelectedStatus = new STATUS();
+
+            if (!model.SelectedDate.HasValue)
+                errorList.Add("Enter a Date.");
+            if (!model.SelectedFactoryID.HasValue)
+                errorList.Add("Select a Factory.");
+            if (!model.SelectedRoomID.HasValue)
+                errorList.Add("Select a Factory Room.");
+            if (!model.SelectedAvailHours.HasValue)
+                errorList.Add("Select the available hours.");
+
+
+            if (!string.IsNullOrEmpty(model.SelectedDetailToBeDeleted))
+                DeleteDetail(model);
+
+            if (!string.IsNullOrEmpty(addDetail))
+                AddDetails(model,dbPRD_HRS,ref errorList);
+
+            if (model.DetailsList == null || !model.DetailsList.Any())
+                errorList.Add("Enter at least one detail.");
+
+
+            UpdateDetails(model,dbPRD_HRS);
+
+            if (!errorList.Any() && (!string.IsNullOrWhiteSpace(save) || !string.IsNullOrWhiteSpace(saveAndSubmit)))
             {
-                db.HEADER.Add(hEADER);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var submitForReview = false;
+                if (!string.IsNullOrWhiteSpace(save))
+                    submitForReview = false;
+                else if (!string.IsNullOrWhiteSpace(saveAndSubmit))
+                    submitForReview = true;
+
+                var exception = Save(model, submitForReview);
+                if (exception.Result)
+                {
+                    Session["SaveMessage"] = "true";
+                    return RedirectToAction("Index", "Header");
+                }
+                else
+                {
+                    Session["SaveMessage"] = "false";
+                    errorList.Add(exception.Name);
+                }
             }
 
-            ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME", hEADER.FACTORY_ID);
-            ViewBag.ROOM_ID = new SelectList(db.ROOM, "ID", "NAME", hEADER.ROOM_ID);
-            ViewBag.STATUS_ID = new SelectList(db.STATUS, "ID", "NAME", hEADER.STATUS_ID);
-            return View(hEADER);
+            Session["SaveMessage"] = "false";
+            ViewBag.ErrorList = errorList;
+            return View(model);
+            //if (ModelState.IsValid)
+            //  {
+            //      db.HEADER.Add(hEADER);
+            //      db.SaveChanges();
+            //      return RedirectToAction("Index");
+            //  }
+
+            //  ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME", hEADER.FACTORY_ID);
+            //  ViewBag.ROOM_ID = new SelectList(db.ROOM, "ID", "NAME", hEADER.ROOM_ID);
+            //  ViewBag.STATUS_ID = new SelectList(db.STATUS, "ID", "NAME", hEADER.STATUS_ID);
+            //  return View(hEADER);
+        }
+
+
+        private ExceptionError Save(HeaderViewModel model, bool submitForReview)
+        {
+            using (new Impersonator(ProductionHoursLosses.Helper.Helper.GetUserNameWithoutDomain(User.Identity.Name), StaticVariables.DomainName, model.Password))
+            {
+                using (var dbPRD_HRS = new PRD_HRS_DBEntities())
+                {
+                    using (DbContextTransaction transactionNewErp = dbPRD_HRS.Database.BeginTransaction())
+                    {
+                    }
+                }
+            }
+        }
+        private void AddDetails(HeaderViewModel model, PRD_HRS_DBEntities dbPRD_HRS, ref List<string> error)
+        {
+            int count = 0;
+            if (!model.SelectedStartTime.HasValue)
+                error.Add("Enter Start Time.");
+            else
+                ++count;
+
+            if (!model.SelectedEndTime.HasValue)
+                error.Add("Enter End Time.");
+            else
+                ++count;
+
+            if (!model.SelectedProductId.HasValue)
+                error.Add("Select Product.");
+            else
+            {
+                model.SelectedProduct = dbPRD_HRS.PRODUCT.FirstOrDefault(x => x.ID == model.SelectedProductId);
+                ++count;
+            }
+                
+            if (model.SelectedProduct == null)
+                model.SelectedProduct = new PRODUCT();
+
+            ViewBag.SelectedProduct = model.SelectedProduct;
+
+            if (!string.IsNullOrEmpty(model.SelectedBatchNo))
+                error.Add("Enter Batch Number.");
+            else
+                ++count;
+
+            if (!string.IsNullOrEmpty(model.SelectedWorkOrder))
+                error.Add("Enter Work Order.");
+            else
+                ++count;
+
+            if (!model.SelectedShift.HasValue)
+                error.Add("Select Shift.");
+            else
+                ++count;
+
+            if (!model.SelectedActualHours.HasValue)
+                error.Add("Select Actual Hours.");
+            else
+                ++count;
+
+            if (!model.SelectedUnitWeight.HasValue)
+                error.Add("Enter Unit Weight (mg).");
+            else
+                ++count;
+
+            if (!model.SelectedSpeedMachineRpm.HasValue)
+                error.Add("Enter Speed Machine RPM.");
+            else
+                ++count;
+
+            if (!model.SelectedActualQuantity.HasValue)
+                error.Add("Enter Actual Quantity (Kg).");
+            else
+                ++count;
+
+            if (!model.SelectedNumPeople.HasValue)
+                error.Add("Enter number of people.");
+            else
+                ++count;
+
+            if (!model.SelectedUnits.HasValue)
+                error.Add("Enter units.");
+            else
+                ++count;
+
+            if(count == 12)
+            {
+                var detailToAdd = new DetailExtended();
+                detailToAdd.START_TIME = model.SelectedStartTime.Value;
+                detailToAdd.END_TIME = model.SelectedEndTime.Value;
+                detailToAdd.PRODUCT_ID = model.SelectedProductId.Value;
+                detailToAdd.BATCH_NO = model.SelectedBatchNo;
+                detailToAdd.WORK_ORDER = model.SelectedWorkOrder;
+                detailToAdd.SHIFT = Convert.ToByte(model.SelectedShift);
+                detailToAdd.ACTUAL_HRS = Convert.ToByte(model.SelectedActualHours);
+                detailToAdd.UNIT_WEIGHT = model.SelectedUnitWeight;
+                detailToAdd.SPEED_MACHINE_RPM = Convert.ToByte(model.SelectedSpeedMachineRpm);
+                detailToAdd.ACTUAL_QTY = model.SelectedActualQuantity;
+                detailToAdd.NUM_PEOPLE = Convert.ToByte(model.SelectedNumPeople);
+                detailToAdd.UNITS = model.SelectedUnits;
+
+                detailToAdd.PRODUCT = dbPRD_HRS.PRODUCT.FirstOrDefault(x => x.ID == model.SelectedProductId);
+                detailToAdd.AA = Guid.NewGuid();
+
+                if (model.DetailsList == null)
+                    model.DetailsList = new List<DetailExtended>();
+
+                model.DetailsList.Add(detailToAdd);
+
+                model.SelectedStartTime = new DateTime?();
+                model.SelectedEndTime = new DateTime?();
+                model.SelectedProductId = new int?();
+                model.SelectedBatchNo = string.Empty;
+                model.SelectedWorkOrder = string.Empty;
+                model.SelectedShift = new int?();
+                model.SelectedActualHours = new int?();
+                model.SelectedUnitWeight = new decimal?();
+                model.SelectedSpeedMachineRpm = new int?();
+                model.SelectedActualQuantity = new decimal?();
+                model.SelectedNumPeople = new int?();
+                model.SelectedUnits = new int?();
+
+                ViewBag.SelectedProduct = null;
+
+            }
+
+
+        }
+
+        private static void UpdateDetails(HeaderViewModel model, PRD_HRS_DBEntities dbPRD_HRS)
+        {
+            if (string.IsNullOrWhiteSpace(model.SelectedDetailToUpdateAA) || 
+                (!model.SelectedDetailToUpdateStartTime.HasValue || !model.SelectedDetailToUpdateEndTime.HasValue || !model.SelectedDetailToUpdateProductId.HasValue
+                || string.IsNullOrEmpty(model.SelectedDetailToUpdateBatchNo) ||  string.IsNullOrEmpty(model.SelectedDetailToUpdateWorkOrder) || !model.SelectedDetailToUpdateShift.HasValue
+                || !model.SelectedDetailToUpdateActualHours.HasValue || !model.SelectedDetailToUpdateUnitWeight.HasValue || !model.SelectedDetailToUpdateSpeedMachineRpm.HasValue
+                || !model.SelectedDetailToUpdateActualQuantity.HasValue || !model.SelectedDetailToUpdateNumPeople.HasValue || !model.SelectedDetailToUpdateUnits.HasValue))
+                return;
+
+            foreach (var det in model.DetailsList.Where(x => x.AA.ToString() == model.SelectedDetailToUpdateAA))
+            {
+                det.START_TIME = model.SelectedDetailToUpdateStartTime.Value;
+                det.END_TIME = model.SelectedDetailToUpdateEndTime.Value;
+                det.PRODUCT_ID = (int)model.SelectedDetailToUpdateProductId;
+                det.BATCH_NO = model.SelectedDetailToUpdateBatchNo;
+                det.WORK_ORDER = model.SelectedDetailToUpdateWorkOrder;
+                det.SHIFT = Convert.ToByte(model.SelectedDetailToUpdateShift);
+                det.ACTUAL_HRS = Convert.ToByte(model.SelectedDetailToUpdateActualHours);
+                det.UNIT_WEIGHT = model.SelectedDetailToUpdateUnitWeight;
+                det.SPEED_MACHINE_RPM = Convert.ToByte(model.SelectedDetailToUpdateSpeedMachineRpm);
+                det.ACTUAL_QTY = model.SelectedDetailToUpdateActualQuantity;
+                det.NUM_PEOPLE = Convert.ToByte(model.SelectedDetailToUpdateNumPeople);
+                det.UNITS = model.SelectedDetailToUpdateUnits;
+
+
+                model.SelectedDetailToUpdateAA = string.Empty;
+                model.SelectedDetailToUpdateStartTime = new DateTime?();
+                model.SelectedDetailToUpdateEndTime = new DateTime?();
+                model.SelectedDetailToUpdateProductId = new int?();
+                model.SelectedDetailToUpdateBatchNo = string.Empty;
+                model.SelectedDetailToUpdateWorkOrder = string.Empty;
+                model.SelectedDetailToUpdateShift = new int?();
+                model.SelectedDetailToUpdateActualHours = new int?();
+                model.SelectedDetailToUpdateUnitWeight = new decimal?();
+                model.SelectedDetailToUpdateSpeedMachineRpm = new int?();
+                model.SelectedDetailToUpdateActualQuantity = new decimal?();
+                model.SelectedDetailToUpdateNumPeople = new int?();
+                model.SelectedDetailToUpdateUnits = new int?();
+                //model.SelectedStep = (int)SmartWizardStepEnum.AddIgredients;
+            }
         }
 
         // GET: Header/Edit/5
@@ -370,6 +610,56 @@ namespace ProductionHoursLosses.Controllers
             results.pagination.more = false;
 
             return Json(results, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetLossesList(string q, int page)
+        {
+            var results = new ResultSelect2<ItemIdText>();
+            results.results = new List<ItemIdText>();
+            results.pagination = new Pagination();
+
+            if (!string.IsNullOrWhiteSpace(q))
+                q = q.ToLower();
+            else
+                q = string.Empty;
+
+            List<ItemIdText> list = new List<ItemIdText>();
+
+                list = db.LOSSES
+                .Where(x => x.DESCRIPTION.ToLower().StartsWith(q))
+                    .Select(y =>
+                        new ItemIdText
+                        {
+                            id = y.ID.ToString(),
+                            text = y.DESCRIPTION,
+                            itemDescription = y.CODE
+                        })
+                        .Distinct()
+                        .ToList();
+
+            if (page == 1)
+                results.results.AddRange(list.Take(30));
+            else
+                results.results.AddRange(list.Skip(page * 30).Take(30));
+
+            if (page * 30 < list.Count)
+                results.pagination.more = true;
+            else
+                results.pagination.more = false;
+
+            return Json(results, JsonRequestBehavior.AllowGet);
+        }
+
+        private ActionResult DeleteDetail(HeaderViewModel model)
+        {
+            if (model.DetailsList != null)
+                model.DetailsList.RemoveAll(x => x.AA.ToString() == model.SelectedDetailToBeDeleted);
+
+            model.SelectedDetailToBeDeleted = string.Empty;
+
+            TempData["objectFromAction"] = model;
+
+            return RedirectToAction("Create", "Header", new { model, button = "delete" });
         }
 
     }

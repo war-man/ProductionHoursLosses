@@ -20,6 +20,25 @@
     @Html.HiddenFor(x => Model.SelectedActualQuantity, new { @id = "SelectedActualQuantity" })
     @Html.HiddenFor(x => Model.SelectedNumPeople, new { @id = "SelectedNumPeople" })
     @Html.HiddenFor(x => Model.SelectedUnits, new { @id = "SelectedUnits" })
+    @Html.HiddenFor(x => Model.SelectedLossesId, new { @id = "SelectedLossesId" })
+    @Html.HiddenFor(x => Model.SelectedLossesMins, new { @id = "SelectedLossesMins" })
+    @Html.HiddenFor(x => Model.SelectedDetailToBeDeleted, new { @id = "SelectedDetailToBeDeleted" })
+
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateAA)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateStartTime)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateEndTime)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateProductId)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateBatchNo)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateWorkOrder)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateShift)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateActualHours)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnitWeight)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateSpeedMachineRpm)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateActualQuantity)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateNumPeople)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnits)
+
+
 
     if (Model != null)
     {
@@ -41,6 +60,16 @@
                 @Html.HiddenFor(x => Model.DetailsList[i].ACTUAL_QTY)
                 @Html.HiddenFor(x => Model.DetailsList[i].NUM_PEOPLE)
                 @Html.HiddenFor(x => Model.DetailsList[i].UNITS)
+
+                @*if (Model.DetailsList[i].DETAIL_LOSSES != null)
+                    {
+                        for (int j = 0; j < Model.DetailsList[i].DETAIL_LOSSES.Count; j++)
+                        {
+                            @Html.HiddenFor(x => Model.DetailsList[i].DETAIL_LOSSES[j].de)
+                            @Html.HiddenFor(x => Model.DetailLossesList[i].LOSSES_ID)
+                            @Html.HiddenFor(x => Model.DetailLossesList[i].HRS)
+                        }
+                    }*@
             }
 
         }
@@ -51,7 +80,7 @@
             {
                 @Html.HiddenFor(x => Model.DetailLossesList[i].DETAIL_ID)
                 @Html.HiddenFor(x => Model.DetailLossesList[i].LOSSES_ID)
-                @Html.HiddenFor(x => Model.DetailLossesList[i].HRS)
+                @Html.HiddenFor(x => Model.DetailLossesList[i].DURATION)
             }
 
         }

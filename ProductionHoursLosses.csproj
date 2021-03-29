@@ -244,12 +244,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\Helper.cs" />
+    <Compile Include="Helper\ImpersonateUser.cs" />
     <Compile Include="Models\DETAIL.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DetailExtended.cs" />
     <Compile Include="Models\DETAIL_LOSSES.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ExceptionError.cs" />
     <Compile Include="Models\FACTORY.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
@@ -289,6 +293,7 @@
     <Compile Include="Models\ROOM.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StaticVariables.cs" />
     <Compile Include="Models\STATUS.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
@@ -308,7 +313,20 @@
     <Content Include="Content\css\select2.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Images\alertIcon.png" />
+    <Content Include="Content\Images\batchIcon.png" />
+    <Content Include="Content\Images\chargeIcon.png" />
+    <Content Include="Content\Images\chatbubbleComment.png" />
+    <Content Include="Content\Images\downloadBlueBMRMasterReport.png" />
+    <Content Include="Content\Images\loadingB.gif" />
+    <Content Include="Content\Images\mc_logo_sml.png" />
+    <Content Include="Content\Images\movement.png" />
+    <Content Include="Content\Images\productionWoIcon.png" />
+    <Content Include="Content\Images\replaceMethod.png" />
+    <Content Include="Content\Images\tabletCapsule.png" />
+    <Content Include="Content\Images\tree.png" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\table-blue.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />

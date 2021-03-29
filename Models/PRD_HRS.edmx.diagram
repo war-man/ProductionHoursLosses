@@ -5,23 +5,23 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f1f2d3eb170a4b749cb799115b238ded" Name="Diagram1">
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.DETAIL" Width="1.5" PointX="7.5" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.DETAIL_LOSSES" Width="1.5" PointX="9.75" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.FACTORY" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.HEADER" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.LOG" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.LOSSES" Width="1.5" PointX="7.5" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.PRODUCT" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.ROOM" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PRD_HRS_DBModel.STATUS" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
-        <AssociationConnector Association="PRD_HRS_DBModel.FK_DETAIL_HEADER" ManuallyRouted="false" />
-        <AssociationConnector Association="PRD_HRS_DBModel.FK_DETAIL_LOSSES_DETAIL" ManuallyRouted="false" />
-        <AssociationConnector Association="PRD_HRS_DBModel.FK_DETAIL_PRODUCT" ManuallyRouted="false" />
-        <AssociationConnector Association="PRD_HRS_DBModel.FK_DETAIL_LOSSES_LOSSES" ManuallyRouted="false" />
-        <AssociationConnector Association="PRD_HRS_DBModel.FK_HEADER_FACTORY" ManuallyRouted="false" />
-        <AssociationConnector Association="PRD_HRS_DBModel.FK_ROOM_FACTORY" ManuallyRouted="false" />
-        <AssociationConnector Association="PRD_HRS_DBModel.FK_HEADER_ROOM" ManuallyRouted="false" />
-        <AssociationConnector Association="PRD_HRS_DBModel.FK_HEADER_STATUS" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.DETAIL" Width="1.5" PointX="7.5" PointY="4.375" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.DETAIL_LOSSES" Width="1.5" PointX="9.75" PointY="5.5" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.FACTORY" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.HEADER" Width="1.5" PointX="5.25" PointY="5" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.LOG" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.LOSSES" Width="1.5" PointX="7.5" PointY="1.625" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.PRODUCT" Width="1.5" PointX="5.25" PointY="1.625" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.ROOM" Width="1.5" PointX="3" PointY="7.375" />
+        <EntityTypeShape EntityType="PRD_HRS_DBModel.STATUS" Width="1.5" PointX="3" PointY="4.75" />
+        <AssociationConnector Association="PRD_HRS_DBModel.FK_DETAIL_HEADER" />
+        <AssociationConnector Association="PRD_HRS_DBModel.FK_DETAIL_LOSSES_DETAIL" />
+        <AssociationConnector Association="PRD_HRS_DBModel.FK_DETAIL_PRODUCT" />
+        <AssociationConnector Association="PRD_HRS_DBModel.FK_DETAIL_LOSSES_LOSSES" />
+        <AssociationConnector Association="PRD_HRS_DBModel.FK_HEADER_FACTORY" />
+        <AssociationConnector Association="PRD_HRS_DBModel.FK_ROOM_FACTORY" />
+        <AssociationConnector Association="PRD_HRS_DBModel.FK_HEADER_ROOM" />
+        <AssociationConnector Association="PRD_HRS_DBModel.FK_HEADER_STATUS" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

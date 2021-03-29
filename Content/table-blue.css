@@ -1,0 +1,25 @@
+﻿.tableStyle {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    .tableStyle td, .tableStyle th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .tableStyle tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .tableStyle tr:hover {
+        background-color: #ddd;
+    }
+
+    .tableStyle th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #337ab7;
+        color: white;
+    }

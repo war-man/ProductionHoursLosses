@@ -17,7 +17,7 @@ namespace ProductionHoursLosses.Models
         public int ID { get; set; }
         public int DETAIL_ID { get; set; }
         public int LOSSES_ID { get; set; }
-        public int HRS { get; set; }
+        public int DURATION { get; set; }
     
         public virtual DETAIL DETAIL { get; set; }
         public virtual LOSSES LOSSES { get; set; }

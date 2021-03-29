@@ -46,8 +46,36 @@ namespace ProductionHoursLosses.Models.ViewModels
         public decimal? SelectedActualQuantity { get; set; }
         public int? SelectedNumPeople { get; set; }
         public int? SelectedUnits { get; set; }
-        public List<DETAIL> DetailsList { get; set; }
+
+        public int? SelectedLossesId { get; set; }
+        public LOSSES SelectedLosses { get; set; } 
+        public int? SelectedLossesMins { get; set; }
+
+        public string SelectedDetailToBeDeleted { get; set; } 
+
+        public List<DetailExtended> DetailsList { get; set; }
 
         public List<DETAIL_LOSSES> DetailLossesList { get; set; }
+
+        public string SelectedDetailToUpdateAA { get; set; }
+        [DataType(DataType.Time)]
+        public DateTime? SelectedDetailToUpdateStartTime { get; set; }
+        [DataType(DataType.Time)]
+        public DateTime? SelectedDetailToUpdateEndTime { get; set; }
+        public int? SelectedDetailToUpdateProductId { get; set; }
+        public string SelectedDetailToUpdateBatchNo { get; set; }
+        public string SelectedDetailToUpdateWorkOrder { get; set; }
+        public int? SelectedDetailToUpdateShift { get; set; }
+        public int? SelectedDetailToUpdateActualHours { get; set; }
+        public decimal? SelectedDetailToUpdateUnitWeight { get; set; }
+
+        [Range(0, 100)]
+        public int? SelectedDetailToUpdateSpeedMachineRpm { get; set; }
+        public decimal? SelectedDetailToUpdateActualQuantity { get; set; }
+        public int? SelectedDetailToUpdateNumPeople { get; set; }
+        public int? SelectedDetailToUpdateUnits { get; set; }
+
+        public bool IsUpdate { get; set; }
+
     }
 }
