@@ -1,4 +1,10 @@
-﻿function OnDropDownFactoryChange() {
+﻿$('#SelectedDate').change(function () {
+    var date = document.getElementById("SelectedDate").value;
+    ("#SelectedDate").val(date);
+
+});
+
+function OnDropDownFactoryChange() {
     var selectItem = $('#SelectedFactoryDropDownID').val();
     $('#SelectedFactoryID').val(selectItem);
 
@@ -403,7 +409,10 @@ function DeleteDetail(aa) {
     }
 }
 
-
+function AddDetailLosses(aa) {
+        $('#SelectedDetailToBeDeleted').val(aa);
+        document.getElementById("formSubmit").submit();
+}
 
 
 function Update() {

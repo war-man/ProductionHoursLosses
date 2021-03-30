@@ -1,0 +1,90 @@
+﻿@model ProductionHoursLosses.Models.ViewModels.HeaderViewModel
+@using ProductionHoursLosses.Models
+
+
+
+
+<h4>Enter details:</h4>
+<hr />
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<div class="form-group">
+    @Html.Label("Date: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+    <div class="col-md-10">
+        @*@Html.EditorFor(model => model.SelectedDate, new { htmlAttributes = new { @class = "datepicker", id = "datepickerId" } })*@
+        @Html.TextBoxFor(model => model.SelectedDate, new { @class = "form-group", @type = "date", @id = "SelectedDate" })
+        <span class="fa fa-calendar"> </span>
+        @Html.ValidationMessageFor(model => model.SelectedDate, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.Label("Factory: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+    <div class="col-md-10">
+        <select class="" id="SelectedFactoryDropDownID" style="" onchange="OnDropDownFactoryChange()">
+            @if (Model.SelectedFactoryID != null)
+            {
+                <option value="@Model.SelectedFactoryID" selected>@Model.SelectedFactory.NAME</option>
+            }
+        </select>
+        @Html.ValidationMessageFor(model => model.SelectedFactoryID, "", new { @class = "text-danger" })
+        <br />
+        <br />
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.Label("Room: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+    <div class="col-md-10">
+        <select class="" id="SelectedRoomDropDownId" style="" onchange="OnDropDownRoomChange()">
+            @if (Model.SelectedRoomID != null)
+            {
+                <option value="@Model.SelectedRoomID" selected>@Model.SelectedRoom.NAME</option>
+            }
+        </select>
+        @Html.ValidationMessageFor(model => model.SelectedRoomID, "", new { @class = "text-danger" })
+        <br />
+        <br />
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.Label("Avail. Hours: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+    <div class="col-md-10">
+        <select class="" id="SelectedAvailHoursDropDownId" style="" onchange="OnDropDownAvailHoursChange()">
+            @if (Model.SelectedAvailHours != null)
+            {
+                <option value="@Model.SelectedAvailHours" selected>@Model.SelectedAvailHours</option>
+            }
+        </select>
+        @Html.ValidationMessageFor(model => model.SelectedAvailHours, "", new { @class = "text-danger" })
+        <br />
+        <br />
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.Label("Status: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+    <div class="col-md-10">
+        <select class="" id="SelectedStatusDropDownId" style="" onchange="OnDropDownStatusChange()">
+            @if (Model.SelectedStatusID != null)
+            {
+                <option value="@Model.SelectedStatusID" selected>@Model.SelectedStatus.NAME</option>
+            }
+        </select>
+        @Html.ValidationMessageFor(model => model.SelectedStatusID, "", new { @class = "text-danger" })
+        <br />
+        <br />
+    </div>
+</div>
+
+<div class="form-group">
+    @*<div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Create" class="btn btn-default" />
+    </div>*@
+
+    <button class="btn btn-success" title="Create" name="AddDetail" type="submit" value="AddDetail">
+        <span class="fa fa-plus"></span> Create Detail
+    </button>
+
+</div>

@@ -76,6 +76,8 @@ namespace ProductionHoursLosses.Models.ViewModels
         public int? SelectedDetailToUpdateUnits { get; set; }
 
         public bool IsUpdate { get; set; }
+        public string Password { get; set; }
+        public int SelectedStep { get; set; }
 
     }
 }

@@ -123,8 +123,8 @@
     <Reference Include="Microsoft.Owin.Security.Twitter, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Owin.Security.Twitter.4.1.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -253,6 +253,7 @@
     <Compile Include="Models\DETAIL_LOSSES.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Enum\SmartWizardStepEnum.cs" />
     <Compile Include="Models\ExceptionError.cs" />
     <Compile Include="Models\FACTORY.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
@@ -326,6 +327,14 @@
     <Content Include="Content\Images\tabletCapsule.png" />
     <Content Include="Content\Images\tree.png" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\smart_wizard.css" />
+    <Content Include="Content\smart_wizard.min.css" />
+    <Content Include="Content\smart_wizard_theme_arrows.css" />
+    <Content Include="Content\smart_wizard_theme_arrows.min.css" />
+    <Content Include="Content\smart_wizard_theme_circles.css" />
+    <Content Include="Content\smart_wizard_theme_circles.min.css" />
+    <Content Include="Content\smart_wizard_theme_dots.css" />
+    <Content Include="Content\smart_wizard_theme_dots.min.css" />
     <Content Include="Content\table-blue.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -478,16 +487,26 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="ApplicationInsights.config" />
-    <None Include="Scripts\jquery-3.5.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.5.1.js" />
-    <Content Include="Scripts\jquery-3.5.1.min.js" />
-    <Content Include="Scripts\jquery-3.5.1.slim.js" />
-    <Content Include="Scripts\jquery-3.5.1.slim.min.js" />
-    <Content Include="Scripts\jquery-3.5.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.5.1.min.map" />
+    <None Include="Scripts\jquery-3.6.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.6.0.js" />
+    <Content Include="Scripts\jquery-3.6.0.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.6.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\SmartWizard\cs\smart_wizard.css" />
+    <Content Include="Scripts\SmartWizard\cs\smart_wizard.min.css" />
+    <Content Include="Scripts\SmartWizard\cs\smart_wizard_theme_arrows.css" />
+    <Content Include="Scripts\SmartWizard\cs\smart_wizard_theme_arrows.min.css" />
+    <Content Include="Scripts\SmartWizard\cs\smart_wizard_theme_circles.css" />
+    <Content Include="Scripts\SmartWizard\cs\smart_wizard_theme_circles.min.css" />
+    <Content Include="Scripts\SmartWizard\cs\smart_wizard_theme_dots.css" />
+    <Content Include="Scripts\SmartWizard\cs\smart_wizard_theme_dots.min.css" />
+    <Content Include="Scripts\SmartWizard\js\jquery.smartWizard.js" />
+    <Content Include="Scripts\jquery.smartWizard.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -590,7 +609,6 @@
     <Content Include="Views\Factory\Details.cshtml" />
     <Content Include="Views\Factory\Edit.cshtml" />
     <Content Include="Views\Factory\Index.cshtml" />
-    <Content Include="Views\Header\Create.cshtml" />
     <Content Include="Views\Header\Delete.cshtml" />
     <Content Include="Views\Header\Details.cshtml" />
     <Content Include="Views\Header\Edit.cshtml" />
@@ -621,6 +639,9 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_HiddenInputFields.cshtml" />
+    <Content Include="Views\Shared\_CreateHeaderInfo.cshtml" />
+    <Content Include="Views\Header\Create.cshtml" />
+    <Content Include="Views\Header\Create - Copy.cshtml" />
     <Content Include="Views\Shared\_CreateHeaderDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>

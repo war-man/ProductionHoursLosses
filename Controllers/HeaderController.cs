@@ -7,8 +7,10 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProductionHoursLosses.Models;
+using ProductionHoursLosses.Models.Enum;
 using ProductionHoursLosses.Models.ViewModels;
 using ProductionHoursLosses.Helper;
+using System.Data.Entity.Validation;
 
 namespace ProductionHoursLosses.Controllers
 {
@@ -71,7 +73,7 @@ namespace ProductionHoursLosses.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HeaderViewModel model, string save, string saveAndSubmit, string addDetail)//([Bind(Include = "ID,DATE,FACTORY_ID,ROOM_ID,AVAIL_HRS,STATUS_ID")] HEADER hEADER)
+        public ActionResult Create(HeaderViewModel model, string save, string saveAndSubmit, string addDetail)//([Bind(Include = "ID,DATE,FACTORY_ID,ROOM_ID,AVAIL_HRS,STATUS_ID")] HEADER hEADER) 
         {
             ModelState.Clear();
 
@@ -157,14 +159,71 @@ namespace ProductionHoursLosses.Controllers
             {
                 using (var dbPRD_HRS = new PRD_HRS_DBEntities())
                 {
-                    using (DbContextTransaction transactionNewErp = dbPRD_HRS.Database.BeginTransaction())
+                    using (DbContextTransaction transactionNewRec = dbPRD_HRS.Database.BeginTransaction())
                     {
+                        if (model.IsUpdate)
+                        {
+
+                        }
+                        else
+                        {
+                            var newHeader = new HEADER();
+                            newHeader.DATE = model.SelectedDate.Value;
+                            newHeader.FACTORY_ID = (int)model.SelectedFactoryID;
+                            newHeader.ROOM_ID = (int)model.SelectedRoomID;
+                            newHeader.AVAIL_HRS = model.SelectedAvailHours;
+
+                            foreach(var detailExtended in model.DetailsList.OrderBy(x => x.AA))
+                            {
+                                var newDetail = new DETAIL();
+                                newDetail.START_TIME = detailExtended.START_TIME;
+                                newDetail.END_TIME = detailExtended.END_TIME;
+                                newDetail.PRODUCT_ID = detailExtended.PRODUCT_ID;
+                                newDetail.BATCH_NO = detailExtended.BATCH_NO;
+                                newDetail.WORK_ORDER = detailExtended.WORK_ORDER;
+                                newDetail.SHIFT = detailExtended.SHIFT;
+                                newDetail.ACTUAL_HRS = detailExtended.ACTUAL_HRS;
+                                newDetail.UNIT_WEIGHT = detailExtended.UNIT_WEIGHT;
+                                newDetail.SPEED_MACHINE_RPM = detailExtended.SPEED_MACHINE_RPM;
+                                newDetail.ACTUAL_QTY = detailExtended.ACTUAL_QTY;
+                                newDetail.NUM_PEOPLE = detailExtended.NUM_PEOPLE;
+                                newDetail.UNITS = detailExtended.UNITS;
+
+                                newHeader.DETAIL.Add(newDetail);
+                            }
+
+                            dbPRD_HRS.HEADER.Add(newHeader);
+                        }
+
+                        try
+                        {
+                            dbPRD_HRS.SaveChanges();
+                            transactionNewRec.Commit();
+
+                            return new ExceptionError { Result = true };
+                        }
+                        catch (DbEntityValidationException e)
+                        {
+                            transactionNewRec.Rollback();
+
+                            var exception = new ExceptionError();
+                            exception.Name = string.Format("Entity has the following validation errors: {0} {1}\n", e.Message, e.InnerException);
+
+                            foreach (var x in e.EntityValidationErrors)
+                            {
+                                exception.Name += string.Format("Property name: {0}, Message {1}\n", x.ValidationErrors.FirstOrDefault().PropertyName, x.ValidationErrors.FirstOrDefault().ErrorMessage);
+                            }
+                            exception.Result = false;
+
+                            return exception;
+                        }
                     }
                 }
             }
         }
         private void AddDetails(HeaderViewModel model, PRD_HRS_DBEntities dbPRD_HRS, ref List<string> error)
         {
+            model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
             int count = 0;
             if (!model.SelectedStartTime.HasValue)
                 error.Add("Enter Start Time.");
@@ -316,7 +375,7 @@ namespace ProductionHoursLosses.Controllers
                 model.SelectedDetailToUpdateActualQuantity = new decimal?();
                 model.SelectedDetailToUpdateNumPeople = new int?();
                 model.SelectedDetailToUpdateUnits = new int?();
-                //model.SelectedStep = (int)SmartWizardStepEnum.AddIgredients;
+                model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
             }
         }
 
@@ -656,7 +715,7 @@ namespace ProductionHoursLosses.Controllers
                 model.DetailsList.RemoveAll(x => x.AA.ToString() == model.SelectedDetailToBeDeleted);
 
             model.SelectedDetailToBeDeleted = string.Empty;
-
+            model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
             TempData["objectFromAction"] = model;
 
             return RedirectToAction("Create", "Header", new { model, button = "delete" });

@@ -7,14 +7,14 @@
 
 <head>
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>*@
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="~/Content/css/select2.css" rel="stylesheet" />
     <script src="~/Scripts/select2.js"></script>
     @*<script src="~/Scripts/jquery-3.5.1.js"></script>
         <script src="~/Scripts/jquery.validate.js"></script>
         <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>*@
     <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
     <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 
 
@@ -34,566 +34,270 @@
 
 
     @*<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />*@
-
-
-
-<div class="form-horizontal">
-    <h4>Enter details:</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-    <div class="form-group">
-        @Html.Label("Date: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-        @*@Html.LabelFor(model => model.SelectedDate, htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.SelectedDate, new { htmlAttributes = new { @class = "datepicker", id = "datepickerId" } })
-            <span class="fa fa-calendar"> </span>
-            @Html.ValidationMessageFor(model => model.SelectedDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Factory: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-        <div class="col-md-10">
-            <select class="" id="SelectedFactoryDropDownID" style="" onchange="OnDropDownFactoryChange()">
-                @if (Model.SelectedFactoryID != null)
-                {
-                    <option value="@Model.SelectedFactoryID" selected>@Model.SelectedFactory.NAME</option>
-                }
+    <!-- External toolbar sample -->
+    <div class="row d-flex align-items-center p-3 my-3 text-white-50">
+        <div class="col-12 col-lg-6 col-sm-12">
+            <label>Change the wizard theme:</label>
+            <select id="theme_selector" class="select2">
+                <option value="arrows">arrows</option>
+                <option value="default">default</option>
+                <option value="circles">circles</option>
+                <option value="dots">dots</option>
             </select>
-            @Html.ValidationMessageFor(model => model.SelectedFactoryID, "", new { @class = "text-danger" })
-            <br />
-            <br />
         </div>
     </div>
 
-    @*<div class="form-group">
-            @Html.LabelFor(model => model.FACTORY_ID, "FACTORY_ID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("FACTORY_ID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.FACTORY_ID, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-    <div class="form-group">
-        @Html.Label("Room: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-        <div class="col-md-10">
-            <select class="" id="SelectedRoomDropDownId" style="" onchange="OnDropDownRoomChange()">
-                @if (Model.SelectedRoomID != null)
-                {
-                    <option value="@Model.SelectedRoomID" selected>@Model.SelectedRoom.NAME</option>
-                }
-            </select>
-            @Html.ValidationMessageFor(model => model.SelectedRoomID, "", new { @class = "text-danger" })
-            <br />
-            <br />
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Avail. Hours: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-        <div class="col-md-10">
-            <select class="" id="SelectedAvailHoursDropDownId" style="" onchange="OnDropDownAvailHoursChange()">
-                @if (Model.SelectedAvailHours != null)
-                {
-                    <option value="@Model.SelectedAvailHours" selected>@Model.SelectedAvailHours</option>
-                }
-            </select>
-            @Html.ValidationMessageFor(model => model.SelectedAvailHours, "", new { @class = "text-danger" })
-            <br />
-            <br />
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Status: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-        <div class="col-md-10">
-            <select class="" id="SelectedStatusDropDownId" style="" onchange="OnDropDownStatusChange()">
-                @if (Model.SelectedStatusID != null)
-                {
-                    <option value="@Model.SelectedStatusID" selected>@Model.SelectedStatus.NAME</option>
-                }
-            </select>
-            @Html.ValidationMessageFor(model => model.SelectedStatusID, "", new { @class = "text-danger" })
-            <br />
-            <br />
-        </div>
-    </div>
-
-    @*<div class="form-group">
-            @Html.LabelFor(model => model.ROOM_ID, "ROOM_ID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ROOM_ID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ROOM_ID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AVAIL_HRS, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.AVAIL_HRS, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AVAIL_HRS, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.STATUS_ID, "STATUS_ID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("STATUS_ID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.STATUS_ID, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-    <div class="col-md-offset-2 col-md-10">
-        @*<div class="col-md-offset-2 col-md-10">
-                <button type="button" class="btn btn-warning" title="Add Details" id="addDetail" onclick="AddDetailClicked()">
-                    <span class="fa fa-plus"></span> Add
-                </button>
-            </div>*@
-        <button id="addDetail" onclick="AddDetailClicked()" type="button" class="btn btn-default"><span class="fa fa-plus"></span> Add Detail</button>
-    </div>
-
-
-    <div class="form-group" id="divDetails" style="display:none">
-        <h4>Enter details:</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="form-group">
-            @Html.Label("Start Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedStartTime, new { htmlAttributes = new { @class = "form-control", id = "timepickerId" } })
-                @Html.ValidationMessageFor(model => model.SelectedStartTime, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("End Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedEndTime, new { htmlAttributes = new { @class = "form-control", id = "timepickerId" } })
-                @Html.ValidationMessageFor(model => model.SelectedEndTime, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Product: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                <select class="" id="SelectedProductDropDownId" style="" onchange="OnDropDownProductChange()">
-                    @if (Model.SelectedProductId != null)
-                    {
-                        <option value="@Model.SelectedProductId" selected>@Model.SelectedProduct.DESCRIPTION</option>
-                    }
-                </select>
-                @Html.ValidationMessageFor(model => model.SelectedProductId, "", new { @class = "text-danger" })
-                <br />
-                <br />
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Batch Number: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedBatchNo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SelectedBatchNo, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Work Order: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedWorkOrder, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SelectedWorkOrder, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Shift: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                <select class="" id="SelectedShiftDropDownId" style="" onchange="OnDropDownShiftChange()">
-                    @if (Model.SelectedShift != null)
-                    {
-                        <option value="@Model.SelectedShift" selected>@Model.SelectedShift</option>
-                    }
-                </select>
-                @Html.ValidationMessageFor(model => model.SelectedShift, "", new { @class = "text-danger" })
-                <br />
-                <br />
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Actual Hours:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                <select class="" id="SelectedActualHoursDropDownId" style="" onchange="OnDropDownActualHoursChange()">
-                    @if (Model.SelectedActualHours != null)
-                    {
-                        <option value="@Model.SelectedActualHours" selected>@Model.SelectedActualHours</option>
-                    }
-                </select>
-                @Html.ValidationMessageFor(model => model.SelectedActualHours, "", new { @class = "text-danger" })
-                <br />
-                <br />
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Tablet weight (mg):", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedUnitWeight, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SelectedUnitWeight, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Speed Machine RPM:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedSpeedMachineRpm, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SelectedSpeedMachineRpm, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Actual Quantity (Kg):", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedActualQuantity, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SelectedActualQuantity, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Num. of people:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedNumPeople, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SelectedNumPeople, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Tablets:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SelectedUnits, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SelectedUnits, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <button class="btn btn-success" title="Create" name="AddDetail" type="submit" value="AddDetail">
-            <span class="fa fa-plus"></span> Create Detail
-        </button>
-
-        <div class="col-md-offset-2 col-md-10">
-            <button id="addDetailLosses" onclick="AddDetailLossesClicked()" type="button" class="btn btn-default"><span class="fa fa-plus"></span> Add Detail Losses</button>
-        </div>
-
-        <div class="form-group" id="divDetailLosses" style="display:none">
-            <h4>Enter detail losses:</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-            <div class="form-group">
-                @Html.Label("Losses: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                <div class="col-md-10">
-                    <select class="" id="SelectedLossesDropDownId" style="" onchange="OnDropDownLossesChange()">
-                        @if (Model.SelectedLossesId != null)
-                        {
-                            <option value="@Model.SelectedLossesId" selected>@Model.SelectedLosses.DESCRIPTION</option>
-                        }
-                    </select>
-                    @Html.ValidationMessageFor(model => model.SelectedLossesId, "", new { @class = "text-danger" })
-                    <br />
-                    <br />
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Duration (mins): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.SelectedLossesMins, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.SelectedLossesMins, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <button class="btn btn-success" title="Create" name="AddDetailLosses" type="submit" value="AddDetailLosses">
-                <span class="fa fa-plus"></span> Create Detail Losses
-            </button>
-
-        </div>
-
-    </div>
-
-    @if (Model.DetailsList != null && Model.DetailsList.Any())
+    if (ViewBag.ErrorList != null && (ViewBag.ErrorList as List<string>).Any())
     {
-        <table class="tableStyle">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.Raw("A/A")
-                    </th>
-                    <th style="text-align:right">
-                        @Html.DisplayName("Start Time")
-                    </th>
-                    <th style="text-align:right">
-                        @Html.DisplayName("End Time")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Product")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Batch Number")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Work Order")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Shift")
-                    </th>
-                    <th style="text-align:right">
-                        @Html.DisplayName("Actual Hours")
-                    </th>
-                    <th style="text-align:right">
-                        @Html.DisplayName("Tablet weight (mg)")
-                    </th>
-                    <th style="text-align:right">
-                        @Html.DisplayName("Speed Machine RPM")
-                    </th>
-                    <th style="text-align:right">
-                        @Html.DisplayName("Actual Quantity (Kg)")
-                    </th>
-                    <th style="text-align:right">
-                        @Html.DisplayName("Num. People")
-                    </th>
-                    <th style="text-align:right">
-                        @Html.DisplayName("Num. Tablets")
-                    </th>
-                    <th style="width:99px; max-width:99px;">
-                        @Html.Label("Actions")
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.DetailsList.Count; i++)
-                {
-                <tr>
-                    <td>
-                        @*@Html.TextBox((i+1), "", new { @type = "number", @class = "form-control", @style = "width: 70px; max-width: 100%", @min = "1", @max = Model.DetailsList.Count })*@
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].AA)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].START_TIME)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].END_TIME)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].PRODUCT.DESCRIPTION)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].BATCH_NO)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].WORK_ORDER)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].SHIFT)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].ACTUAL_HRS)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].UNIT_WEIGHT)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].SPEED_MACHINE_RPM)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].ACTUAL_QTY)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].NUM_PEOPLE)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].UNITS)
-                    </td>
-                    <td>
-                        <button class="btn btn-success btn-sm" title="Edit" type="button" data-toggle="modal" data-target="#editTableRow"
-                                data-id="@Model.DetailsList[i].AA"
-                                data-startTime="@Model.DetailsList[i].START_TIME"
-                                data-endTime="@Model.DetailsList[i].END_TIME"
-                                data-productId="@Model.DetailsList[i].PRODUCT_ID"
-                                data-productName="@Model.DetailsList[i].PRODUCT.DESCRIPTION"
-                                data-batchNo="@Model.DetailsList[i].BATCH_NO"
-                                data-workOrder="@Model.DetailsList[i].WORK_ORDER"
-                                data-shift="@Model.DetailsList[i].SHIFT"
-                                data-actualHours="@Model.DetailsList[i].ACTUAL_HRS"
-                                data-unitWeight="@Model.DetailsList[i].UNIT_WEIGHT"
-                                data-speedMachine="@Model.DetailsList[i].SPEED_MACHINE_RPM"
-                                data-actualQty="@Model.DetailsList[i].ACTUAL_QTY"
-                                data-numPeople="@Model.DetailsList[i].NUM_PEOPLE"
-                                data-units="@Model.DetailsList[i].UNITS">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm" title="Delete" onclick="DeleteDetail('@Model.DetailsList[i].AA');">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-                 }
-            </tbody>
-        </table>
-
+        <div class="panel panel-danger">
+            <div class="panel-heading">Warnings/Errors</div>
+            <div class="panel-body">
+                <ol>
+                    @foreach (string item in ViewBag.ErrorList as List<string>)
+                    {
+                        <li>@item</li>
+                    }
+                </ol>
+            </div>
+        </div>
     }
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+
+<div class="form-group">
+    <!-- SmartWizard html -->
+    <div id="smartwizard">
+        <ul>
+            <li><a href="#step-1">Step 1<br /><small>Enter Header information</small></a></li>
+            <li><a href="#step-2">Step 2<br /><small>Enter Details</small></a></li>
+            <li><a href="#step-3">Step 3<br /><small>Authentication</small></a></li>
+        </ul>
+
+        <div>
+            <div id="step-1" class="">
+                @{
+                    Html.RenderPartial("~/Views/Shared/_CreateHeaderInfo.cshtml", Model);
+                }
+            </div>
+
+            <div id="step-2" class="">
+                @{
+                    Html.RenderPartial("~/Views/Shared/_CreateHeaderDetails.cshtml", Model);
+                }
+            </div>
+            <div id="step-3" class="">
+                <h2>Step 3: Authentication</h2>
+            </div>
         </div>
+
+
     </div>
 </div>
 
 
 
+
+
+    @*<div class="form-horizontal">
+
+
+            <div class="col-md-offset-2 col-md-10">
+                <button id="addDetail" onclick="AddDetailClicked()" type="button" class="btn btn-default"><span class="fa fa-plus"></span> Add Detail</button>
+            </div>
+
+
+            <div class="form-group" id="divDetails" style="display:none">
+
+
+
+
+                <div class="col-md-offset-2 col-md-10">
+                    <button id="addDetailLosses" onclick="AddDetailLossesClicked()" type="button" class="btn btn-default"><span class="fa fa-plus"></span> Add Detail Losses</button>
+                </div>
+
+                <div class="form-group" id="divDetailLosses" style="display:none">
+                    <h4>Enter detail losses:</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.Label("Losses: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                        <div class="col-md-10">
+                            <select class="" id="SelectedLossesDropDownId" style="" onchange="OnDropDownLossesChange()">
+                                @if (Model.SelectedLossesId != null)
+                                {
+                                    <option value="@Model.SelectedLossesId" selected>@Model.SelectedLosses.DESCRIPTION</option>
+                                }
+                            </select>
+                            @Html.ValidationMessageFor(model => model.SelectedLossesId, "", new { @class = "text-danger" })
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Duration (mins): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.SelectedLossesMins, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.SelectedLossesMins, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success" title="Create" name="AddDetailLosses" type="submit" value="AddDetailLosses">
+                        <span class="fa fa-plus"></span> Create Detail Losses
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>*@
+
+
+
+
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+
+
+    <div id="editTableRow" role="dialog" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    <h4 class="modal-title custom_align" id="Heading">Edit Detail </h4>
+                </div>
+                <div class="modal-body">
+
+                    @Html.Hidden("RowTableMasterAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableMasterAA" })
+
+
+                    @Html.Label("Start Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("StartTimeModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "StartTimeModalFormId",
+               })
+                    <br />
+
+                    @Html.Label("End Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("EndTimeModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "EndTimeModalFormId",
+               })
+                    <br />
+
+                    @Html.Label("Product: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    <div id="divProductId2" style="display:block">
+                        <select class="" id="SelectProductIdDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownProductIdChangeCreateDetailFromModal()"></select>
+                    </div>
+                    <br />
+
+                    @Html.Label("Batch Number: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("BatchNoModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "BatchNoModalFormId",
+               })
+                    <br />
+
+
+                    @Html.Label("Work Order: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("WorkOrderModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "WorkOrderModalFormId",
+               })
+                    <br />
+
+                    @Html.Label("Shift: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    <div id="divShift2" style="display:block">
+                        <select class="" id="SelectShiftDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownShiftChangeCreateDetailFromModal()"></select>
+                    </div>
+                    <br />
+
+                    @Html.Label("Actual Hours: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    <div id="divActHrs2" style="display:block">
+                        <select class="" id="SelectActualHrsDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownActualHrsChangeCreateDetailFromModal()"></select>
+                    </div>
+                    <br />
+
+                    @Html.Label("Unit Weight (mg): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("UnitWeightModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "UnitWeightModalFormId",
+               })
+                    <br />
+
+                    @Html.Label("Speed Machine RPM: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("SpeedMachineModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "SpeedMachineModalFormId",
+               })
+                    <br />
+
+                    @Html.Label("Actual Quantity (Kg): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("ActualQtyModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "ActualQtyModalFormId",
+               })
+                    <br />
+
+                    @Html.Label("Num. People: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("NumPeopleModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "NumPeopleModalFormId",
+               })
+                    <br />
+
+                    @Html.Label("Units: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                    @Html.TextBox("UnitsModalFormId", "", new
+               {
+                   @class = "form-control required",
+                   @min = "0",
+                   @type = "time",
+                   @id = "UnitsModalFormId",
+               })
+                    <br />
+
+                    <br />
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" name="button" value="UpdateDetail" id="modalOK" class="btn btn-success" data-dismiss="modal" onclick="Update()" disabled><span class="glyphicon glyphicon-ok-sign"></span> OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-
-
-<div id="editTableRow" role="dialog" class="modal fade" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                <h4 class="modal-title custom_align" id="Heading">Edit Detail </h4>
-            </div>
-            <div class="modal-body">
-
-                @Html.Hidden("RowTableMasterAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableMasterAA" })
-
-
-                @Html.Label("Start Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("StartTimeModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "StartTimeModalFormId",
-                                   })
-                <br />
-
-                @Html.Label("End Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("EndTimeModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "EndTimeModalFormId",
-                                   })
-                <br />
-
-                @Html.Label("Product: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                <div id="divProductId2" style="display:block">
-                    <select class="" id="SelectProductIdDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownProductIdChangeCreateDetailFromModal()"></select>
-                </div>
-                <br />
-
-                @Html.Label("Batch Number: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("BatchNoModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "BatchNoModalFormId",
-                                   })
-                <br />
-
-
-                @Html.Label("Work Order: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("WorkOrderModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "WorkOrderModalFormId",
-                                   })
-                <br />
-
-                @Html.Label("Shift: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                <div id="divShift2" style="display:block">
-                    <select class="" id="SelectShiftDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownShiftChangeCreateDetailFromModal()"></select>
-                </div>
-                <br />
-
-                @Html.Label("Actual Hours: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                <div id="divActHrs2" style="display:block">
-                    <select class="" id="SelectActualHrsDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownActualHrsChangeCreateDetailFromModal()"></select>
-                </div>
-                <br />
-
-                @Html.Label("Unit Weight (mg): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("UnitWeightModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "UnitWeightModalFormId",
-                                   })
-                <br />
-
-                @Html.Label("Speed Machine RPM: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("SpeedMachineModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "SpeedMachineModalFormId",
-                                   })
-                <br />
-
-                @Html.Label("Actual Quantity (Kg): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("ActualQtyModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "ActualQtyModalFormId",
-                                   })
-                <br />
-
-                @Html.Label("Num. People: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("NumPeopleModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "NumPeopleModalFormId",
-                                   })
-                <br />
-
-                @Html.Label("Units: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("UnitsModalFormId", "", new
-                                   {
-                                       @class = "form-control required",
-                                       @min = "0",
-                                       @type = "time",
-                                       @id = "UnitsModalFormId",
-                                   })
-                <br />
-
-                <br />
-            </div>
-            <div class="modal-footer ">
-                <button type="submit" name="button" value="UpdateDetail" id="modalOK" class="btn btn-success" data-dismiss="modal" onclick="Update()" disabled><span class="glyphicon glyphicon-ok-sign"></span> OK</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@
@@ -604,12 +308,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css" type="text/css" />
     <link href="~/Content/table-blue.css" rel="stylesheet" />
+    <!-- Include SmartWizard JavaScript source -->
+    <script type="text/javascript" src="~/Scripts/SmartWizard/js/jquery.smartWizard.js"></script>
+
+    <!-- Include SmartWizard -->
+    <link href="~/Scripts/SmartWizard/cs/smart_wizard.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/SmartWizard/cs/smart_wizard_theme_circles.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/SmartWizard/cs/smart_wizard_theme_arrows.css" rel="stylesheet" type="text/css" />
+    <link href="~/Scripts/SmartWizard/cs/smart_wizard_theme_dots.css" rel="stylesheet" type="text/css" />
+
     <script type="text/javascript">
 
-        $(document).ready(function () {
-            document.getElementById("divDetails").style.display = "none";
-            document.getElementById("divDetailLosses").style.display = "none";
-        });
+        //$(document).ready(function () {
+        //    document.getElementById("divDetails").style.display = "none";
+        //    document.getElementById("divDetailLosses").style.display = "none";
+        //});
 
         $(function () {
             $(".datepicker").datepicker({
@@ -633,6 +346,114 @@
                 showLeadingZero: true
             });
         });
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+    $("#smartwizard").on("beginReset", function (e) {
+
+    //    var masterId = $('#ProductionMasterId').val();
+    //if (confirm("Are you sure you want to cancel the wizard?")) {
+    //var masterId = $('#ProductionMasterId').val();
+    //if (masterId == "") {
+    //window.location = "/Header/Index";
+    //}
+    //else {
+    //$.ajax({
+    //type: "POST",
+    //url: '/Header/CancelWizard/',
+    //data: { masterId: masterId },
+    //success: function (response) {
+    //window.location = "/Header/Index";
+    //},
+    //error: function (xhr, ajaxOptions, thrownError) {
+    //alert(xhr.status);
+    //alert(thrownError);
+    //alert(xhr.responseText);
+    //$(".loader").fadeOut("slow");
+    //}
+    //});
+    //}
+    //}
+    //else {
+    //$(".loader").fadeOut("slow");
+    //}
+    });
+
+    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
+    });
+
+    $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection, stepPosition) {
+    });
+
+    var btnFinish = $('<button></button>')
+    .attr('name', 'Save')
+    .attr('value', 'Save')
+    .attr('type', 'submit')
+    .text('Save')
+    .addClass('btn btn-info')
+    .on('click', function () {
+    $(".loader").fadeIn("slow");
+    });
+    var btnSaveAndSubmit = $('<button></button>').text('Save and Submit for Review')
+    .attr('name', 'SaveAndSubmit')
+    .attr('value', 'SaveAndSubmit')
+    .attr('type', 'submit')
+    .addClass('btn btn-primary')
+    .on('click', function () {
+    $(".loader").fadeIn("slow");
+    });
+    var btnCancel = $('<button></button>').text('Cancel')
+    .addClass('btn btn-danger')
+    .on('click', function () {
+    $(".loader").fadeIn("slow");
+    $('#smartwizard').smartWizard("reset");
+    });
+
+    $('#smartwizard').smartWizard({
+    selected: @Model.SelectedStep,
+    theme: 'arrows',
+    keyNavigation: false,
+    autoAdjustHeight: true,
+    transitionEffect: 'fade',
+    showStepURLhash: true,
+    toolbarSettings: {
+    toolbarPosition: 'both',
+    toolbarButtonPosition: 'end',
+    toolbarExtraButtons: [btnCancel, btnFinish, btnSaveAndSubmit]
+    },
+    anchorSettings: {
+    anchorClickable: true,
+    enableAllAnchors: true,
+    markDoneStep: true,
+    enableAnchorOnDoneStep: true
+    },
+    transitionSpeed: '400',
+    errorSteps: [],
+    });
+
+    $("#reset-btn").on("click", function () {
+    $('#smartwizard').smartWizard("reset");
+    return true;
+    });
+
+    $("#prev-btn").on("click", function () {
+    $('#smartwizard').smartWizard("prev");
+    return true;
+    });
+
+    $("#next-btn").on("click", function () {
+    $('#smartwizard').smartWizard("next");
+    return true;
+    });
+
+    $("#theme_selector").on("change", function () {
+    $('#smartwizard').smartWizard("theme", $(this).val());
+    return true;
+    });
+
+    $("#theme_selector").change();
+    });
     </script>
 
 }

@@ -38,6 +38,8 @@
     @Html.HiddenFor(x => Model.SelectedDetailToUpdateNumPeople)
     @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnits)
 
+    @Html.HiddenFor(x => Model.IsUpdate)
+    @Html.HiddenFor(x => Model.SelectedStep, new { @id = "SelectedStep" })
 
 
     if (Model != null)
