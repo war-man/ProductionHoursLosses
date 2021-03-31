@@ -409,10 +409,6 @@ function DeleteDetail(aa) {
     }
 }
 
-function AddDetailLosses(aa) {
-        $('#SelectedDetailToBeDeleted').val(aa);
-        document.getElementById("formSubmit").submit();
-}
 
 
 function Update() {
@@ -569,18 +565,18 @@ $("#SelectActualHrsDropDownIdCreateDetailFromModal").select2({
 $(document).ready(function () {
     $('#editTableRow').on('show.bs.modal', function (e) {
         var aa = $(e.relatedTarget).data('id');
-        var startTime = $(e.relatedTarget).data('startTime');
-        var endTime = $(e.relatedTarget).data('endTime');
-        var product = $(e.relatedTarget).data('productId');
-        var productName = $(e.relatedTarget).data('productName');
-        var batchNo = $(e.relatedTarget).data('batchNo');
-        var workOrder = $(e.relatedTarget).data('workOrder');
+        var startTime = $(e.relatedTarget).data('starttime');
+        var endTime = $(e.relatedTarget).data('endtime');
+        var product = $(e.relatedTarget).data('productid');
+        var productName = $(e.relatedTarget).data('productname');
+        var batchNo = $(e.relatedTarget).data('batchno');
+        var workOrder = $(e.relatedTarget).data('workorder');
         var shift = $(e.relatedTarget).data('shift');
-        var actualHours = $(e.relatedTarget).data('actualHours');
-        var unitWeight = $(e.relatedTarget).data('unitWeight');
-        var speedMachine = $(e.relatedTarget).data('speedMachine');
-        var actualQty = $(e.relatedTarget).data('actualQty');
-        var numPeople = $(e.relatedTarget).data('numPeople');
+        var actualHours = $(e.relatedTarget).data('actualhours');
+        var unitWeight = $(e.relatedTarget).data('unitweight');
+        var speedMachine = $(e.relatedTarget).data('speedmachine');
+        var actualQty = $(e.relatedTarget).data('actualqty');
+        var numPeople = $(e.relatedTarget).data('numpeople');
         var units = $(e.relatedTarget).data('units');
 
 
@@ -602,6 +598,96 @@ $(document).ready(function () {
         var selectOption = new Option(productName, product, true, true);
         $('#SelectProductIdDropDownIdCreateDetailFromModal').append(selectOption).trigger('change');
 
+        var selectOption2 = new Option((actualHours+" hrs"), actualHours, true, true);
+        $('#SelectActualHrsDropDownIdCreateDetailFromModal').append(selectOption2).trigger('change');
+
+        var shiftname;
+        if (shift == '1')
+            shiftname = "1st";
+        else if (shift == '2')
+            shiftname = "2nd";
+        else if (shift == '3')
+            shiftname = "3rd";
+
+        var selectOption3 = new Option(shiftname, shift, true, true);
+        $('#SelectShiftDropDownIdCreateDetailFromModal').append(selectOption3).trigger('change');
+
+        document.getElementById("modalOK").disabled = false;
+    });
+});
+
+$(document).ready(function () {
+    $('#addDetailLoss').on('show.bs.modal', function (e) {
+        var aa = $(e.relatedTarget).data('id');
+
+        $('#addDetailLoss #RowTableMasterAA').val(aa);
+
         document.getElementById("modalOK").disabled = true;
     });
 });
+
+$(function () {
+    $('#LossDurationModalFormId').change(function () {
+        CheckDuration();
+    });
+});
+
+function CheckDuration() {
+    var duration = document.getElementById("LossDurationModalFormId").value;
+    if (duration > 0) {
+        document.getElementById("modalOK").disabled = false;
+    }
+}
+
+function OnDropDownLossIdChangeCreateDetailLossFromModal() {
+    var selectItem = $("#SelectLossIdDropDownIdCreateDetailLossFromModal").val();
+    $('#SelectedLossesId').val(selectItem);
+    CheckDuration();
+}
+
+$("#SelectLossIdDropDownIdCreateDetailLossFromModal").select2({
+    width: '500px',
+    ajax: {
+        url: "/Header/GetLossesList",
+        dataType: 'json',
+        type: "POST",
+        data: function (params) {
+            return {
+                q: params.term, // search term
+                page: params.page || 1
+            };
+        },
+        ProcessResults: function (data, params) {
+            params.page = params.page || 1;
+
+            return {
+                results: data.items,
+                pagination: {
+                    more: (params.page * 30) < data.total_count
+                }
+            };
+        },
+        cache: true
+    },
+    placeholder: 'Search for a loss',
+    escapeMarkup: function (markup) { return markup; },
+    minimumInputLength: -1,
+    templateResult: formatRepoSelectItemId,
+    templateSelection: formatRepoSelection,
+    allowClear: true,
+    multiple: true,
+    maximumSelectionLength: 1
+});
+
+function AddDetailLoss() {
+    var aa = $('#addDetailLoss #RowTableMasterAA').val();
+    var lossid = $('#SelectedLossesId').val();
+    var duration = $('#addDetailLoss #LossDurationModalFormId').val();
+
+
+    $('#SelectedDetailToAddLossAA').val(aa);
+    $('#SelectedLossesId').val(lossid);
+    $('#SelectedLossesMins').val(duration);
+
+    document.getElementById("formSubmit").submit();
+}

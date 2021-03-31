@@ -183,8 +183,8 @@
             {
                 <tr>
                     <td>
-                        @*@Html.TextBox((i+1), "", new { @type = "number", @class = "form-control", @style = "width: 70px; max-width: 100%", @min = "1", @max = Model.DetailsList.Count })*@
-                        @Html.DisplayFor(modelDetail => Model.DetailsList[i].AA)
+                        @Html.Label((i+1).ToString())
+                        @*@Html.DisplayFor(modelDetail => Model.DetailsList[i].AA)*@
                     </td>
                     <td>
                         @Html.DisplayFor(modelDetail => Model.DetailsList[i].START_TIME)
@@ -223,25 +223,26 @@
                         @Html.DisplayFor(modelDetail => Model.DetailsList[i].UNITS)
                     </td>
                     <td>
-                        <button class="btn btn-success btn-sm" title="Edit" type="button" data-toggle="modal" data-target="#editTableRow"
+                        <button class="btn btn-warning btn-sm" title="Edit" type="button" data-toggle="modal" data-target="#editTableRow"
                                 data-id="@Model.DetailsList[i].AA"
-                                data-startTime="@Model.DetailsList[i].START_TIME"
-                                data-endTime="@Model.DetailsList[i].END_TIME"
-                                data-productId="@Model.DetailsList[i].PRODUCT_ID"
-                                data-productName="@Model.DetailsList[i].PRODUCT.DESCRIPTION"
-                                data-batchNo="@Model.DetailsList[i].BATCH_NO"
-                                data-workOrder="@Model.DetailsList[i].WORK_ORDER"
+                                data-starttime="@Model.DetailsList[i].START_TIME.ToString("HH:mm")"
+                                data-endtime="@Model.DetailsList[i].END_TIME.ToString("HH:mm")"
+                                data-productid="@Model.DetailsList[i].PRODUCT_ID"
+                                data-productname="@Model.DetailsList[i].PRODUCT.DESCRIPTION"
+                                data-batchno="@Model.DetailsList[i].BATCH_NO"
+                                data-workorder="@Model.DetailsList[i].WORK_ORDER"
                                 data-shift="@Model.DetailsList[i].SHIFT"
-                                data-actualHours="@Model.DetailsList[i].ACTUAL_HRS"
-                                data-unitWeight="@Model.DetailsList[i].UNIT_WEIGHT"
-                                data-speedMachine="@Model.DetailsList[i].SPEED_MACHINE_RPM"
-                                data-actualQty="@Model.DetailsList[i].ACTUAL_QTY"
-                                data-numPeople="@Model.DetailsList[i].NUM_PEOPLE"
+                                data-actualhours="@Model.DetailsList[i].ACTUAL_HRS"
+                                data-unitweight="@Model.DetailsList[i].UNIT_WEIGHT"
+                                data-speedmachine="@Model.DetailsList[i].SPEED_MACHINE_RPM"
+                                data-actualqty="@Model.DetailsList[i].ACTUAL_QTY"
+                                data-numpeople="@Model.DetailsList[i].NUM_PEOPLE"
                                 data-units="@Model.DetailsList[i].UNITS">
                             <i class="fa fa-pencil"></i>
                         </button>
-                        <button class="btn btn-warning btn-sm" title="Add Losses" onclick="AddDetailLosses('@Model.DetailsList[i].AA');">
-                            <i class="fa fa-trash"></i>
+                        <button class="btn btn-success btn-sm" title="Add" type="button" data-toggle="modal" data-target="#addDetailLoss"
+                                data-id="@Model.DetailsList[i].AA">
+                            <i class="fa fa-plus"></i>
                         </button>
                         <button class="btn btn-danger btn-sm" title="Delete" onclick="DeleteDetail('@Model.DetailsList[i].AA');">
                             <i class="fa fa-trash"></i>
@@ -253,3 +254,174 @@
     </table>
 
 }
+
+
+<div id="editTableRow" role="dialog" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                <h4 class="modal-title custom_align" id="Heading">Edit Detail </h4>
+            </div>
+            <div class="modal-body">
+
+                @Html.Hidden("RowTableMasterAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableMasterAA" })
+
+
+                @Html.Label("Start Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("StartTimeModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "time",
+               @id = "StartTimeModalFormId",
+           })
+                <br />
+
+                @Html.Label("End Time: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("EndTimeModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "time",
+               @id = "EndTimeModalFormId",
+           })
+                <br />
+
+                @Html.Label("Product: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                <div id="divProductId2" style="display:block">
+                    <select class="" id="SelectProductIdDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownProductIdChangeCreateDetailFromModal()"></select>
+                </div>
+                <br />
+
+                @Html.Label("Batch Number: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("BatchNoModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "string",
+               @id = "BatchNoModalFormId",
+           })
+                <br />
+
+
+                @Html.Label("Work Order: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("WorkOrderModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "string",
+               @id = "WorkOrderModalFormId",
+           })
+                <br />
+
+                @Html.Label("Shift: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                <div id="divShift2" style="display:block">
+                    <select class="" id="SelectShiftDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownShiftChangeCreateDetailFromModal()"></select>
+                </div>
+                <br />
+
+                @Html.Label("Actual Hours: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                <div id="divActHrs2" style="display:block">
+                    <select class="" id="SelectActualHrsDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownActualHrsChangeCreateDetailFromModal()"></select>
+                </div>
+                <br />
+
+                @Html.Label("Unit Weight (mg): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("UnitWeightModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "string",
+               @id = "UnitWeightModalFormId",
+           })
+                <br />
+
+                @Html.Label("Speed Machine RPM: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("SpeedMachineModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @max="100",
+               @type = "number",
+               @id = "SpeedMachineModalFormId",
+           })
+                <br />
+
+                @Html.Label("Actual Quantity (Kg): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("ActualQtyModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "number",
+               @id = "ActualQtyModalFormId",
+           })
+                <br />
+
+                @Html.Label("Num. People: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("NumPeopleModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "number",
+               @id = "NumPeopleModalFormId",
+           })
+                <br />
+
+                @Html.Label("Units: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("UnitsModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "number",
+               @id = "UnitsModalFormId",
+           })
+                <br />
+
+                <br />
+            </div>
+            <div class="modal-footer ">
+                <button type="submit" name="button" value="UpdateDetail" id="modalOK" class="btn btn-success" data-dismiss="modal" onclick="Update()" disabled><span class="glyphicon glyphicon-ok-sign"></span> OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="addDetailLoss" role="dialog" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                <h4 class="modal-title custom_align" id="Heading">Add detail loss</h4>
+            </div>
+            <div class="modal-body">
+
+                @Html.Hidden("RowTableMasterAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableMasterAA" })
+
+
+
+                @Html.Label("Loss: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                <div id="divLossId" style="display:block">
+                    <select class="" id="SelectLossIdDropDownIdCreateDetailLossFromModal" style="" onchange="OnDropDownLossIdChangeCreateDetailLossFromModal()"></select>
+                </div>
+                <br />
+
+                @Html.Label("Duration (mins): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                @Html.TextBox("LossDurationModalFormId", "", new
+           {
+               @class = "form-control required",
+               @min = "0",
+               @type = "number",
+               @id = "LossDurationModalFormId",
+           })
+                <br />
+
+                <br />
+            </div>
+            <div class="modal-footer ">
+                <button type="submit" name="button" value="UpdateDetailLoss" id="modalOK" class="btn btn-success" data-dismiss="modal" onclick="AddDetailLoss()" disabled><span class="glyphicon glyphicon-ok-sign"></span> OK</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -57,6 +57,8 @@ namespace ProductionHoursLosses.Models.ViewModels
 
         public List<DETAIL_LOSSES> DetailLossesList { get; set; }
 
+        public string SelectedDetailToAddLossAA { get; set; }
+        
         public string SelectedDetailToUpdateAA { get; set; }
         [DataType(DataType.Time)]
         public DateTime? SelectedDetailToUpdateStartTime { get; set; }

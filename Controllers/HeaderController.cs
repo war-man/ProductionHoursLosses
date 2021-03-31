@@ -56,6 +56,7 @@ namespace ProductionHoursLosses.Controllers
             if (model == null)
             {
                 model = new HeaderViewModel();
+                model.HeaderModel = new HEADER();
                 model.DetailsList = new List<DetailExtended>();
                 model.DetailLossesList = new List<DETAIL_LOSSES>();
             }
@@ -93,7 +94,7 @@ namespace ProductionHoursLosses.Controllers
             if (model.SelectedStatus == null)
                 model.SelectedStatus = new STATUS();
 
-            if (!model.SelectedDate.HasValue)
+            if (!model.SelectedDate.HasValue && model.HeaderModel.DATE == null)
                 errorList.Add("Enter a Date.");
             if (!model.SelectedFactoryID.HasValue)
                 errorList.Add("Select a Factory.");
@@ -102,9 +103,21 @@ namespace ProductionHoursLosses.Controllers
             if (!model.SelectedAvailHours.HasValue)
                 errorList.Add("Select the available hours.");
 
+            if (!errorList.Any() && model.HeaderModel == null)
+            {
+                model.HeaderModel = new HEADER();
+                model.HeaderModel.DATE = model.SelectedDate.Value;
+                model.HeaderModel.FACTORY_ID = (int)model.SelectedFactoryID;
+                model.HeaderModel.ROOM_ID = (int)model.SelectedRoomID;
+                model.HeaderModel.STATUS_ID = (int)model.SelectedStatusID;
+                model.HeaderModel.AVAIL_HRS = model.SelectedAvailHours;
+            }
 
             if (!string.IsNullOrEmpty(model.SelectedDetailToBeDeleted))
                 DeleteDetail(model);
+
+            if (!string.IsNullOrEmpty(model.SelectedDetailToAddLossAA))
+                AddDetailLoss(model, dbPRD_HRS, ref errorList);
 
             if (!string.IsNullOrEmpty(addDetail))
                 AddDetails(model,dbPRD_HRS,ref errorList);
@@ -155,8 +168,8 @@ namespace ProductionHoursLosses.Controllers
 
         private ExceptionError Save(HeaderViewModel model, bool submitForReview)
         {
-            using (new Impersonator(ProductionHoursLosses.Helper.Helper.GetUserNameWithoutDomain(User.Identity.Name), StaticVariables.DomainName, model.Password))
-            {
+            //using (new Impersonator(ProductionHoursLosses.Helper.Helper.GetUserNameWithoutDomain(User.Identity.Name), StaticVariables.DomainName, model.Password))
+            //{
                 using (var dbPRD_HRS = new PRD_HRS_DBEntities())
                 {
                     using (DbContextTransaction transactionNewRec = dbPRD_HRS.Database.BeginTransaction())
@@ -168,12 +181,18 @@ namespace ProductionHoursLosses.Controllers
                         else
                         {
                             var newHeader = new HEADER();
-                            newHeader.DATE = model.SelectedDate.Value;
-                            newHeader.FACTORY_ID = (int)model.SelectedFactoryID;
-                            newHeader.ROOM_ID = (int)model.SelectedRoomID;
-                            newHeader.AVAIL_HRS = model.SelectedAvailHours;
+                            //newHeader.DATE = model.SelectedDate.Value;
+                            //newHeader.FACTORY_ID = (int)model.SelectedFactoryID;
+                            //newHeader.ROOM_ID = (int)model.SelectedRoomID;
+                            //newHeader.AVAIL_HRS = model.SelectedAvailHours;
 
-                            foreach(var detailExtended in model.DetailsList.OrderBy(x => x.AA))
+                            newHeader.DATE = model.HeaderModel.DATE;
+                            newHeader.FACTORY_ID = (int)model.HeaderModel.FACTORY_ID;
+                            newHeader.ROOM_ID = (int)model.HeaderModel.ROOM_ID;
+                            newHeader.AVAIL_HRS = model.HeaderModel.AVAIL_HRS;
+                            newHeader.STATUS_ID = (int)model.HeaderModel.STATUS_ID;
+
+                            foreach (var detailExtended in model.DetailsList.OrderBy(x => x.AA))
                             {
                                 var newDetail = new DETAIL();
                                 newDetail.START_TIME = detailExtended.START_TIME;
@@ -188,6 +207,15 @@ namespace ProductionHoursLosses.Controllers
                                 newDetail.ACTUAL_QTY = detailExtended.ACTUAL_QTY;
                                 newDetail.NUM_PEOPLE = detailExtended.NUM_PEOPLE;
                                 newDetail.UNITS = detailExtended.UNITS;
+
+                            foreach(var detaiLoss in detailExtended.DetailLossesList)
+                            {
+                                var newDetailLoss = new DETAIL_LOSSES();
+                                newDetailLoss.LOSSES_ID = detaiLoss.LOSSES_ID;
+                                newDetailLoss.DURATION = detaiLoss.DURATION;
+
+                                newDetail.DETAIL_LOSSES.Add(newDetailLoss);
+                            }
 
                                 newHeader.DETAIL.Add(newDetail);
                             }
@@ -219,7 +247,7 @@ namespace ProductionHoursLosses.Controllers
                         }
                     }
                 }
-            }
+            //}
         }
         private void AddDetails(HeaderViewModel model, PRD_HRS_DBEntities dbPRD_HRS, ref List<string> error)
         {
@@ -248,12 +276,12 @@ namespace ProductionHoursLosses.Controllers
 
             ViewBag.SelectedProduct = model.SelectedProduct;
 
-            if (!string.IsNullOrEmpty(model.SelectedBatchNo))
+            if (string.IsNullOrEmpty(model.SelectedBatchNo))
                 error.Add("Enter Batch Number.");
             else
                 ++count;
 
-            if (!string.IsNullOrEmpty(model.SelectedWorkOrder))
+            if (string.IsNullOrEmpty(model.SelectedWorkOrder))
                 error.Add("Enter Work Order.");
             else
                 ++count;
@@ -336,6 +364,48 @@ namespace ProductionHoursLosses.Controllers
 
 
         }
+
+
+        private void AddDetailLoss(HeaderViewModel model, PRD_HRS_DBEntities dbPRD_HRS, ref List<string> error)
+        {
+            model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
+
+            if (!model.SelectedLossesMins.HasValue)
+                error.Add("Enter Loss Duration (mins).");
+
+            if (!model.SelectedLossesId.HasValue)
+                error.Add("Select Loss.");
+            else
+                model.SelectedLosses = dbPRD_HRS.LOSSES.FirstOrDefault(x => x.ID == model.SelectedLossesId);
+
+            if (model.SelectedLosses == null)
+                model.SelectedLosses = new LOSSES();
+
+            ViewBag.SelectedLosses = model.SelectedLosses;
+
+            if(model.SelectedLossesMins.HasValue && model.SelectedLossesId.HasValue)
+            {
+                foreach (var det in model.DetailsList.Where(x => x.AA.ToString() == model.SelectedDetailToAddLossAA))
+                {
+                    if (det.DETAIL_LOSSES == null)
+                        det.DetailLossesList = new List<DETAIL_LOSSES>();
+
+                    var detailLossToAdd = new DETAIL_LOSSES();
+
+                    detailLossToAdd.LOSSES_ID = (int)model.SelectedLossesId;
+                    detailLossToAdd.LOSSES = dbPRD_HRS.LOSSES.FirstOrDefault(x => x.ID == model.SelectedLossesId);
+                    detailLossToAdd.DURATION = (int)model.SelectedLossesMins;
+
+                    det.DetailLossesList.Add(detailLossToAdd);
+
+                    model.SelectedDetailToAddLossAA = string.Empty;
+                    model.SelectedLossesId = new int?();
+                    model.SelectedLossesMins = new int?();
+                    model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
+                }
+            }
+        }
+
 
         private static void UpdateDetails(HeaderViewModel model, PRD_HRS_DBEntities dbPRD_HRS)
         {
