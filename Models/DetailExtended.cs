@@ -9,7 +9,7 @@ namespace ProductionHoursLosses.Models
     {
         public Guid AA { get; set; }
 
-        public List<DETAIL_LOSSES> DetailLossesList { get; set; }
+        public List<DetailLossesExtended> DetailLossesList { get; set; }
         public int? SelectedLossesId { get; set; }
         public LOSSES SelectedLosses { get; set; }
         public int? SelectedLossesMins { get; set; }

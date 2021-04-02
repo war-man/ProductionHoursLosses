@@ -266,14 +266,14 @@
     .on('click', function () {
     $(".loader").fadeIn("slow");
     });
-    var btnSaveAndSubmit = $('<button></button>').text('Save and Submit for Review')
-    .attr('name', 'SaveAndSubmit')
-    .attr('value', 'SaveAndSubmit')
-    .attr('type', 'submit')
-    .addClass('btn btn-primary')
-    .on('click', function () {
-    $(".loader").fadeIn("slow");
-    });
+    //var btnSaveAndSubmit = $('<button></button>').text('Save and Submit for Review')
+    //.attr('name', 'SaveAndSubmit')
+    //.attr('value', 'SaveAndSubmit')
+    //.attr('type', 'submit')
+    //.addClass('btn btn-primary')
+    //.on('click', function () {
+    //$(".loader").fadeIn("slow");
+    //});
     var btnCancel = $('<button></button>').text('Cancel')
     .addClass('btn btn-danger')
     .on('click', function () {
@@ -291,7 +291,7 @@
     toolbarSettings: {
     toolbarPosition: 'both',
     toolbarButtonPosition: 'end',
-    toolbarExtraButtons: [btnCancel, btnFinish, btnSaveAndSubmit]
+        toolbarExtraButtons: [btnCancel, btnFinish]/*, btnSaveAndSubmit*/
     },
     anchorSettings: {
     anchorClickable: true,

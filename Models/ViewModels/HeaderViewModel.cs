@@ -51,11 +51,12 @@ namespace ProductionHoursLosses.Models.ViewModels
         public LOSSES SelectedLosses { get; set; } 
         public int? SelectedLossesMins { get; set; }
 
-        public string SelectedDetailToBeDeleted { get; set; } 
+        public string SelectedDetailToBeDeleted { get; set; }
+        public string SelectedDetailLossToBeDeleted { get; set; }
 
         public List<DetailExtended> DetailsList { get; set; }
 
-        public List<DETAIL_LOSSES> DetailLossesList { get; set; }
+        //public List<DETAIL_LOSSES> DetailLossesList { get; set; }
 
         public string SelectedDetailToAddLossAA { get; set; }
         
@@ -76,6 +77,10 @@ namespace ProductionHoursLosses.Models.ViewModels
         public decimal? SelectedDetailToUpdateActualQuantity { get; set; }
         public int? SelectedDetailToUpdateNumPeople { get; set; }
         public int? SelectedDetailToUpdateUnits { get; set; }
+
+        public string SelectedDetailLossToUpdateAA { get; set; }
+        public int? SelectedDetailLossToUpdateLossID { get; set; }
+        public int? SelectedDetailLossToUpdateDuration { get; set; }
 
         public bool IsUpdate { get; set; }
         public string Password { get; set; }

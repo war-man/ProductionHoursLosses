@@ -23,6 +23,7 @@
     @Html.HiddenFor(x => Model.SelectedLossesId, new { @id = "SelectedLossesId" })
     @Html.HiddenFor(x => Model.SelectedLossesMins, new { @id = "SelectedLossesMins" })
     @Html.HiddenFor(x => Model.SelectedDetailToBeDeleted, new { @id = "SelectedDetailToBeDeleted" })
+    @Html.HiddenFor(x => Model.SelectedDetailLossToBeDeleted, new { @id = "SelectedDetailLossToBeDeleted" })
     @Html.HiddenFor(x => Model.SelectedDetailToAddLossAA)
 
     @Html.HiddenFor(x => Model.SelectedDetailToUpdateAA)
@@ -50,6 +51,10 @@
     @Html.HiddenFor(x => Model.SelectedDetailToUpdateNumPeople)
 
     @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnits)
+
+    @Html.HiddenFor(x => Model.SelectedDetailLossToUpdateAA)
+    @Html.HiddenFor(x => Model.SelectedDetailLossToUpdateLossID, new { @id = "SelectedDetailLossToUpdateLossID" })
+    @Html.HiddenFor(x => Model.SelectedDetailLossToUpdateDuration)
 
     @Html.HiddenFor(x => Model.IsUpdate)
 
@@ -91,6 +96,7 @@
                 {
                     for (int j = 0; j < Model.DetailsList[i].DetailLossesList.Count; j++)
                     {
+                        @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].AA)
                         @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].LOSSES_ID)
                         @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].DURATION)
                         @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].LOSSES.CODE)
@@ -98,17 +104,6 @@
                         @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].LOSSES.DESCRIPTION)
                     }
                 }
-            }
-
-        }
-
-        if (Model.DetailLossesList != null)
-        {
-            for (int i = 0; i < Model.DetailLossesList.Count; i++)
-            {
-                @Html.HiddenFor(x => Model.DetailLossesList[i].DETAIL_ID)
-                @Html.HiddenFor(x => Model.DetailLossesList[i].LOSSES_ID)
-                @Html.HiddenFor(x => Model.DetailLossesList[i].DURATION)
             }
 
         }

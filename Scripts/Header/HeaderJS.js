@@ -409,6 +409,14 @@ function DeleteDetail(aa) {
     }
 }
 
+function DeleteDetailLoss(aa, detaa) {
+    var result = confirm("Are you sure you Want to Delete Selected Record?");
+    if (result) {
+        $('#SelectedDetailLossToBeDeleted').val(aa);
+        $('#SelectedDetailToBeDeleted').val(detaa);
+        document.getElementById("formSubmit").submit();
+    }
+}
 
 
 function Update() {
@@ -444,13 +452,27 @@ function Update() {
     document.getElementById("formSubmit").submit();
 }
 
+function UpdateDetailLoss() {
+    var aa = $('#editTableLossesRow #RowTableDetailAA').val();
+    var detaa = $('#editTableLossesRow #RowTableDetailLossAA').val();
+    var lossid = $('#editTableLossesRow #LossModalFormId').val();
+    var duration = $('#editTableLossesRow #LossDurationModalFormId').val();
+
+    $('#SelectedDetailLossToUpdateAA').val(aa);
+    $('#SelectedDetailToUpdateAA').val(detaa);
+    $('#SelectedDetailLossToUpdateLossID').val(lossid);
+    $('#SelectedDetailLossToUpdateDuration').val(duration);
+
+    document.getElementById("formSubmit").submit();
+}
+
 function OnDropDownProductIdChangeCreateDetailFromModal() {
     var selectItem = $("#SelectProductIdDropDownIdCreateDetailFromModal").val();
     $('#SelectedProductId').val(selectItem);
 }
 
 $("#SelectProductIdDropDownIdCreateDetailFromModal").select2({
-    width: '500px',
+    width: '300px',
     ajax: {
         url: "/Header/GetProductList",
         dataType: 'json',
@@ -489,7 +511,7 @@ function OnDropDownShiftChangeCreateDetailFromModal() {
 }
 
 $("#SelectShiftDropDownIdCreateDetailFromModal").select2({
-    width: '500px',
+    width: '150px',
     ajax: {
         url: "/Header/GetShiftList",
         dataType: 'json',
@@ -529,7 +551,7 @@ function OnDropDownActualHrsChangeCreateDetailFromModal() {
 }
 
 $("#SelectActualHrsDropDownIdCreateDetailFromModal").select2({
-    width: '500px',
+    width: '150px',
     ajax: {
         url: "/Header/GetAvailHrsList",
         dataType: 'json',
@@ -617,7 +639,29 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+    $('#editTableLossesRow').on('show.bs.modal', function (e) {
+        $.fn.bootstrapBtn = $.fn.button.noConflict();
+        var aa = $(e.relatedTarget).data('id');
+        var detaa = $(e.relatedTarget).data('detailid');
+        var lossid = $(e.relatedTarget).data('lossid');
+        var lossname = $(e.relatedTarget).data('lossname');
+        var duration = $(e.relatedTarget).data('duration');
+
+        $('#editTableLossesRow #RowTableDetailAA').val(aa);
+        $('#editTableLossesRow #RowTableDetailLossAA').val(detaa); 
+        $('#editTableLossesRow #LossDurationModalFormId').val(duration); 
+
+        var selectOption = new Option(lossname, lossid, true, true);
+        $('#SelectLossIdDropDownIdCreateDetailLossFromModal').append(selectOption).trigger('change');
+
+        document.getElementById("modal2OK").disabled = true;
+    });
+});
+
+
+$(document).ready(function () {
     $('#addDetailLoss').on('show.bs.modal', function (e) {
+        $.fn.bootstrapBtn = $.fn.button.noConflict();
         var aa = $(e.relatedTarget).data('id');
 
         $('#addDetailLoss #RowTableMasterAA').val(aa);
@@ -625,6 +669,7 @@ $(document).ready(function () {
         document.getElementById("modal2OK").disabled = true;
     });
 });
+
 
 $(function () {
     $('#LossDurationModalFormId').change(function () {
@@ -646,7 +691,7 @@ function OnDropDownLossIdChangeCreateDetailLossFromModal() {
 }
 
 $("#SelectLossIdDropDownIdCreateDetailLossFromModal").select2({
-    width: '500px',
+    width: '450px',
     ajax: {
         url: "/Header/GetLossesList",
         dataType: 'json',
@@ -691,3 +736,43 @@ function AddDetailLoss() {
 
     document.getElementById("formSubmit").submit();
 }
+
+function OnDropDownLossIdChangeUpdateDetailLossFromModal() {
+    var selectItem = $("#SelectLossIdDropDownIdUpdateDetailLossFromModal").val();
+    $('#SelectedDetailLossToUpdateLossID').val(selectItem);
+    CheckDuration();
+}
+
+$("#SelectLossIdDropDownIdUpdateDetailLossFromModal").select2({
+    width: '450px',
+    ajax: {
+        url: "/Header/GetLossesList",
+        dataType: 'json',
+        type: "POST",
+        data: function (params) {
+            return {
+                q: params.term, // search term
+                page: params.page || 1
+            };
+        },
+        ProcessResults: function (data, params) {
+            params.page = params.page || 1;
+
+            return {
+                results: data.items,
+                pagination: {
+                    more: (params.page * 30) < data.total_count
+                }
+            };
+        },
+        cache: true
+    },
+    placeholder: 'Search for a loss',
+    escapeMarkup: function (markup) { return markup; },
+    minimumInputLength: -1,
+    templateResult: formatRepoSelectItemId,
+    templateSelection: formatRepoSelection,
+    allowClear: true,
+    multiple: true,
+    maximumSelectionLength: 1
+});

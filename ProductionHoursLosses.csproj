@@ -250,6 +250,7 @@
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DetailExtended.cs" />
+    <Compile Include="Models\DetailLossesExtended.cs" />
     <Compile Include="Models\DETAIL_LOSSES.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>

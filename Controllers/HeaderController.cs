@@ -58,7 +58,7 @@ namespace ProductionHoursLosses.Controllers
                 model = new HeaderViewModel();
                 model.HeaderModel = new HEADER();
                 model.DetailsList = new List<DetailExtended>();
-                model.DetailLossesList = new List<DETAIL_LOSSES>();
+                //model.DetailLossesList = new List<DETAIL_LOSSES>();
             }
                 
 
@@ -113,11 +113,17 @@ namespace ProductionHoursLosses.Controllers
                 model.HeaderModel.AVAIL_HRS = model.SelectedAvailHours;
             }
 
-            if (!string.IsNullOrEmpty(model.SelectedDetailToBeDeleted))
+            if (!string.IsNullOrEmpty(model.SelectedDetailToBeDeleted) && string.IsNullOrEmpty(model.SelectedDetailLossToBeDeleted))
                 DeleteDetail(model);
+
+            if (!string.IsNullOrEmpty(model.SelectedDetailLossToBeDeleted) && !string.IsNullOrEmpty(model.SelectedDetailToBeDeleted))
+                DeleteDetailLoss(model);
 
             if (!string.IsNullOrEmpty(model.SelectedDetailToAddLossAA))
                 AddDetailLoss(model, dbPRD_HRS, ref errorList);
+
+            if (!string.IsNullOrEmpty(model.SelectedDetailLossToUpdateAA) && !string.IsNullOrEmpty(model.SelectedDetailToUpdateAA))
+                UpdateDetailLoss(model, dbPRD_HRS);
 
             if (!string.IsNullOrEmpty(addDetail))
                 AddDetails(model,dbPRD_HRS,ref errorList);
@@ -208,7 +214,7 @@ namespace ProductionHoursLosses.Controllers
                                 newDetail.NUM_PEOPLE = detailExtended.NUM_PEOPLE;
                                 newDetail.UNITS = detailExtended.UNITS;
 
-                            foreach(var detaiLoss in detailExtended.DetailLossesList)
+                            foreach(var detaiLoss in detailExtended.DetailLossesList.OrderBy(y => y.AA))
                             {
                                 var newDetailLoss = new DETAIL_LOSSES();
                                 newDetailLoss.LOSSES_ID = detaiLoss.LOSSES_ID;
@@ -388,10 +394,11 @@ namespace ProductionHoursLosses.Controllers
                 foreach (var det in model.DetailsList.Where(x => x.AA.ToString() == model.SelectedDetailToAddLossAA))
                 {
                     if (det.DetailLossesList == null)
-                        det.DetailLossesList = new List<DETAIL_LOSSES>();
+                        det.DetailLossesList = new List<DetailLossesExtended>();
 
-                    var detailLossToAdd = new DETAIL_LOSSES();
+                    var detailLossToAdd = new DetailLossesExtended();
 
+                    detailLossToAdd.AA = Guid.NewGuid();
                     detailLossToAdd.LOSSES_ID = (int)model.SelectedLossesId;
                     detailLossToAdd.LOSSES = dbPRD_HRS.LOSSES.FirstOrDefault(x => x.ID == model.SelectedLossesId);
                     detailLossToAdd.DURATION = (int)model.SelectedLossesMins;
@@ -445,6 +452,29 @@ namespace ProductionHoursLosses.Controllers
                 model.SelectedDetailToUpdateActualQuantity = new decimal?();
                 model.SelectedDetailToUpdateNumPeople = new int?();
                 model.SelectedDetailToUpdateUnits = new int?();
+                model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
+            }
+        }
+
+        private static void UpdateDetailLoss(HeaderViewModel model, PRD_HRS_DBEntities dbPRD_HRS)
+        {
+            if (string.IsNullOrWhiteSpace(model.SelectedDetailToUpdateAA) || string.IsNullOrWhiteSpace(model.SelectedDetailLossToUpdateAA) ||
+                (!model.SelectedDetailLossToUpdateDuration.HasValue || !model.SelectedDetailLossToUpdateLossID.HasValue ))
+                return;
+
+            foreach (var det in model.DetailsList.Where(x => x.AA.ToString() == model.SelectedDetailToUpdateAA))
+            {
+                foreach(var detlos in det.DetailLossesList.Where(y => y.AA.ToString()==model.SelectedDetailLossToUpdateAA))
+                {
+                    detlos.LOSSES_ID = (int)model.SelectedDetailLossToUpdateLossID;
+                    detlos.DURATION = (int)model.SelectedDetailLossToUpdateDuration;
+                }
+
+                model.SelectedDetailToUpdateAA = string.Empty;
+                model.SelectedDetailLossToUpdateAA = string.Empty;
+                model.SelectedDetailLossToUpdateDuration = new int?();
+                model.SelectedDetailLossToUpdateLossID = new int?();
+
                 model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
             }
         }
@@ -785,6 +815,26 @@ namespace ProductionHoursLosses.Controllers
                 model.DetailsList.RemoveAll(x => x.AA.ToString() == model.SelectedDetailToBeDeleted);
 
             model.SelectedDetailToBeDeleted = string.Empty;
+            model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
+            TempData["objectFromAction"] = model;
+
+            return RedirectToAction("Create", "Header", new { model, button = "delete" });
+        }
+
+        private ActionResult DeleteDetailLoss(HeaderViewModel model)
+        {
+            if (model.DetailsList != null)
+            {
+                foreach(var det in model.DetailsList.Where(x => x.AA.ToString() == model.SelectedDetailToBeDeleted))
+                {
+                    if(det.DetailLossesList != null && det.DetailLossesList.Any())
+                        det.DetailLossesList.RemoveAll(y => y.AA.ToString() == model.SelectedDetailLossToBeDeleted);
+                }
+     
+            }
+
+            model.SelectedDetailToBeDeleted = string.Empty;
+            model.SelectedDetailLossToBeDeleted = string.Empty;
             model.SelectedStep = (int)SmartWizardStepEnum.AddDetails;
             TempData["objectFromAction"] = model;
 
