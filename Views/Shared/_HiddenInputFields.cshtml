@@ -11,6 +11,8 @@
     @*@Html.HiddenFor(x => Model.SelectedStartTime, new { @id = "SelectedStartTime" })
         @Html.HiddenFor(x => Model.SelectedEndTime, new { @id = "SelectedEndTime" })*@
     @Html.HiddenFor(x => Model.SelectedProductId, new { @id = "SelectedProductId" })
+    @Html.HiddenFor(x => Model.SelectedProduct.CODE)
+    @Html.HiddenFor(x => Model.SelectedProduct.DESCRIPTION)
     @*@Html.HiddenFor(x => Model.SelectedBatchNo, new { @id = "SelectedBatchNo" })
         @Html.HiddenFor(x => Model.SelectedWorkOrder, new { @id = "SelectedWorkOrder" })*@
     @Html.HiddenFor(x => Model.SelectedShift, new { @id = "SelectedShift" })

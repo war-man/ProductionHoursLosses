@@ -226,7 +226,7 @@
                     @Html.DisplayFor(modelDetail => Model.DetailsList[i].UNITS)
                 </td>
                 <td>
-                    <button class="btn btn-warning btn-sm" title="Edit" type="button" data-toggle="modal" data-target="#editTableRow"
+                    <button class="btn btn-warning btn-sm" title="Edit Detail" type="button" data-toggle="modal" data-target="#editTableRow"
                             data-id="@Model.DetailsList[i].AA"
                             data-starttime="@Model.DetailsList[i].START_TIME.ToString("HH:mm")"
                             data-endtime="@Model.DetailsList[i].END_TIME.ToString("HH:mm")"
@@ -243,16 +243,16 @@
                             data-units="@Model.DetailsList[i].UNITS">
                         <i class="fa fa-pencil"></i>
                     </button>
-                    <button class="btn btn-success btn-sm" title="Add" type="button" data-toggle="modal" data-target="#addDetailLoss"
+                    <button class="btn btn-success btn-sm" title="Add Loss" type="button" data-toggle="modal" data-target="#addDetailLoss"
                             data-id="@Model.DetailsList[i].AA">
                         <i class="fa fa-plus"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm" title="Delete" onclick="DeleteDetail('@Model.DetailsList[i].AA');">
+                    <button class="btn btn-danger btn-sm" title="Delete Detail" onclick="DeleteDetail('@Model.DetailsList[i].AA');">
                         <i class="fa fa-trash"></i>
                     </button>
                 </td>
                 <td>
-                    if (Model.DetailsList[i].DetailLossesList != null && Model.DetailsList[i].DetailLossesList.Any())
+                    @if (Model.DetailsList[i].DetailLossesList != null && Model.DetailsList[i].DetailLossesList.Any())
                     {
                     <table class="tableStyle">
                         <thead>
@@ -322,29 +322,29 @@
             </div>
             <div class="modal-body">
 
-                @Html.Hidden("RowTableDetailAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableMasterAA" })
-                @Html.Hidden("RowTableDetailLossAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableMasterAA" })
+                @Html.Hidden("RowTableDetailAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableDetailAA" })
+                @Html.Hidden("RowTableDetailLossAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableDetailLossAA" })
 
                 @Html.Label("Loss: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                <div id="divLossId" style="display:block">
+                <div id="divLossId2" style="display:block">
                     <select class="" id="SelectLossIdDropDownIdUpdateDetailLossFromModal" style="" onchange="OnDropDownLossIdChangeUpdateDetailLossFromModal()"></select>
                 </div>
                 <br />
 
                 @Html.Label("Duration (mins): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                @Html.TextBox("LossDurationModalFormId", "", new
+                @Html.TextBox("LossDurationModalFormId2", "", new
            {
                @class = "form-control required",
                @min = "0",
                @type = "number",
-               @id = "LossDurationModalFormId",
+               @id = "LossDurationModalFormId2",
            })
                 <br />
 
                 <br />
             </div>
             <div class="modal-footer ">
-                <button type="submit" name="button" value="UpdateDetail" id="modal2OK" class="btn btn-success" data-dismiss="modal" onclick="UpdateDetailLoss()" disabled><span class="glyphicon glyphicon-ok-sign"></span> OK</button>
+                <button type="submit" name="button" value="UpdateDetailLoss" id="modal3OK" class="btn btn-success" data-dismiss="modal" onclick="UpdateDetailLoss()" disabled><span class="glyphicon glyphicon-ok-sign"></span> OK</button>
             </div>
         </div>
     </div>

@@ -423,11 +423,11 @@ function Update() {
     var aa = $('#editTableRow #RowTableMasterAA').val();
     var startTime = $('#editTableRow #StartTimeModalFormId').val();
     var endTime = $('#editTableRow #EndTimeModalFormId').val();
-    var product = $('#editTableRow #ProductIdModalFormId').val();
+    //var product = $('#editTableRow #ProductIdModalFormId').val();
     var batchNo = $('#editTableRow #BatchNoModalFormId').val();
     var workOrder = $('#editTableRow #WorkOrderModalFormId').val();
-    var shift = $('#editTableRow #ShiftModalFormId').val();
-    var actualHours = $('#editTableRow #ActualHrsModalFormId').val();
+    //var shift = $('#editTableRow #ShiftModalFormId').val();
+    //var actualHours = $('#editTableRow #ActualHrsModalFormId').val();
     var unitWeight = $('#editTableRow #UnitWeightModalFormId').val();
     var speedMachine = $('#editTableRow #SpeedMachineModalFormId').val();
     var actualQty = $('#editTableRow #ActualQtyModalFormId').val();
@@ -438,11 +438,11 @@ function Update() {
     $('#SelectedDetailToUpdateAA').val(aa);
     $('#SelectedDetailToUpdateStartTime').val(startTime);
     $('#SelectedDetailToUpdateEndTime').val(endTime);
-    $('#SelectedDetailToUpdateProductId').val(product);
+    //$('#SelectedDetailToUpdateProductId').val(product);
     $('#SelectedDetailToUpdateBatchNo').val(batchNo);
     $('#SelectedDetailToUpdateWorkOrder').val(workOrder);
-    $('#SelectedDetailToUpdateShift').val(shift);
-    $('#SelectedDetailToUpdateActualHours').val(actualHours);
+    //$('#SelectedDetailToUpdateShift').val(shift);
+    //$('#SelectedDetailToUpdateActualHours').val(actualHours);
     $('#SelectedDetailToUpdateUnitWeight').val(unitWeight);
     $('#SelectedDetailToUpdateSpeedMachineRpm').val(speedMachine);
     $('#SelectedDetailToUpdateActualQuantity').val(actualQty);
@@ -455,12 +455,12 @@ function Update() {
 function UpdateDetailLoss() {
     var aa = $('#editTableLossesRow #RowTableDetailAA').val();
     var detaa = $('#editTableLossesRow #RowTableDetailLossAA').val();
-    var lossid = $('#editTableLossesRow #LossModalFormId').val();
-    var duration = $('#editTableLossesRow #LossDurationModalFormId').val();
+    //var lossid = $('#editTableLossesRow #LossModalFormId').val();
+    var duration = $('#editTableLossesRow #LossDurationModalFormId2').val();
 
     $('#SelectedDetailLossToUpdateAA').val(aa);
     $('#SelectedDetailToUpdateAA').val(detaa);
-    $('#SelectedDetailLossToUpdateLossID').val(lossid);
+    //$('#SelectedDetailLossToUpdateLossID').val(lossid);
     $('#SelectedDetailLossToUpdateDuration').val(duration);
 
     document.getElementById("formSubmit").submit();
@@ -468,7 +468,7 @@ function UpdateDetailLoss() {
 
 function OnDropDownProductIdChangeCreateDetailFromModal() {
     var selectItem = $("#SelectProductIdDropDownIdCreateDetailFromModal").val();
-    $('#SelectedProductId').val(selectItem);
+    $('#SelectedDetailToUpdateProductId').val(selectItem);
 }
 
 $("#SelectProductIdDropDownIdCreateDetailFromModal").select2({
@@ -507,7 +507,7 @@ $("#SelectProductIdDropDownIdCreateDetailFromModal").select2({
 
 function OnDropDownShiftChangeCreateDetailFromModal() {
     var selectItem = $("#SelectShiftDropDownIdCreateDetailFromModal").val();
-    $('#SelectedShift').val(selectItem);
+    $('#SelectedDetailToUpdateShift').val(selectItem);
 }
 
 $("#SelectShiftDropDownIdCreateDetailFromModal").select2({
@@ -547,7 +547,7 @@ $("#SelectShiftDropDownIdCreateDetailFromModal").select2({
 
 function OnDropDownActualHrsChangeCreateDetailFromModal() {
     var selectItem = $("#SelectActualHrsDropDownIdCreateDetailFromModal").val();
-    $('#SelectedActualHours').val(selectItem);
+    $('#SelectedDetailToUpdateActualHours').val(selectItem);
 }
 
 $("#SelectActualHrsDropDownIdCreateDetailFromModal").select2({
@@ -640,7 +640,6 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('#editTableLossesRow').on('show.bs.modal', function (e) {
-        $.fn.bootstrapBtn = $.fn.button.noConflict();
         var aa = $(e.relatedTarget).data('id');
         var detaa = $(e.relatedTarget).data('detailid');
         var lossid = $(e.relatedTarget).data('lossid');
@@ -649,19 +648,18 @@ $(document).ready(function () {
 
         $('#editTableLossesRow #RowTableDetailAA').val(aa);
         $('#editTableLossesRow #RowTableDetailLossAA').val(detaa); 
-        $('#editTableLossesRow #LossDurationModalFormId').val(duration); 
+        $('#editTableLossesRow #LossDurationModalFormId2').val(duration); 
 
         var selectOption = new Option(lossname, lossid, true, true);
-        $('#SelectLossIdDropDownIdCreateDetailLossFromModal').append(selectOption).trigger('change');
+        $('#SelectLossIdDropDownIdUpdateDetailLossFromModal').append(selectOption).trigger('change');
 
-        document.getElementById("modal2OK").disabled = true;
+        document.getElementById("modal3OK").disabled = true;
     });
 });
 
 
 $(document).ready(function () {
     $('#addDetailLoss').on('show.bs.modal', function (e) {
-        $.fn.bootstrapBtn = $.fn.button.noConflict();
         var aa = $(e.relatedTarget).data('id');
 
         $('#addDetailLoss #RowTableMasterAA').val(aa);
@@ -676,6 +674,19 @@ $(function () {
         CheckDuration();
     });
 });
+
+$(function () {
+    $('#LossDurationModalFormId2').change(function () {
+        CheckDuration2();
+    });
+});
+
+function CheckDuration2() {
+    var duration = document.getElementById("LossDurationModalFormId2").value;
+    if (duration > 0) {
+        document.getElementById("modal3OK").disabled = false;
+    }
+}
 
 function CheckDuration() {
     var duration = document.getElementById("LossDurationModalFormId").value;
