@@ -622,7 +622,7 @@ $(document).ready(function () {
 
         $('#addDetailLoss #RowTableMasterAA').val(aa);
 
-        document.getElementById("modalOK").disabled = true;
+        document.getElementById("modal2OK").disabled = true;
     });
 });
 
@@ -635,7 +635,7 @@ $(function () {
 function CheckDuration() {
     var duration = document.getElementById("LossDurationModalFormId").value;
     if (duration > 0) {
-        document.getElementById("modalOK").disabled = false;
+        document.getElementById("modal2OK").disabled = false;
     }
 }
 

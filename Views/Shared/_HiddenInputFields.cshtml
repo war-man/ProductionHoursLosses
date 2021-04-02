@@ -25,35 +25,35 @@
     @Html.HiddenFor(x => Model.SelectedDetailToBeDeleted, new { @id = "SelectedDetailToBeDeleted" })
     @Html.HiddenFor(x => Model.SelectedDetailToAddLossAA)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateAA)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateAA)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateStartTime)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateStartTime)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateEndTime)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateEndTime)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateProductId)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateProductId)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateBatchNo)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateBatchNo)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateWorkOrder)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateWorkOrder)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateShift)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateShift)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateActualHours)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateActualHours)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnitWeight)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnitWeight)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateSpeedMachineRpm)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateSpeedMachineRpm)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateActualQuantity)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateActualQuantity)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateNumPeople)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateNumPeople)
 
-        @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnits)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnits)
 
     @Html.HiddenFor(x => Model.IsUpdate)
 
-        @Html.HiddenFor(x => Model.SelectedStep, new { @id = "SelectedStep" })
+    @Html.HiddenFor(x => Model.SelectedStep, new { @id = "SelectedStep" })
 
 
     if (Model != null)
@@ -87,29 +87,31 @@
                 @Html.HiddenFor(x => Model.DetailsList[i].NUM_PEOPLE)
                 @Html.HiddenFor(x => Model.DetailsList[i].UNITS)
 
-@*if (Model.DetailsList[i].DETAIL_LOSSES != null)
-    {
-        for (int j = 0; j < Model.DetailsList[i].DETAIL_LOSSES.Count; j++)
-        {
-            @Html.HiddenFor(x => Model.DetailsList[i].DETAIL_LOSSES[j].de)
-            @Html.HiddenFor(x => Model.DetailLossesList[i].LOSSES_ID)
-            @Html.HiddenFor(x => Model.DetailLossesList[i].HRS)
+                if (Model.DetailsList[i].DetailLossesList != null)
+                {
+                    for (int j = 0; j < Model.DetailsList[i].DetailLossesList.Count; j++)
+                    {
+                        @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].LOSSES_ID)
+                        @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].DURATION)
+                        @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].LOSSES.CODE)
+                        @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].LOSSES.ID)
+                        @Html.HiddenFor(x => Model.DetailsList[i].DetailLossesList[j].LOSSES.DESCRIPTION)
+                    }
+                }
+            }
+
         }
-    }*@
+
+        if (Model.DetailLossesList != null)
+        {
+            for (int i = 0; i < Model.DetailLossesList.Count; i++)
+            {
+                @Html.HiddenFor(x => Model.DetailLossesList[i].DETAIL_ID)
+                @Html.HiddenFor(x => Model.DetailLossesList[i].LOSSES_ID)
+                @Html.HiddenFor(x => Model.DetailLossesList[i].DURATION)
+            }
+
+        }
+    }
+
 }
-
-}
-
-if (Model.DetailLossesList != null)
-{
-for (int i = 0; i< Model.DetailLossesList.Count; i++)
-    {
-    @Html.HiddenFor(x => Model.DetailLossesList[i].DETAIL_ID)
-    @Html.HiddenFor(x => Model.DetailLossesList[i].LOSSES_ID)
-    @Html.HiddenFor(x => Model.DetailLossesList[i].DURATION)
-    }
-
-    }
-    }
-
-    }

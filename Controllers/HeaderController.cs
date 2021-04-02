@@ -387,7 +387,7 @@ namespace ProductionHoursLosses.Controllers
             {
                 foreach (var det in model.DetailsList.Where(x => x.AA.ToString() == model.SelectedDetailToAddLossAA))
                 {
-                    if (det.DETAIL_LOSSES == null)
+                    if (det.DetailLossesList == null)
                         det.DetailLossesList = new List<DETAIL_LOSSES>();
 
                     var detailLossToAdd = new DETAIL_LOSSES();
