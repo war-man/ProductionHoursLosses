@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using ProductionHoursLosses.Models;
 using ProductionHoursLosses.Models.Enum;
 using ProductionHoursLosses.Models.ViewModels;
+using ProductionHoursLosses.Module;
 using ProductionHoursLosses.Helper;
 using System.Data.Entity.Validation;
 
@@ -74,7 +75,7 @@ namespace ProductionHoursLosses.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HeaderViewModel model, string save, string saveAndSubmit, string addDetail)//([Bind(Include = "ID,DATE,FACTORY_ID,ROOM_ID,AVAIL_HRS,STATUS_ID")] HEADER hEADER) 
+        public ActionResult Create(HeaderViewModel model, string save, string addDetail)//([Bind(Include = "ID,DATE,FACTORY_ID,ROOM_ID,AVAIL_HRS,STATUS_ID")] HEADER hEADER) 
         {
             ModelState.Clear();
 
@@ -134,15 +135,22 @@ namespace ProductionHoursLosses.Controllers
 
             UpdateDetails(model,dbPRD_HRS);
 
-            if (!errorList.Any() && (!string.IsNullOrWhiteSpace(save) || !string.IsNullOrWhiteSpace(saveAndSubmit)))
+            if (string.IsNullOrWhiteSpace(model.Password))
             {
-                var submitForReview = false;
-                if (!string.IsNullOrWhiteSpace(save))
-                    submitForReview = false;
-                else if (!string.IsNullOrWhiteSpace(saveAndSubmit))
-                    submitForReview = true;
+                errorList.Add("Step 3: Please enter your password.");
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(save) )
+                {
+                    if (!CheckPassword(model.Password))
+                        errorList.Add("Step 3: Wrong user authentication password.");
+                }
+            }
 
-                var exception = Save(model, submitForReview);
+            if (!errorList.Any() && !string.IsNullOrWhiteSpace(save))
+            {
+                var exception = Save(model);
                 if (exception.Result)
                 {
                     Session["SaveMessage"] = "true";
@@ -171,8 +179,13 @@ namespace ProductionHoursLosses.Controllers
             //  return View(hEADER);
         }
 
+        private bool CheckPassword(string password)
+        {
+            return SecurityModule.VerifyUser(Request.LogonUserIdentity.Name, password);
+        }
 
-        private ExceptionError Save(HeaderViewModel model, bool submitForReview)
+
+        private ExceptionError Save(HeaderViewModel model)
         {
             //using (new Impersonator(ProductionHoursLosses.Helper.Helper.GetUserNameWithoutDomain(User.Identity.Name), StaticVariables.DomainName, model.Password))
             //{

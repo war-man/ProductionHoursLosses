@@ -86,6 +86,19 @@
             </div>
             <div id="step-3" class="">
                 <h2>Step 3: Authentication</h2>
+                <h5>Please enter your password.</h5>
+                <div class="card card-container">
+                    <img height="100" width="100" src="" />
+                    <p id="profile-name" class="profile-name-card"></p>
+                    @Html.Raw("Username: " + User.Identity.Name)
+                    <div>
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Windows Password", @id = "PasswordId" })
+                        <div>
+                            <input type="checkbox" id="passwordAuthentication" name="" onclick="showPassword('PasswordId')">
+                            <label for="passwordAuthentication">Show Password</label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -176,6 +189,7 @@
     <link href="~/Content/css/select2.css" rel="stylesheet" />
     <script src="~/Scripts/select2.js"></script>
     <script src="~/Scripts/Header/HeaderJS.js"></script>
+    <script src="~/Scripts/Header/showPassword.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css" type="text/css" />
     <link href="~/Content/table-blue.css" rel="stylesheet" />

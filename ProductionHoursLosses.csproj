@@ -144,6 +144,8 @@
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=5.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Diagnostics.DiagnosticSource.5.0.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -273,6 +275,7 @@
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\Pagination.cs" />
     <Compile Include="Models\PartialClasses.cs" />
+    <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\PRD_HRS.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -300,6 +303,7 @@
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\HeaderViewModel.cs" />
+    <Compile Include="Module\SecurityModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedHelp\CommonFunctions.cs" />
     <Compile Include="Startup.cs" />
@@ -408,6 +412,7 @@
     <Content Include="Scripts\esm\popper.js" />
     <Content Include="Scripts\esm\popper.min.js" />
     <Content Include="Scripts\Header\HeaderJS.js" />
+    <Content Include="Scripts\Header\showPassword.js" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
