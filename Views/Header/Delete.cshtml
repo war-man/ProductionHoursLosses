@@ -1,5 +1,5 @@
-﻿@model ProductionHoursLosses.Models.HEADER
-
+﻿@model ProductionHoursLosses.Models.ViewModels.HeaderViewModel
+@using ProductionHoursLosses.Models
 @{
     ViewBag.Title = "Delete";
 }
@@ -12,48 +12,54 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.DATE)
+            @*@Html.DisplayNameFor(model => model.HeaderModel.DATE)*@
+            Date
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DATE)
+            @Html.DisplayFor(model => model.HeaderModel.DATE)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.AVAIL_HRS)
+            @*@Html.DisplayNameFor(model => model.AVAIL_HRS)*@
+            Avail. Hours
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.AVAIL_HRS)
+            @Html.DisplayFor(model => model.HeaderModel.AVAIL_HRS)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.FACTORY.NAME)
+            @*@Html.DisplayNameFor(model => model.FACTORY.NAME)*@
+            Factory
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.FACTORY.NAME)
+            @Html.DisplayFor(model => model.HeaderModel.FACTORY.NAME)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ROOM.NAME)
+            @*@Html.DisplayNameFor(model => model.ROOM.NAME)*@
+            Room
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ROOM.NAME)
+            @Html.DisplayFor(model => model.HeaderModel.ROOM.NAME)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.STATUS.NAME)
+            @*@Html.DisplayNameFor(model => model.STATUS.NAME)*@
+            Status
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.STATUS.NAME)
+            @Html.DisplayFor(model => model.HeaderModel.STATUS.NAME)
         </dd>
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

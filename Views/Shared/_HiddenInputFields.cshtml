@@ -67,6 +67,7 @@
     {
         if (Model.HeaderModel != null)
         {
+            @Html.HiddenFor(x => Model.HeaderModel.ID)
             @Html.HiddenFor(x => Model.HeaderModel.DATE)
             @Html.HiddenFor(x => Model.HeaderModel.FACTORY_ID)
             @Html.HiddenFor(x => Model.HeaderModel.ROOM_ID)

@@ -12,6 +12,8 @@ using ProductionHoursLosses.Models.ViewModels;
 using ProductionHoursLosses.Module;
 using ProductionHoursLosses.Helper;
 using System.Data.Entity.Validation;
+using PagedList;
+
 
 namespace ProductionHoursLosses.Controllers
 {
@@ -19,21 +21,150 @@ namespace ProductionHoursLosses.Controllers
     {
         private PRD_HRS_DBEntities db = new PRD_HRS_DBEntities();
 
-        private HeaderViewModel InitializeModel(HeaderViewModel model)
+        private HeaderListViewModel InitializeListViewModel(HeaderListViewModel model)
         {
+            //if (model.SelectedStartDate == null)
+            //    model.SelectedStartDate = new DateTime();
+
+            //if (model.SelectedEndDate == null)
+            //    model.SelectedEndDate = new DateTime();
+
+            if (model.SelectedHeaderStatusList == null)
+                model.SelectedHeaderStatusList = new List<ItemIdName>();
+
+            if (!string.IsNullOrWhiteSpace(model.SelectedHeaderStatusIds))
+            {
+                foreach (var selectedHeaderStatusId in model.SelectedHeaderStatusIds.Split(',').ToList())
+                {
+                    var itemName = new ItemIdName();
+
+                    var itemToAdd = db.STATUS.FirstOrDefault(x => x.ID.ToString() == selectedHeaderStatusId);
+                    if (itemToAdd == null)
+                        continue;
+
+                    itemName.Id = selectedHeaderStatusId;
+                    itemName.Name = itemToAdd.NAME;
+
+                    model.SelectedHeaderStatusList.Add(itemName);
+                }
+            }
+
+            if (model.SelectedHeaderFactoryList == null)
+                model.SelectedHeaderFactoryList = new List<ItemIdName>();
+
+            if (!string.IsNullOrWhiteSpace(model.SelectedHeaderFactoryIds))
+            {
+                foreach (var selectedHeaderFactoryId in model.SelectedHeaderFactoryIds.Split(',').ToList())
+                {
+                    var itemName = new ItemIdName();
+
+                    var itemToAdd = db.FACTORY.FirstOrDefault(x => x.ID.ToString() == selectedHeaderFactoryId);
+                    if (itemToAdd == null)
+                        continue;
+
+                    itemName.Id = selectedHeaderFactoryId;
+                    itemName.Name = itemToAdd.NAME;
+
+                    model.SelectedHeaderFactoryList.Add(itemName);
+                }
+            }
+
+            if (model.SelectedHeaderRoomList == null)
+                model.SelectedHeaderRoomList = new List<ItemIdName>();
+
+            if (!string.IsNullOrWhiteSpace(model.SelectedHeaderRoomIds))
+            {
+                foreach (var selectedHeaderRoomId in model.SelectedHeaderRoomIds.Split(',').ToList())
+                {
+                    var itemName = new ItemIdName();
+
+                    var itemToAdd = db.ROOM.FirstOrDefault(x => x.ID.ToString() == selectedHeaderRoomId);
+                    if (itemToAdd == null)
+                        continue;
+
+                    itemName.Id = selectedHeaderRoomId;
+                    itemName.Name = itemToAdd.NAME;
+
+                    model.SelectedHeaderRoomList.Add(itemName);
+                }
+            }
 
             return model;
         }
 
         // GET: Header
-        public ActionResult Index(HeaderViewModel model)
+        public ActionResult Index(HeaderListViewModel model)
         {
             if (model == null)
-                model = new HeaderViewModel();
+                model = new HeaderListViewModel();
 
-            //model = InitializeModel(model);
-            var hEADER = db.HEADER.Include(h => h.FACTORY).Include(h => h.ROOM).Include(h => h.STATUS);
-            return View(hEADER.ToList());
+            model = InitializeListViewModel(model);
+
+            model.PageNumber = model.PageNumber ?? 1;
+            model.PageSize = model.PageSize ?? 10;
+
+            model.HeaderList = SearchInList(model);
+
+            model.IsNextPageRequest = false;
+
+            if (!string.IsNullOrWhiteSpace((string)TempData["errorMessage"]))
+                ViewBag.PasswordMessage = "Wrong user authentication password.";
+
+            return View("Index", model);
+
+
+            //var hEADER = db.HEADER.Include(h => h.FACTORY).Include(h => h.ROOM).Include(h => h.STATUS);
+            //return View(hEADER.ToList());
+        }
+
+        private IPagedList<HEADER> SearchInList(HeaderListViewModel model)
+        {
+            var areSearchCriteriaEmpty = !model.SelectedStartDate.HasValue
+                && !model.SelectedEndDate.HasValue
+                && !model.SelectedHeaderStatusList.Any()
+                && !model.SelectedHeaderFactoryList.Any()
+                && !model.SelectedHeaderRoomList.Any();
+
+            if (areSearchCriteriaEmpty)
+            {
+                return db.HEADER
+                        .OrderBy(x => x.ID)
+                        //.Select(x => new ProductionHelperModel { ProductionMaster = x })
+                        .AsQueryable()
+                        .ToPagedList(model.PageNumber.Value, model.PageSize.Value);
+            }
+            else
+            {
+                var list = db.HEADER.OrderBy(x => x.ID);
+
+                if (model.SelectedStartDate.HasValue && model.SelectedEndDate.HasValue)
+                {
+                    if (model.SelectedStartDate.Value <= model.SelectedEndDate.Value)
+                        list = list.Where(x => x.DATE >= model.SelectedStartDate.Value && x.DATE <= model.SelectedEndDate.Value).OrderBy(x => x.ID);
+                }
+
+
+                if (model.SelectedHeaderStatusList.Any())
+                {
+                    var listOfHeaderStatus = new HashSet<string>(model.SelectedHeaderStatusList.Select(x => x.Id));
+                    list = list.Where(x => listOfHeaderStatus.Contains(x.STATUS_ID.ToString())).OrderBy(X => X.ID);
+                }
+
+                if (model.SelectedHeaderFactoryList.Any())
+                {
+                    var listOfHeaderFactory = new HashSet<string>(model.SelectedHeaderFactoryList.Select(x => x.Id));
+                    list = list.Where(x => listOfHeaderFactory.Contains(x.FACTORY_ID.ToString())).OrderBy(X => X.ID);
+                }
+
+                if (model.SelectedHeaderRoomList.Any())
+                {
+                    var listOfHeaderRoom = new HashSet<string>(model.SelectedHeaderRoomList.Select(x => x.Id));
+                    list = list.Where(x => listOfHeaderRoom.Contains(x.ROOM_ID.ToString())).OrderBy(X => X.ID);
+                }
+
+                return list.AsQueryable()
+                         .ToPagedList(model.PageNumber.Value, model.PageSize.Value);
+            }
         }
 
         // GET: Header/Details/5
@@ -52,21 +183,33 @@ namespace ProductionHoursLosses.Controllers
         }
 
         // GET: Header/Create
-        public ActionResult Create(HeaderViewModel model)
+        public ActionResult Create(int? headerId)
         {
+            HeaderViewModel model = new HeaderViewModel();
+
             if (model == null)
             {
-                model = new HeaderViewModel();
                 model.HeaderModel = new HEADER();
                 model.DetailsList = new List<DetailExtended>();
                 //model.DetailLossesList = new List<DETAIL_LOSSES>();
             }
-                
 
-            //model = InitializeModel(model);
-            ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME");
-            ViewBag.ROOM_ID = new SelectList(db.ROOM, "ID", "NAME");
-            ViewBag.STATUS_ID = new SelectList(db.STATUS, "ID", "NAME");
+            ModelState.Clear();
+
+            if(headerId.HasValue)
+            {
+                model = RetrieveHeader(headerId.Value);
+                model.IsUpdate = true;
+                model.HeaderModel.ID = headerId.Value;
+
+                return View(model);
+            }
+
+            model = InitializeViewModel(model);
+            model.DetailsList = new List<DetailExtended>();
+            //ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME");
+            //ViewBag.ROOM_ID = new SelectList(db.ROOM, "ID", "NAME");
+            //ViewBag.STATUS_ID = new SelectList(db.STATUS, "ID", "NAME");
             return View("Create", model);
         }
 
@@ -104,14 +247,20 @@ namespace ProductionHoursLosses.Controllers
             if (!model.SelectedAvailHours.HasValue)
                 errorList.Add("Select the available hours.");
 
-            if (!errorList.Any() && model.HeaderModel == null)
+            if (!errorList.Any())
             {
-                model.HeaderModel = new HEADER();
-                model.HeaderModel.DATE = model.SelectedDate.Value;
-                model.HeaderModel.FACTORY_ID = (int)model.SelectedFactoryID;
-                model.HeaderModel.ROOM_ID = (int)model.SelectedRoomID;
-                model.HeaderModel.STATUS_ID = (int)model.SelectedStatusID;
-                model.HeaderModel.AVAIL_HRS = model.SelectedAvailHours;
+                if(model.HeaderModel == null)
+                    model.HeaderModel = new HEADER();
+                if(model.SelectedDate.HasValue)
+                    model.HeaderModel.DATE = model.SelectedDate.Value;
+                if(model.SelectedFactoryID.HasValue)
+                    model.HeaderModel.FACTORY_ID = (int)model.SelectedFactoryID;
+                if (model.SelectedRoomID.HasValue)
+                    model.HeaderModel.ROOM_ID = (int)model.SelectedRoomID;
+                if (model.SelectedStatusID.HasValue)
+                    model.HeaderModel.STATUS_ID = (int)model.SelectedStatusID;
+                if (model.SelectedAvailHours.HasValue)
+                    model.HeaderModel.AVAIL_HRS = model.SelectedAvailHours;
             }
 
             if (!string.IsNullOrEmpty(model.SelectedDetailToBeDeleted) && string.IsNullOrEmpty(model.SelectedDetailLossToBeDeleted))
@@ -135,18 +284,18 @@ namespace ProductionHoursLosses.Controllers
 
             UpdateDetails(model,dbPRD_HRS);
 
-            if (string.IsNullOrWhiteSpace(model.Password))
-            {
-                errorList.Add("Step 3: Please enter your password.");
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(save) )
-                {
-                    if (!CheckPassword(model.Password))
-                        errorList.Add("Step 3: Wrong user authentication password.");
-                }
-            }
+            //if (string.IsNullOrWhiteSpace(model.Password))
+            //{
+            //    errorList.Add("Step 3: Please enter your password.");
+            //}
+            //else
+            //{
+            //    if (!string.IsNullOrWhiteSpace(save) )
+            //    {
+            //        if (!CheckPassword(model.Password))
+            //            errorList.Add("Step 3: Wrong user authentication password.");
+            //    }
+            //}
 
             if (!errorList.Any() && !string.IsNullOrWhiteSpace(save))
             {
@@ -179,6 +328,144 @@ namespace ProductionHoursLosses.Controllers
             //  return View(hEADER);
         }
 
+        public static HeaderViewModel RetrieveHeader(int headerId)
+        {
+            PRD_HRS_DBEntities db = new PRD_HRS_DBEntities();
+            var itemToEdit = db.HEADER.FirstOrDefault(x => x.ID == headerId);
+            if (itemToEdit == null)
+                return null;
+
+            var model = new HeaderViewModel();
+            model.IsUpdate = true;
+
+            model.HeaderModel = itemToEdit;
+            model.SelectedDate = itemToEdit.DATE;
+            model.SelectedAvailHours = itemToEdit.AVAIL_HRS;
+            model.SelectedFactoryID = itemToEdit.FACTORY_ID;
+            model.SelectedRoomID = itemToEdit.ROOM_ID;
+            model.SelectedStatusID = itemToEdit.STATUS_ID;
+
+            model = InitializeViewModel(model);
+
+            model.DetailsList = new List<DetailExtended>();
+
+            if (itemToEdit.DETAIL != null)
+            {
+                foreach (var det in itemToEdit.DETAIL)
+                {
+                    var detToAdd = new DetailExtended();
+                    detToAdd.AA = Guid.NewGuid();
+                    detToAdd.START_TIME = det.START_TIME;
+                    detToAdd.END_TIME = det.END_TIME;
+                    detToAdd.PRODUCT_ID = det.PRODUCT_ID;
+                    detToAdd.PRODUCT = new PRODUCT();
+                    detToAdd.PRODUCT = db.PRODUCT.FirstOrDefault(x => x.ID == det.PRODUCT_ID);
+                    detToAdd.BATCH_NO = det.BATCH_NO;
+                    detToAdd.WORK_ORDER = det.WORK_ORDER;
+                    detToAdd.SHIFT = det.SHIFT;
+                    detToAdd.ACTUAL_HRS = det.ACTUAL_HRS;
+                    detToAdd.UNIT_WEIGHT = det.UNIT_WEIGHT;
+                    detToAdd.SPEED_MACHINE_RPM = det.SPEED_MACHINE_RPM;
+                    detToAdd.ACTUAL_QTY = det.ACTUAL_QTY;
+                    detToAdd.NUM_PEOPLE = det.NUM_PEOPLE;
+                    detToAdd.UNITS = det.UNITS;
+
+                    if (det.DETAIL_LOSSES != null)
+                    {
+                        detToAdd.DetailLossesList = new List<DetailLossesExtended>();
+                        foreach (var loss in det.DETAIL_LOSSES)
+                        {
+                            var lossToAdd = new DetailLossesExtended();
+                            lossToAdd.AA = Guid.NewGuid();
+                            lossToAdd.LOSSES_ID = loss.LOSSES_ID;
+                            lossToAdd.DURATION = loss.DURATION;
+                            lossToAdd.LOSSES = new LOSSES();
+                            lossToAdd.LOSSES = db.LOSSES.FirstOrDefault(x => x.ID == loss.LOSSES_ID);
+
+                            detToAdd.DetailLossesList.Add(lossToAdd);
+                        }
+                    }
+
+                    model.DetailsList.Add(detToAdd);
+                }
+            }
+
+            return model;
+        }
+
+        public static HeaderViewModel InitializeViewModel(HeaderViewModel model)
+        {
+            PRD_HRS_DBEntities db = new PRD_HRS_DBEntities();
+
+            if (model == null)
+                model = new HeaderViewModel();
+
+            if(model.SelectedDate.HasValue || model.SelectedStatusID.HasValue || model.SelectedFactoryID.HasValue || model.SelectedRoomID.HasValue || model.SelectedAvailHours.HasValue)
+            {
+                if (model.HeaderModel == null)
+                {
+                    model.HeaderModel = new HEADER();
+                }
+            }
+
+
+            if (model.DetailsList == null)
+                model.DetailsList = new List<DetailExtended>();
+
+            if (model.SelectedStatusID.HasValue)
+            {
+                var status = db.STATUS.FirstOrDefault(x => x.ID == model.SelectedStatusID);
+                if (status != null)
+                {
+                    model.SelectedStatus = new STATUS();
+                    model.SelectedStatus = status;
+                    model.HeaderModel.STATUS = new STATUS();
+                    model.HeaderModel.STATUS = status;
+                    model.HeaderModel.STATUS_ID = model.SelectedStatusID.Value;
+                }
+            }
+
+            if (model.SelectedFactoryID.HasValue)
+            {
+                var factory = db.FACTORY.FirstOrDefault(x => x.ID == model.SelectedFactoryID);
+                if (factory != null)
+                {
+                    model.SelectedFactory = new FACTORY();
+                    model.SelectedFactory = factory;
+                    model.HeaderModel.FACTORY = new FACTORY();
+                    model.HeaderModel.FACTORY = factory;
+                    model.HeaderModel.FACTORY_ID = model.SelectedFactoryID.Value;
+                }
+            }
+
+            if (model.SelectedRoomID.HasValue)
+            {
+                var room = db.ROOM.FirstOrDefault(x => x.ID == model.SelectedRoomID);
+                if (room != null)
+                {
+                    model.SelectedRoom = new ROOM();
+                    model.SelectedRoom = room;
+                    model.HeaderModel.ROOM = new ROOM();
+                    model.HeaderModel.ROOM = room;
+                    model.HeaderModel.ROOM_ID = model.SelectedRoomID.Value;
+                }
+            }
+
+            if (model.SelectedDate.HasValue)
+            {
+                model.HeaderModel.DATE = new DateTime();
+                model.HeaderModel.DATE = model.SelectedDate.Value;
+            }
+
+            if (model.SelectedAvailHours.HasValue)
+            {
+                model.HeaderModel.AVAIL_HRS = new int();
+                model.HeaderModel.AVAIL_HRS = model.SelectedAvailHours.Value;
+            }
+
+            return model;
+        }
+
         private bool CheckPassword(string password)
         {
             return SecurityModule.VerifyUser(Request.LogonUserIdentity.Name, password);
@@ -195,8 +482,78 @@ namespace ProductionHoursLosses.Controllers
                     {
                         if (model.IsUpdate)
                         {
+                            var dbHdr = dbPRD_HRS.HEADER.FirstOrDefault(x => x.ID == model.HeaderModel.ID);
+                            if (dbHdr == null)
+                            {
+                                var exception = new ExceptionError();
+                                exception.Name = string.Format("Edit Header: During save cannot find the header id {0}", model.HeaderModel.ID);
+                                return exception;
+                            }
 
-                        }
+                            //Option 1: delete the existing record details and losses and modify the existing one
+
+                            if (dbHdr.DETAIL != null && dbHdr.DETAIL.Any())
+                            {
+                                foreach (var det in dbHdr.DETAIL.ToList())
+                                {
+                                    if (det.DETAIL_LOSSES != null && det.DETAIL_LOSSES.Any())
+                                    {
+                                        foreach (var loss in det.DETAIL_LOSSES.ToList())
+                                        {
+                                            dbPRD_HRS.DETAIL_LOSSES.Remove(loss);
+                                        }
+                                    }
+                                    dbPRD_HRS.DETAIL.Remove(det);
+                                }
+                            }
+
+                            dbHdr.DATE = model.HeaderModel.DATE;
+                            dbHdr.FACTORY_ID = (int)model.HeaderModel.FACTORY_ID;
+                            dbHdr.ROOM_ID = (int)model.HeaderModel.ROOM_ID;
+                            dbHdr.AVAIL_HRS = model.HeaderModel.AVAIL_HRS;
+                            dbHdr.STATUS_ID = (int)model.HeaderModel.STATUS_ID;
+
+                            if (model.DetailsList != null && model.DetailsList.Any())
+                            {
+                                foreach (var detailExtended in model.DetailsList.OrderBy(x => x.AA))
+                                {
+                                    var newDetail = new DETAIL();
+                                    newDetail.START_TIME = detailExtended.START_TIME;
+                                    newDetail.END_TIME = detailExtended.END_TIME;
+                                    newDetail.PRODUCT_ID = detailExtended.PRODUCT_ID;
+                                    newDetail.BATCH_NO = detailExtended.BATCH_NO;
+                                    newDetail.WORK_ORDER = detailExtended.WORK_ORDER;
+                                    newDetail.SHIFT = detailExtended.SHIFT;
+                                    newDetail.ACTUAL_HRS = detailExtended.ACTUAL_HRS;
+                                    newDetail.UNIT_WEIGHT = detailExtended.UNIT_WEIGHT;
+                                    newDetail.SPEED_MACHINE_RPM = detailExtended.SPEED_MACHINE_RPM;
+                                    newDetail.ACTUAL_QTY = detailExtended.ACTUAL_QTY;
+                                    newDetail.NUM_PEOPLE = detailExtended.NUM_PEOPLE;
+                                    newDetail.UNITS = detailExtended.UNITS;
+
+                                    if (detailExtended.DetailLossesList != null && detailExtended.DetailLossesList.Any())
+                                    {
+                                        foreach (var detaiLoss in detailExtended.DetailLossesList.OrderBy(y => y.AA))
+                                        {
+                                            var newDetailLoss = new DETAIL_LOSSES();
+                                            newDetailLoss.LOSSES_ID = detaiLoss.LOSSES_ID;
+                                            newDetailLoss.DURATION = detaiLoss.DURATION;
+
+                                            newDetail.DETAIL_LOSSES.Add(newDetailLoss);
+                                        }
+                                    }
+                                    dbHdr.DETAIL.Add(newDetail);
+                                }
+
+                            }
+
+                        dbPRD_HRS.Entry(dbHdr).State = EntityState.Modified;
+
+
+                        //Option 2: modify the existing one
+
+
+                    }
                         else
                         {
                             var newHeader = new HEADER();
@@ -211,32 +568,38 @@ namespace ProductionHoursLosses.Controllers
                             newHeader.AVAIL_HRS = model.HeaderModel.AVAIL_HRS;
                             newHeader.STATUS_ID = (int)model.HeaderModel.STATUS_ID;
 
-                            foreach (var detailExtended in model.DetailsList.OrderBy(x => x.AA))
+                            if(model.DetailsList != null && model.DetailsList.Any())
                             {
-                                var newDetail = new DETAIL();
-                                newDetail.START_TIME = detailExtended.START_TIME;
-                                newDetail.END_TIME = detailExtended.END_TIME;
-                                newDetail.PRODUCT_ID = detailExtended.PRODUCT_ID;
-                                newDetail.BATCH_NO = detailExtended.BATCH_NO;
-                                newDetail.WORK_ORDER = detailExtended.WORK_ORDER;
-                                newDetail.SHIFT = detailExtended.SHIFT;
-                                newDetail.ACTUAL_HRS = detailExtended.ACTUAL_HRS;
-                                newDetail.UNIT_WEIGHT = detailExtended.UNIT_WEIGHT;
-                                newDetail.SPEED_MACHINE_RPM = detailExtended.SPEED_MACHINE_RPM;
-                                newDetail.ACTUAL_QTY = detailExtended.ACTUAL_QTY;
-                                newDetail.NUM_PEOPLE = detailExtended.NUM_PEOPLE;
-                                newDetail.UNITS = detailExtended.UNITS;
+                                foreach (var detailExtended in model.DetailsList.OrderBy(x => x.AA))
+                                {
+                                    var newDetail = new DETAIL();
+                                    newDetail.START_TIME = detailExtended.START_TIME;
+                                    newDetail.END_TIME = detailExtended.END_TIME;
+                                    newDetail.PRODUCT_ID = detailExtended.PRODUCT_ID;
+                                    newDetail.BATCH_NO = detailExtended.BATCH_NO;
+                                    newDetail.WORK_ORDER = detailExtended.WORK_ORDER;
+                                    newDetail.SHIFT = detailExtended.SHIFT;
+                                    newDetail.ACTUAL_HRS = detailExtended.ACTUAL_HRS;
+                                    newDetail.UNIT_WEIGHT = detailExtended.UNIT_WEIGHT;
+                                    newDetail.SPEED_MACHINE_RPM = detailExtended.SPEED_MACHINE_RPM;
+                                    newDetail.ACTUAL_QTY = detailExtended.ACTUAL_QTY;
+                                    newDetail.NUM_PEOPLE = detailExtended.NUM_PEOPLE;
+                                    newDetail.UNITS = detailExtended.UNITS;
 
-                            foreach(var detaiLoss in detailExtended.DetailLossesList.OrderBy(y => y.AA))
-                            {
-                                var newDetailLoss = new DETAIL_LOSSES();
-                                newDetailLoss.LOSSES_ID = detaiLoss.LOSSES_ID;
-                                newDetailLoss.DURATION = detaiLoss.DURATION;
+                                    if (detailExtended.DetailLossesList != null && detailExtended.DetailLossesList.Any())
+                                    {
+                                        foreach (var detaiLoss in detailExtended.DetailLossesList.OrderBy(y => y.AA))
+                                        {
+                                            var newDetailLoss = new DETAIL_LOSSES();
+                                            newDetailLoss.LOSSES_ID = detaiLoss.LOSSES_ID;
+                                            newDetailLoss.DURATION = detaiLoss.DURATION;
 
-                                newDetail.DETAIL_LOSSES.Add(newDetailLoss);
-                            }
+                                            newDetail.DETAIL_LOSSES.Add(newDetailLoss);
+                                        }
+                                    }
+                                    newHeader.DETAIL.Add(newDetail);
+                                }
 
-                                newHeader.DETAIL.Add(newDetail);
                             }
 
                             dbPRD_HRS.HEADER.Add(newHeader);
@@ -493,41 +856,50 @@ namespace ProductionHoursLosses.Controllers
         }
 
         // GET: Header/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int headerId)
         {
-            if (id == null)
+            if (headerId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            HEADER hEADER = db.HEADER.Find(id);
-            if (hEADER == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME", hEADER.FACTORY_ID);
-            ViewBag.ROOM_ID = new SelectList(db.ROOM, "ID", "NAME", hEADER.ROOM_ID);
-            ViewBag.STATUS_ID = new SelectList(db.STATUS, "ID", "NAME", hEADER.STATUS_ID);
-            return View(hEADER);
+
+            var model = new HeaderViewModel();
+            model = RetrieveHeader((int)headerId);
+
+            if (model == null)
+                return RedirectToAction("GeneralError", "Error", new { error = "Header Edit: Header id does not exist" });
+
+            return RedirectToAction("Create", "Header", new { headerId = headerId });
+
+            //HEADER hEADER = db.HEADER.Find(id);
+            //if (hEADER == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME", hEADER.FACTORY_ID);
+            //ViewBag.ROOM_ID = new SelectList(db.ROOM, "ID", "NAME", hEADER.ROOM_ID);
+            //ViewBag.STATUS_ID = new SelectList(db.STATUS, "ID", "NAME", hEADER.STATUS_ID);
+            //return View(hEADER);
         }
 
         // POST: Header/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,DATE,FACTORY_ID,ROOM_ID,AVAIL_HRS,STATUS_ID")] HEADER hEADER)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(hEADER).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME", hEADER.FACTORY_ID);
-            ViewBag.ROOM_ID = new SelectList(db.ROOM, "ID", "NAME", hEADER.ROOM_ID);
-            ViewBag.STATUS_ID = new SelectList(db.STATUS, "ID", "NAME", hEADER.STATUS_ID);
-            return View(hEADER);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "ID,DATE,FACTORY_ID,ROOM_ID,AVAIL_HRS,STATUS_ID")] HEADER hEADER)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(hEADER).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME", hEADER.FACTORY_ID);
+        //    ViewBag.ROOM_ID = new SelectList(db.ROOM, "ID", "NAME", hEADER.ROOM_ID);
+        //    ViewBag.STATUS_ID = new SelectList(db.STATUS, "ID", "NAME", hEADER.STATUS_ID);
+        //    return View(hEADER);
+        //}
 
         // GET: Header/Delete/5
         public ActionResult Delete(int? id)
@@ -536,12 +908,21 @@ namespace ProductionHoursLosses.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            HEADER hEADER = db.HEADER.Find(id);
-            if (hEADER == null)
-            {
-                return HttpNotFound();
-            }
-            return View(hEADER);
+
+            var model = new HeaderViewModel();
+            model = RetrieveHeader((int)id);
+
+            if (model == null)
+                return RedirectToAction("GeneralError", "Error", new { error = "Header Edit: Header id does not exist" });
+
+            return View("Delete", model);
+
+            //HEADER hEADER = db.HEADER.Find(id);
+            //if (hEADER == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(hEADER);
         }
 
         // POST: Header/Delete/5
@@ -549,10 +930,80 @@ namespace ProductionHoursLosses.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            HEADER hEADER = db.HEADER.Find(id);
-            db.HEADER.Remove(hEADER);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            var errorList = new List<string>();
+            var exception = new ExceptionError();
+            //using (new Impersonator(ProductionHoursLosses.Helper.Helper.GetUserNameWithoutDomain(User.Identity.Name), StaticVariables.DomainName, model.Password))
+            //{
+            using (var dbPRD_HRS = new PRD_HRS_DBEntities())
+            {
+                using (DbContextTransaction transactionNewRec = dbPRD_HRS.Database.BeginTransaction())
+                {
+                    
+                        var dbHdr = dbPRD_HRS.HEADER.FirstOrDefault(x => x.ID == id);
+                        if (dbHdr == null)
+                        {
+                            exception.Result = false;
+                            exception.Name = string.Format("Edit Header: During save cannot find the header id {0}", id);
+                        }
+                        else 
+                        {
+                            if (dbHdr.DETAIL != null && dbHdr.DETAIL.Any())
+                            {
+                                foreach (var det in dbHdr.DETAIL.ToList())
+                                {
+                                    if (det.DETAIL_LOSSES != null && det.DETAIL_LOSSES.Any())
+                                    {
+                                        foreach (var loss in det.DETAIL_LOSSES.ToList())
+                                        {
+                                            dbPRD_HRS.DETAIL_LOSSES.Remove(loss);
+                                        }
+                                    }
+                                    dbPRD_HRS.DETAIL.Remove(det);
+                                }
+                            }
+
+                            dbPRD_HRS.HEADER.Remove(dbHdr);
+
+                            try
+                            {
+                                dbPRD_HRS.SaveChanges();
+                                transactionNewRec.Commit();
+
+                                exception.Result = true;
+                            }
+                            catch (DbEntityValidationException e)
+                            {
+                                transactionNewRec.Rollback();
+
+                                exception.Name = string.Format("Entity has the following validation errors: {0} {1}\n", e.Message, e.InnerException);
+
+                                foreach (var x in e.EntityValidationErrors)
+                                {
+                                    exception.Name += string.Format("Property name: {0}, Message {1}\n", x.ValidationErrors.FirstOrDefault().PropertyName, x.ValidationErrors.FirstOrDefault().ErrorMessage);
+                                }
+                                exception.Result = false;
+
+                            }
+                    }
+                        
+                }
+            }
+            //}
+
+            if (exception.Result)
+            {
+                Session["SaveMessage"] = "true";
+                return RedirectToAction("Index", "Header");
+            }
+            else
+            {
+                Session["SaveMessage"] = "false";
+                errorList.Add(exception.Name);
+            }
+
+            ViewBag.ErrorList = errorList;
+            return RedirectToAction("Index", "Header");
+
         }
 
         protected override void Dispose(bool disposing)
@@ -665,6 +1116,49 @@ namespace ProductionHoursLosses.Controllers
 
             return Json(results, JsonRequestBehavior.AllowGet);
         }
+
+
+        public JsonResult GetAllRoomList(string q, int page)
+        {
+            var results = new ResultSelect2<ItemIdText>();
+            results.results = new List<ItemIdText>();
+            results.pagination = new Pagination();
+
+            if (!string.IsNullOrWhiteSpace(q))
+                q = q.ToLower();
+            else
+                q = string.Empty;
+
+     
+
+            List<ItemIdText> list = new List<ItemIdText>();
+
+                list = db.ROOM
+                .Where(x => x.NAME.ToLower().StartsWith(q))
+                    .Select(y =>
+                        new ItemIdText
+                        {
+                            id = y.ID.ToString(),
+                            text = y.NAME,
+                            itemDescription = y.FACTORY.NAME
+                        })
+                        .Distinct()
+                        .ToList();
+
+
+            if (page == 1)
+                results.results.AddRange(list.Take(30));
+            else
+                results.results.AddRange(list.Skip(page * 30).Take(30));
+
+            if (page * 30 < list.Count)
+                results.pagination.more = true;
+            else
+                results.pagination.more = false;
+
+            return Json(results, JsonRequestBehavior.AllowGet);
+        }
+
 
         public JsonResult GetAvailHrsList(string q, int page)
         {

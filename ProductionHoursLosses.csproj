@@ -302,6 +302,7 @@
     <Compile Include="Models\STATUS.cs">
       <DependentUpon>PRD_HRS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\HeaderListViewModel.cs" />
     <Compile Include="Models\ViewModels\HeaderViewModel.cs" />
     <Compile Include="Module\SecurityModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -331,6 +332,7 @@
     <Content Include="Content\Images\replaceMethod.png" />
     <Content Include="Content\Images\tabletCapsule.png" />
     <Content Include="Content\Images\tree.png" />
+    <Content Include="Content\loadingImage.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\smart_wizard.css" />
     <Content Include="Content\smart_wizard.min.css" />
@@ -649,9 +651,12 @@
     <Content Include="Views\Header\Create.cshtml" />
     <Content Include="Views\Header\Create - Copy.cshtml" />
     <Content Include="Views\Shared\_CreateHeaderDetails.cshtml" />
+    <Content Include="Views\Header\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\treetable\" />
+    <Folder Include="Scripts\treetable\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

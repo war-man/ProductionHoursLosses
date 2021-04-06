@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProductionHoursLosses.Models.HEADER>
+﻿@model ProductionHoursLosses.Models.ViewModels.HeaderListViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -6,52 +6,424 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.DATE)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AVAIL_HRS)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FACTORY.NAME)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ROOM.NAME)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.STATUS.NAME)
-        </th>
-        <th></th>
-    </tr>
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DATE)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AVAIL_HRS)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FACTORY.NAME)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ROOM.NAME)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.STATUS.NAME)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
+<h1>
+    <img alt="logo" height="100" width="100" src="~/Content/Images/productionWoIcon.png" />
+    Production Hours Losses - Header Information
+</h1>
+
+<div class="loader">
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formSubmit" }))
+{
+    <hr />
+    <div class="form-group">
+        <button type="button" class="btn btn-primary" title="Create New Header" onclick="location.href='@Url.Action("Create", "Header")'">
+            <span class="fa fa-plus"></span> Create New
+        </button>
+    </div>
+
+    <hr />
+
+    if (!string.IsNullOrWhiteSpace(ViewBag.PasswordMessage))
+    {
+        <div class="alert alert-danger" style="font-size:18px !important;">
+            @ViewBag.PasswordMessage
+        </div>
+    }
+
+    if (Session["SaveMessage"] != null && Session["SaveMessage"] == "true")
+    {
+        <div id="SuccessAlert" class="alert alert-success alert-dismissible fade in" style="font-size:18px !important;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            @Html.Raw("The Header has been successfully saved.")
+        </div>
+
+        Session["SaveMessage"] = null;
+    }
+
+    @*@Html.HiddenFor(x => x.SelectedStartDate, new { @id = "SelectedStartDate" })
+    @Html.HiddenFor(x => x.SelectedEndDate, new { @id = "SelectedEndDate" })*@
+    @Html.HiddenFor(x => x.SelectedHeaderStatusIds, new { @id = "SelectedHeaderStatusIds" })
+    @Html.HiddenFor(x => x.SelectedHeaderFactoryIds, new { @id = "SelectedHeaderFactoryIds" })
+    @Html.HiddenFor(x => x.SelectedHeaderRoomIds, new { @id = "SelectedHeaderRoomIds" })
+    @Html.HiddenFor(x => x.IsNextPageRequest, new { @id = "IsNextPageRequestId" })
+
+
+    <h4><strong> Search for Header using the following criteria: </strong></h4>
+
+    <div class="form-group">
+        @Html.Label("Start Date:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.SelectedStartDate, new { @class = "form-group", @type = "date", @id = "SelectedStartDate" })
+            <span class="fa fa-calendar"> </span>
+            @Html.ValidationMessageFor(model => model.SelectedStartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("End Date:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.SelectedEndDate, new { @class = "form-group", @type = "date", @id = "SelectedEndDate" })
+            <span class="fa fa-calendar"> </span>
+            @Html.ValidationMessageFor(model => model.SelectedEndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="" id="SelectHeaderStatusDropDownId" style="" onchange="OnDropDownHeaderStatusIdChange()" multiple>
+                @if (Model != null && Model.SelectedHeaderStatusList != null)
+                {
+                    foreach (var item in Model.SelectedHeaderStatusList)
+                    {
+                        <option value="@item.Id" selected>@item.Name</option>
+                    }
+                }
+            </select>
+            <br />
+            <br />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.Label("Factory:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="" id="SelectHeaderFactoryDropDownId" style="" onchange="OnDropDownHeaderFactoryIdChange()" multiple>
+                @if (Model != null && Model.SelectedHeaderFactoryList != null)
+                {
+                    foreach (var item in Model.SelectedHeaderFactoryList)
+                    {
+                        <option value="@item.Id" selected>@item.Name</option>
+                    }
+                }
+            </select>
+            <br />
+            <br />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Room:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="" id="SelectHeaderRoomDropDownId" style="" onchange="OnDropDownHeaderRoomIdChange()" multiple>
+                @if (Model != null && Model.SelectedHeaderRoomList != null)
+                {
+                    foreach (var item in Model.SelectedHeaderRoomList)
+                    {
+                        <option value="@item.Id" selected>@item.Name</option>
+                    }
+                }
+            </select>
+            <br />
+            <br />
+        </div>
+    </div>
+
+    <div id="divButtonSubmit">
+        <button class="btn btn-primary" title="Search" type="submit">
+            <span class="fa fa-search"></span> Search
+        </button>
+    </div>
+    <br />
+    <br />
+
+    <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align:center">
+                        A/A
+                    </th>
+                    <th style="text-align:center">
+                        Date
+                    </th>
+                    <th style="text-align:center">
+                        Factory
+                    </th>
+                    <th style="text-align:center">
+                        Room
+                    </th>
+                    <th style="text-align:center">
+                        Avail. Hours
+                    </th>
+                    <th style="text-align:center">
+                        Status
+                    </th>
+                    <th style="text-align:center">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var count = 1; }
+                @foreach (var item in Model.HeaderList)
+                {
+                <tr>
+                    <td>
+                        @Html.Raw(count)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.DATE)*@
+                        @item.DATE.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FACTORY.NAME)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ROOM.NAME)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AVAIL_HRS)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.STATUS.NAME)
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.ID })*@
+
+                        <button class="btn btn-success btn-sm" title="Edit" onclick="location.href='@Url.Action("Edit", "Header", new { headerId = item.ID })'" type="button">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+
+                        <button class="btn btn-success btn-sm" title="Edit" onclick="location.href='@Url.Action("Delete", "Header", new { headerId = item.ID })'" type="button">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+
+                    </td>
+                </tr>
+                    count++;
+                }
+            <tbody>
+
+        </table>
+
+
+
+
 }
 
-</table>
+
+
+@section Scripts
+{
+
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/loadingImage.css" rel="stylesheet" />
+    <link href="~/Content/css/select2.css" rel="stylesheet" />
+    <script src="~/Scripts/select2.js"></script>
+    <script src="~/Scripts/Header/showPassword.js"></script>
+
+    <script type="text/javascript">
+        $('#PageSizeDropDownId').on('change', function (event) {
+            $('#IsNextPageRequestId').val(true);
+
+            var form = $(event.target).parents('form');
+            form.submit();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $("#SuccessAlert").fadeTo(2000, 500).slideUp(500, function () {
+            $("#SuccessAlert").slideUp(500);
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        function OnDropDownHeaderStatusIdChange() {
+            var selectCategory = $('#SelectHeaderStatusDropDownId').val();
+            $('#SelectedHeaderStatusIds').val(selectCategory);
+        }
+
+        $("#SelectHeaderStatusDropDownId").select2({
+            width: '500px',
+            ajax: {
+                url: "/Header/GetStatusList",
+                dataType: 'json',
+                type: "POST",
+                quietMillis: 50,
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page || 1
+                    };
+                },
+                ProcessResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            placeholder: 'Select up to 2 statuses',
+            escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: -1,
+            templateResult: formatRepo,
+            templateSelection: formatRepoSelection,
+            allowClear: true,
+            multiple: true,
+            maximumSelectionLength: 2
+        });
+
+        function formatRepo(repo) {
+            if (repo.loading) {
+                return repo.text;
+            }
+
+            var markup = "<div class='select2-result-repository clearfix'>" +
+                "<div class='select2-result-repository__meta'>" +
+                "<div class='select2-result-repository__title'>" + repo.text + "</div>";
+            markup += "</div></div>";
+
+            return markup;
+        }
+
+        function formatRepoSelection(repo) {
+            return repo.text;
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        function OnDropDownHeaderFactoryIdChange() {
+            var selectCategory = $('#SelectHeaderFactoryDropDownId').val();
+            $('#SelectedHeaderFactoryIds').val(selectCategory);
+        }
+
+        $("#SelectHeaderFactoryDropDownId").select2({
+            width: '500px',
+            ajax: {
+                url: "/Header/GetFactoryList",
+                dataType: 'json',
+                type: "POST",
+                quietMillis: 50,
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page || 1
+                    };
+                },
+                ProcessResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            placeholder: 'Select up to 2 factories',
+            escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: -1,
+            templateResult: formatRepoSelectItemId,
+            templateSelection: formatRepoSelection,
+            allowClear: true,
+            multiple: true,
+            maximumSelectionLength: 2
+        });
+
+        function formatRepoSelectItemId(repo) {
+            if (repo.loading) {
+                return repo.text;
+            }
+
+            var markup = "<div class='select2-result-repository clearfix'>" +
+                "<div class='select2-result-repository__meta'>" +
+                "<div class='select2-result-repository__title'>" + repo.text + "</div>" +
+                "<div class='select2-result-repository__description'>" + repo.itemDescription + "</div>" +
+                "<div class='select2-result-repository__statistics'>" +
+                "</div>" +
+                "</div></div>";
+
+            return markup;
+        }
+
+        function formatRepoSelection(repo) {
+            return repo.text;
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        function OnDropDownHeaderRoomIdChange() {
+            var selectCategory = $('#SelectHeaderRoomDropDownId').val();
+            $('#SelectedHeaderRoomIds').val(selectCategory);
+        }
+
+        $("#SelectHeaderRoomDropDownId").select2({
+            width: '500px',
+            ajax: {
+                url: "/Header/GetAllRoomList",
+                dataType: 'json',
+                type: "POST",
+                quietMillis: 50,
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        page: params.page || 1
+                    };
+                },
+                ProcessResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            placeholder: 'Select up to 2 rooms',
+            escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: -1,
+            templateResult: formatRepoSelectItemId,
+            templateSelection: formatRepoSelection,
+            allowClear: true,
+            multiple: true,
+            maximumSelectionLength: 2
+        });
+
+        function formatRepoSelectItemId(repo) {
+            if (repo.loading) {
+                return repo.text;
+            }
+
+            var markup = "<div class='select2-result-repository clearfix'>" +
+                "<div class='select2-result-repository__meta'>" +
+                "<div class='select2-result-repository__title'>" + repo.text + "</div>" +
+                "<div class='select2-result-repository__description'>" + repo.itemDescription + "</div>" +
+                "<div class='select2-result-repository__statistics'>" +
+                "</div>" +
+                "</div></div>";
+
+            return markup;
+        }
+
+        function formatRepoSelection(repo) {
+            return repo.text;
+        }
+    </script>
+
+}

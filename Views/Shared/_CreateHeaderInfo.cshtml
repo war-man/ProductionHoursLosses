@@ -11,12 +11,20 @@
 <div class="form-group">
     @Html.Label("Date: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
     <div class="col-md-10">
-        @*@Html.EditorFor(model => model.SelectedDate, new { htmlAttributes = new { @class = "datepicker", id = "datepickerId" } })*@
-        @Html.TextBoxFor(model => model.SelectedDate, new { @class = "form-group", @type = "date", @id = "SelectedDate" })
+        @if (Model.IsUpdate)
+        {
+            string selDate = (Model.SelectedDate.Value).ToString("yyyy-MM-dd");
+            @Html.TextBoxFor(model => model.SelectedDate, new { @class = "form-group", @type = "date", @Value = selDate, @id = "SelectedDate" })
+        }
+        else
+        {
+            @Html.TextBoxFor(model => model.SelectedDate, new { @class = "form-group", @type = "date", @id = "SelectedDate" })
+        }
         <span class="fa fa-calendar"> </span>
         @Html.ValidationMessageFor(model => model.SelectedDate, "", new { @class = "text-danger" })
     </div>
 </div>
+
 
 <div class="form-group">
     @Html.Label("Factory: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
