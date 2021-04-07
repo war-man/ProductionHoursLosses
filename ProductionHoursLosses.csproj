@@ -384,6 +384,9 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\treetable\jquery.treetable.css" />
+    <Content Include="Content\treetable\jquery.treetable.theme.default.css" />
+    <Content Include="Content\treetable\screen.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
@@ -589,6 +592,7 @@
     <Content Include="Scripts\src\utils\setAttributes.js" />
     <Content Include="Scripts\src\utils\setStyles.js" />
     <Content Include="Scripts\src\utils\setupEventListeners.js" />
+    <Content Include="Scripts\treetable\jquery.treetable.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -652,11 +656,10 @@
     <Content Include="Views\Header\Create - Copy.cshtml" />
     <Content Include="Views\Shared\_CreateHeaderDetails.cshtml" />
     <Content Include="Views\Header\Index - Copy.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\treetable\" />
-    <Folder Include="Scripts\treetable\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

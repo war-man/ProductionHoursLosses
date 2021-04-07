@@ -10,9 +10,9 @@
 <div>
     <h4>HEADER</h4>
     <hr />
+
     <dl class="dl-horizontal">
         <dt>
-            @*@Html.DisplayNameFor(model => model.HeaderModel.DATE)*@
             Date
         </dt>
 
@@ -21,16 +21,6 @@
         </dd>
 
         <dt>
-            @*@Html.DisplayNameFor(model => model.AVAIL_HRS)*@
-            Avail. Hours
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.HeaderModel.AVAIL_HRS)
-        </dd>
-
-        <dt>
-            @*@Html.DisplayNameFor(model => model.FACTORY.NAME)*@
             Factory
         </dt>
 
@@ -39,7 +29,6 @@
         </dd>
 
         <dt>
-            @*@Html.DisplayNameFor(model => model.ROOM.NAME)*@
             Room
         </dt>
 
@@ -48,7 +37,14 @@
         </dd>
 
         <dt>
-            @*@Html.DisplayNameFor(model => model.STATUS.NAME)*@
+            Avail. Hours
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HeaderModel.AVAIL_HRS)
+        </dd>
+
+        <dt>
             Status
         </dt>
 
@@ -57,6 +53,108 @@
         </dd>
 
     </dl>
+
+    <table id="example-advanced" class="treetable">
+        <thead>
+            <tr>
+                <th style="text-align:center">
+                    Product
+                </th>
+                <th style="text-align:center">
+                    Start Time
+                </th>
+                <th style="text-align:center">
+                    End Time
+                </th>
+                <th style="text-align:center">
+                    Batch No.
+                </th>
+                <th style="text-align:center">
+                    Work Order
+                </th>
+                <th style="width:100px; text-align:center">
+                    Shift
+                </th>
+                <th style="text-align:center; width:100px">
+                    Actual Hours
+                </th>
+                <th style="text-align:center; width:100px">
+                    Unit Weight (mg)
+                </th>
+                <th style="text-align:center; width:100px">
+                    Speed Machine RPM
+                </th>
+                <th style="text-align:center; width:100px">
+                    Actual Quantity
+                </th>
+                <th style="text-align:center; width:100px">
+                    Num. People
+                </th>
+                <th style="text-align:center; width:100px">
+                    Units
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var det in Model.DetailsList)
+            {
+                <tr data-tt-id='@det.AA' data-tt-parent-id=''>
+                    <td>
+                        <span class='folder'>@det.PRODUCT.DESCRIPTION</span>
+                    </td>
+                    <td>
+                        @det.START_TIME.ToString("HH:mm")
+                    </td>
+                    <td>
+                        @det.END_TIME.ToString("HH:mm")
+                    </td>
+                    <td>
+                        @det.BATCH_NO
+                    </td>
+                    <td>
+                        @det.WORK_ORDER
+                    </td>
+                    <td>
+                        @det.SHIFT
+                    </td>
+                    <td>
+                        @det.ACTUAL_HRS
+                    </td>
+                    <td>
+                        @det.UNIT_WEIGHT
+                    </td>
+                    <td>
+                        @det.SPEED_MACHINE_RPM
+                    </td>
+                    <td>
+                        @det.ACTUAL_QTY@*.ToString("N10", new System.Globalization.CultureInfo("it-IT"))*@
+                    </td>
+                    <td>
+                        @det.NUM_PEOPLE
+                    </td>
+                    <td>
+                        @det.UNITS
+                    </td>
+                </tr>
+
+                foreach (var loss in det.DetailLossesList)
+                {
+                    <tr data-tt-id='' data-tt-parent-id='@det.AA'>
+                        <td></td>
+                        <td>
+                            <span class='file'>@loss.LOSSES.DESCRIPTION</span>
+                        </td>
+                        <td>
+                            <span>@loss.DURATION mins</span>
+                        </td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+
+
 
     @using (Html.BeginForm())
     {
@@ -68,3 +166,15 @@
         </div>
     }
 </div>
+
+@section Scripts
+{
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+    <link href="~/Content/loadingImage.css" rel="stylesheet" />
+
+    <link href="~/Content/treetable/jquery.treetable.theme.default.css" rel="stylesheet" />
+    <script src="~/Scripts/treetable/jquery.treetable.js"></script>
+
+
+}

@@ -1,0 +1,7 @@
+﻿@using Microsoft.AspNet.Identity
+@using ProductionHoursLosses.Helper
+
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Hello @Helper.GetUserNameWithoutDomain(@User.Identity.GetUserName()) !</a></li>
+    </ul>
+

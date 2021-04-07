@@ -902,15 +902,15 @@ namespace ProductionHoursLosses.Controllers
         //}
 
         // GET: Header/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? headerId)
         {
-            if (id == null)
+            if (headerId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             var model = new HeaderViewModel();
-            model = RetrieveHeader((int)id);
+            model = RetrieveHeader((int)headerId);
 
             if (model == null)
                 return RedirectToAction("GeneralError", "Error", new { error = "Header Edit: Header id does not exist" });
@@ -928,7 +928,7 @@ namespace ProductionHoursLosses.Controllers
         // POST: Header/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int headerId)
         {
             var errorList = new List<string>();
             var exception = new ExceptionError();
@@ -939,11 +939,11 @@ namespace ProductionHoursLosses.Controllers
                 using (DbContextTransaction transactionNewRec = dbPRD_HRS.Database.BeginTransaction())
                 {
                     
-                        var dbHdr = dbPRD_HRS.HEADER.FirstOrDefault(x => x.ID == id);
+                        var dbHdr = dbPRD_HRS.HEADER.FirstOrDefault(x => x.ID == headerId);
                         if (dbHdr == null)
                         {
                             exception.Result = false;
-                            exception.Name = string.Format("Edit Header: During save cannot find the header id {0}", id);
+                            exception.Name = string.Format("Edit Header: During save cannot find the header id {0}", headerId);
                         }
                         else 
                         {
