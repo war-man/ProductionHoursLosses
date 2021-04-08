@@ -127,13 +127,13 @@
                         @det.SPEED_MACHINE_RPM
                     </td>
                     <td>
-                        @det.ACTUAL_QTY@*.ToString("N10", new System.Globalization.CultureInfo("it-IT"))*@
+                        @det.ACTUAL_QTY.Value.ToString("N3", new System.Globalization.CultureInfo("en-US"))
                     </td>
                     <td>
                         @det.NUM_PEOPLE
                     </td>
                     <td>
-                        @det.UNITS
+                        @det.UNITS.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))
                     </td>
                 </tr>
 

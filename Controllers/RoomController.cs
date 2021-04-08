@@ -52,8 +52,12 @@ namespace ProductionHoursLosses.Controllers
         {
             if (ModelState.IsValid)
             {
+                rOOM.FACTORY = db.FACTORY.FirstOrDefault(X => X.ID == rOOM.FACTORY_ID);
                 db.ROOM.Add(rOOM);
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("CREATE", "ROOM", db.ROOM.Max(x => x.ID), null, string.Concat(rOOM.NAME, " / ", rOOM.FACTORY.NAME), User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
 
@@ -86,8 +90,13 @@ namespace ProductionHoursLosses.Controllers
         {
             if (ModelState.IsValid)
             {
+                ROOM old_val = db.ROOM.AsNoTracking().FirstOrDefault(x => x.ID == rOOM.ID);
+                rOOM.FACTORY = db.FACTORY.FirstOrDefault(X => X.ID == rOOM.FACTORY_ID);
                 db.Entry(rOOM).State = EntityState.Modified;
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("EDIT", "ROOM", rOOM.ID, string.Concat(old_val.NAME, " / ", old_val.FACTORY.NAME), string.Concat(rOOM.NAME, " / ", rOOM.FACTORY.NAME), User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
             ViewBag.FACTORY_ID = new SelectList(db.FACTORY, "ID", "NAME", rOOM.FACTORY_ID);
@@ -117,6 +126,10 @@ namespace ProductionHoursLosses.Controllers
             ROOM rOOM = db.ROOM.Find(id);
             db.ROOM.Remove(rOOM);
             db.SaveChanges();
+
+            rOOM.FACTORY = db.FACTORY.FirstOrDefault(X => X.ID == rOOM.FACTORY_ID);
+            SharedHelp.CommonFunctions.CreateLog("DELETE", "ROOM", rOOM.ID, string.Concat(rOOM.NAME, " / ", rOOM.FACTORY.NAME), null, User.Identity.Name);
+
             return RedirectToAction("Index");
         }
 

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProductionHoursLosses.Models;
+using ProductionHoursLosses.SharedHelp;
 
 namespace ProductionHoursLosses.Controllers
 {
@@ -52,6 +53,9 @@ namespace ProductionHoursLosses.Controllers
             {
                 db.FACTORY.Add(fACTORY);
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("CREATE", "FACTORY", db.FACTORY.Max(x => x.ID), null, string.Concat(fACTORY.NAME, " / ", fACTORY.ADDRESS), User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
 
@@ -82,8 +86,12 @@ namespace ProductionHoursLosses.Controllers
         {
             if (ModelState.IsValid)
             {
+                FACTORY old_fact = db.FACTORY.AsNoTracking().FirstOrDefault(x => x.ID == fACTORY.ID);
                 db.Entry(fACTORY).State = EntityState.Modified;
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("EDIT", "FACTORY", fACTORY.ID, string.Concat(old_fact.NAME, " / ", old_fact.ADDRESS), string.Concat(fACTORY.NAME, " / ", fACTORY.ADDRESS), User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
             return View(fACTORY);
@@ -112,6 +120,9 @@ namespace ProductionHoursLosses.Controllers
             FACTORY fACTORY = db.FACTORY.Find(id);
             db.FACTORY.Remove(fACTORY);
             db.SaveChanges();
+
+            SharedHelp.CommonFunctions.CreateLog("DELETE", "FACTORY", fACTORY.ID, string.Concat(fACTORY.NAME, " / ", fACTORY.ADDRESS), null, User.Identity.Name);
+
             return RedirectToAction("Index");
         }
 

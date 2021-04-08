@@ -52,6 +52,9 @@ namespace ProductionHoursLosses.Controllers
             {
                 db.LOSSES.Add(lOSSES);
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("CREATE", "LOSSES", db.LOSSES.Max(x => x.ID), null, string.Concat(lOSSES.CODE, " / ", lOSSES.DESCRIPTION), User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
 
@@ -82,8 +85,12 @@ namespace ProductionHoursLosses.Controllers
         {
             if (ModelState.IsValid)
             {
+                LOSSES OLD_VAL = db.LOSSES.AsNoTracking().FirstOrDefault(x => x.ID == lOSSES.ID);
                 db.Entry(lOSSES).State = EntityState.Modified;
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("EDIT", "LOSSES", lOSSES.ID, string.Concat(OLD_VAL.CODE, " / ", OLD_VAL.DESCRIPTION), string.Concat(lOSSES.CODE, " / ", lOSSES.DESCRIPTION), User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
             return View(lOSSES);
@@ -112,6 +119,9 @@ namespace ProductionHoursLosses.Controllers
             LOSSES lOSSES = db.LOSSES.Find(id);
             db.LOSSES.Remove(lOSSES);
             db.SaveChanges();
+
+            SharedHelp.CommonFunctions.CreateLog("DELETE", "LOSSES", lOSSES.ID, string.Concat(lOSSES.CODE, " / ", lOSSES.DESCRIPTION), null, User.Identity.Name);
+
             return RedirectToAction("Index");
         }
 

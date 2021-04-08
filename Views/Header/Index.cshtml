@@ -1,8 +1,65 @@
 ﻿@model ProductionHoursLosses.Models.ViewModels.HeaderListViewModel
+@using PagedList.Mvc;
+@using ProductionHoursLosses.Models.Enum;
+@using ProductionHoursLosses.Models;
+@using ProductionHoursLosses.Module;
 
 @{
     ViewBag.Title = "Index";
 }
+
+<style>
+    .badge-notify {
+        background: red;
+        position: relative;
+        top: -20px;
+        left: -35px;
+    }
+
+    /* Dropdown Button */
+    .dropbtn {
+        background-color: #3498DB;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: #2980B9;
+        }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+    .dropdown a:hover {
+        background-color: #ddd
+    }
+
+    .show {
+        display: block;
+    }
+</style>
 
 <h2>Index</h2>
 
@@ -47,7 +104,7 @@
     }
 
     @*@Html.HiddenFor(x => x.SelectedStartDate, new { @id = "SelectedStartDate" })
-    @Html.HiddenFor(x => x.SelectedEndDate, new { @id = "SelectedEndDate" })*@
+        @Html.HiddenFor(x => x.SelectedEndDate, new { @id = "SelectedEndDate" })*@
     @Html.HiddenFor(x => x.SelectedHeaderStatusIds, new { @id = "SelectedHeaderStatusIds" })
     @Html.HiddenFor(x => x.SelectedHeaderFactoryIds, new { @id = "SelectedHeaderFactoryIds" })
     @Html.HiddenFor(x => x.SelectedHeaderRoomIds, new { @id = "SelectedHeaderRoomIds" })
@@ -136,35 +193,35 @@
     <br />
 
     <table class="table">
-            <thead>
-                <tr>
-                    <th style="text-align:center">
-                        A/A
-                    </th>
-                    <th style="text-align:center">
-                        Date
-                    </th>
-                    <th style="text-align:center">
-                        Factory
-                    </th>
-                    <th style="text-align:center">
-                        Room
-                    </th>
-                    <th style="text-align:center">
-                        Avail. Hours
-                    </th>
-                    <th style="text-align:center">
-                        Status
-                    </th>
-                    <th style="text-align:center">
-                        Actions
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @{ var count = 1; }
-                @foreach (var item in Model.HeaderList)
-                {
+        <thead>
+            <tr>
+                <th style="text-align:center">
+                    A/A
+                </th>
+                <th style="text-align:center">
+                    Date
+                </th>
+                <th style="text-align:center">
+                    Factory
+                </th>
+                <th style="text-align:center">
+                    Room
+                </th>
+                <th style="text-align:center">
+                    Avail. Hours
+                </th>
+                <th style="text-align:center">
+                    Status
+                </th>
+                <th style="text-align:center">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var count = 1; }
+            @foreach (var item in Model.HeaderList)
+            {
                 <tr>
                     <td>
                         @Html.Raw(count)
@@ -187,8 +244,8 @@
                     </td>
                     <td>
                         @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.ID })*@
+                            @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ID })*@
 
                         <button class="btn btn-success btn-sm" title="Edit" onclick="location.href='@Url.Action("Edit", "Header", new { headerId = item.ID })'" type="button">
                             <i class="fa fa-pencil"></i>
@@ -200,18 +257,30 @@
 
                     </td>
                 </tr>
-                    count++;
-                }
-            <tbody>
+                count++;
+            }
+        <tbody>
 
-        </table>
+    </table>
 
+    <br />
 
+    <div>
+        @if (Model.HeaderList.PageCount < Model.HeaderList.PageNumber)
+        {
+            @Html.Label(string.Format("Page 0 of {0}", @Model.HeaderList.PageCount))
+        }
+        else
+        {
+            @Html.Label(string.Format("Page {0} of {1}", Model.HeaderList.PageNumber, @Model.HeaderList.PageCount))
+        }
+
+        @Html.PagedListPager(Model.HeaderList, page => Url.Action("Index", "Header", new ProductionHoursLosses.Models.ViewModels.HeaderListViewModel { SelectedStartDate = Model.SelectedStartDate, SelectedEndDate = Model.SelectedEndDate, SelectedHeaderStatusIds = Model.SelectedHeaderStatusIds, SelectedHeaderFactoryIds = Model.SelectedHeaderFactoryIds, SelectedHeaderRoomIds = Model.SelectedHeaderRoomIds, PageNumber = page, PageSize = Model.PageSize, IsNextPageRequest = true }))
+        Display @Html.DropDownListFor(m => m.PageSize, new SelectList(new Dictionary<string, int> { { "10", 10 }, { "20", 20 }, { "30", 30 }, { "50", 50 }, { "100", 100 }, { "120", 120 }, { "150", 150 }, { "1000", 1000 } }, "Key", "Value"), htmlAttributes: new { @class = "", @id = "PageSizeDropDownId" }) per page
+    </div>
 
 
 }
-
-
 
 @section Scripts
 {

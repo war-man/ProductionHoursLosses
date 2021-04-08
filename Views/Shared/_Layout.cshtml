@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Production Hours</title>
+    <title>@ViewBag.Title - Production Hours Losses</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -16,17 +16,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Production Hours", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Production Hours Losses", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Product", "Index", "Product")</li>
                     <li>@Html.ActionLink("Losses", "Index", "Losses")</li>
                     <li>@Html.ActionLink("Factory", "Index", "Factory")</li>
                     <li>@Html.ActionLink("Room", "Index", "Room")</li>
                 </ul>
+
                 @*<p class="nav navbar-text navbar-right">Hello, @User.Identity.Name!</p>*@
             </div>
             @Html.Partial("_LoginPartial")

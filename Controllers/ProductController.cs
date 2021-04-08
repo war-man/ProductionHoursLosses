@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProductionHoursLosses.Models;
+using ProductionHoursLosses.SharedHelp;
+using System.Data.Entity.Validation;
 
 namespace ProductionHoursLosses.Controllers
 {
@@ -48,11 +50,35 @@ namespace ProductionHoursLosses.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,CODE,DESCRIPTION")] PRODUCT pRODUCT)
         {
+            
             if (ModelState.IsValid)
             {
-                db.PRODUCT.Add(pRODUCT);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var exception = new ExceptionError();
+                try
+                {
+                    db.PRODUCT.Add(pRODUCT);
+                    db.SaveChanges();
+                    exception.Result = true;
+                }
+                catch(DbEntityValidationException e)
+                {
+                    
+                    exception.Name = string.Format("Entity has the following validation errors: {0} {1}\n", e.Message, e.InnerException);
+
+                    foreach (var x in e.EntityValidationErrors)
+                    {
+                        exception.Name += string.Format("Property name: {0}, Message {1}\n", x.ValidationErrors.FirstOrDefault().PropertyName, x.ValidationErrors.FirstOrDefault().ErrorMessage);
+                    }
+                    exception.Result = false;
+                }
+                
+                if(exception.Result)
+                {
+                    SharedHelp.CommonFunctions.CreateLog("CREATE", "PRODUCT", db.PRODUCT.Max(x => x.ID), null, string.Concat(pRODUCT.CODE, " / ", pRODUCT.DESCRIPTION), User.Identity.Name);
+                }
+
+
+                    return RedirectToAction("Index");
             }
 
             return View(pRODUCT);
@@ -82,8 +108,12 @@ namespace ProductionHoursLosses.Controllers
         {
             if (ModelState.IsValid)
             {
+                PRODUCT old_prod = db.PRODUCT.AsNoTracking().FirstOrDefault(x => x.ID == pRODUCT.ID);
                 db.Entry(pRODUCT).State = EntityState.Modified;
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("EDIT", "PRODUCT", pRODUCT.ID, string.Concat(old_prod.CODE, " / ", old_prod.DESCRIPTION), string.Concat(pRODUCT.CODE, " / ", pRODUCT.DESCRIPTION), User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
             return View(pRODUCT);
@@ -112,6 +142,9 @@ namespace ProductionHoursLosses.Controllers
             PRODUCT pRODUCT = db.PRODUCT.Find(id);
             db.PRODUCT.Remove(pRODUCT);
             db.SaveChanges();
+
+            SharedHelp.CommonFunctions.CreateLog("DELETE", "PRODUCT", pRODUCT.ID, string.Concat(pRODUCT.CODE, " / ", pRODUCT.DESCRIPTION), null, User.Identity.Name);
+
             return RedirectToAction("Index");
         }
 

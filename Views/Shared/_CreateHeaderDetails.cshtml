@@ -217,13 +217,13 @@
                     @Html.DisplayFor(modelDetail => Model.DetailsList[i].SPEED_MACHINE_RPM)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].ACTUAL_QTY)
+                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].ACTUAL_QTY.Value) @*.ToString("N3", new System.Globalization.CultureInfo("en-US"))*@
                 </td>
                 <td>
                     @Html.DisplayFor(modelDetail => Model.DetailsList[i].NUM_PEOPLE)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].UNITS)
+                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].UNITS) @*.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))*@
                 </td>
                 <td>
                     <button class="btn btn-warning btn-sm" title="Edit Detail" type="button" data-toggle="modal" data-target="#editTableRow"

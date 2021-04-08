@@ -11,6 +11,7 @@ using ProductionHoursLosses.Models.Enum;
 using ProductionHoursLosses.Models.ViewModels;
 using ProductionHoursLosses.Module;
 using ProductionHoursLosses.Helper;
+using ProductionHoursLosses.SharedHelp;
 using System.Data.Entity.Validation;
 using PagedList;
 
@@ -350,11 +351,12 @@ namespace ProductionHoursLosses.Controllers
             model.DetailsList = new List<DetailExtended>();
 
             if (itemToEdit.DETAIL != null)
-            {
-                foreach (var det in itemToEdit.DETAIL)
+            {   
+                foreach (var det in itemToEdit.DETAIL.OrderBy(x => x.ID))
                 {
                     var detToAdd = new DetailExtended();
                     detToAdd.AA = Guid.NewGuid();
+                    detToAdd.ID = det.ID;
                     detToAdd.START_TIME = det.START_TIME;
                     detToAdd.END_TIME = det.END_TIME;
                     detToAdd.PRODUCT_ID = det.PRODUCT_ID;
@@ -373,10 +375,11 @@ namespace ProductionHoursLosses.Controllers
                     if (det.DETAIL_LOSSES != null)
                     {
                         detToAdd.DetailLossesList = new List<DetailLossesExtended>();
-                        foreach (var loss in det.DETAIL_LOSSES)
+                        foreach (var loss in det.DETAIL_LOSSES.OrderBy(x => x.ID))
                         {
                             var lossToAdd = new DetailLossesExtended();
                             lossToAdd.AA = Guid.NewGuid();
+                            lossToAdd.ID = loss.ID;
                             lossToAdd.LOSSES_ID = loss.LOSSES_ID;
                             lossToAdd.DURATION = loss.DURATION;
                             lossToAdd.LOSSES = new LOSSES();
@@ -384,10 +387,12 @@ namespace ProductionHoursLosses.Controllers
 
                             detToAdd.DetailLossesList.Add(lossToAdd);
                         }
+                        detToAdd.DetailLossesList.OrderBy(x => x.ID);
                     }
 
                     model.DetailsList.Add(detToAdd);
                 }
+                model.DetailsList.OrderBy(x => x.ID);
             }
 
             return model;
@@ -609,6 +614,15 @@ namespace ProductionHoursLosses.Controllers
                         {
                             dbPRD_HRS.SaveChanges();
                             transactionNewRec.Commit();
+
+                            if(model.IsUpdate)
+                            {
+                                SharedHelp.CommonFunctions.CreateLog("EDIT", "HEADER", model.HeaderModel.ID, null, null, User.Identity.Name);
+                            }
+                            else
+                            {
+                                SharedHelp.CommonFunctions.CreateLog("CREATE", "HEADER", dbPRD_HRS.HEADER.Max(x => x.ID), null, null, User.Identity.Name);
+                            }
 
                             return new ExceptionError { Result = true };
                         }
@@ -968,6 +982,8 @@ namespace ProductionHoursLosses.Controllers
                             {
                                 dbPRD_HRS.SaveChanges();
                                 transactionNewRec.Commit();
+
+                                SharedHelp.CommonFunctions.CreateLog("DELETE", "HEADER", headerId, null, null, User.Identity.Name);
 
                                 exception.Result = true;
                             }

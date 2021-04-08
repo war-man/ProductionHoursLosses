@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProductionHoursLosses.Models;
+using ProductionHoursLosses.SharedHelp;
 
 namespace ProductionHoursLosses.Controllers
 {
@@ -52,6 +53,9 @@ namespace ProductionHoursLosses.Controllers
             {
                 db.STATUS.Add(sTATUS);
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("CREATE", "STATUS", db.STATUS.Max(x => x.ID), null, sTATUS.NAME, User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
 
@@ -82,8 +86,12 @@ namespace ProductionHoursLosses.Controllers
         {
             if (ModelState.IsValid)
             {
+                STATUS old_val = db.STATUS.AsNoTracking().FirstOrDefault(x => x.ID == sTATUS.ID);
                 db.Entry(sTATUS).State = EntityState.Modified;
                 db.SaveChanges();
+
+                SharedHelp.CommonFunctions.CreateLog("EDIT", "STATUS", sTATUS.ID, old_val.NAME, sTATUS.NAME, User.Identity.Name);
+
                 return RedirectToAction("Index");
             }
             return View(sTATUS);
@@ -112,6 +120,9 @@ namespace ProductionHoursLosses.Controllers
             STATUS sTATUS = db.STATUS.Find(id);
             db.STATUS.Remove(sTATUS);
             db.SaveChanges();
+
+            SharedHelp.CommonFunctions.CreateLog("DELETE", "STATUS", sTATUS.ID, sTATUS.NAME, null, User.Identity.Name);
+
             return RedirectToAction("Index");
         }
 
