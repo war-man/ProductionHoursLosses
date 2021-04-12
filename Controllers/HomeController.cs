@@ -15,7 +15,7 @@ namespace ProductionHoursLosses.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "This application is used to record the production hour losses.";
 
             return View();
         }

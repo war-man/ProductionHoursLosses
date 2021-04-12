@@ -69,7 +69,7 @@
             <ul>
                 <li><a href="#step-1">Step 1<br /><small>Enter Header information</small></a></li>
                 <li><a href="#step-2">Step 2<br /><small>Enter Details</small></a></li>
-                <li><a href="#step-3">Step 3<br /><small>Enter Losses</small></a></li>
+                <li><a href="#step-3">Step 3<br /><small>Enter losses</small></a></li>
                 <li><a href="#step-6">Step 4<br /><small>Authentication</small></a></li>
             </ul>
         </div>
@@ -326,24 +326,24 @@
                     </button>
 
                     <div class="col-md-offset-2 col-md-10">
-                        <button id="addDetailLosses" onclick="AddDetailLossesClicked()" type="button" class="btn btn-default"><span class="fa fa-plus"></span> Add Detail Losses</button>
+                        <button id="addDetaillosses" onclick="AddDetaillossesClicked()" type="button" class="btn btn-default"><span class="fa fa-plus"></span> Add Detail losses</button>
                     </div>
 
-                    <div class="form-group" id="divDetailLosses" style="display:none">
+                    <div class="form-group" id="divDetaillosses" style="display:none">
                         <h4>Enter detail losses:</h4>
                         <hr />
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                         <div class="form-group">
-                            @Html.Label("Losses: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                            @Html.Label("losses: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
                             <div class="col-md-10">
-                                <select class="" id="SelectedLossesDropDownId" style="" onchange="OnDropDownLossesChange()">
-                                    @if (Model.SelectedLossesId != null)
+                                <select class="" id="SelectedlossesDropDownId" style="" onchange="OnDropDownlossesChange()">
+                                    @if (Model.SelectedlossesId != null)
                                     {
-                                        <option value="@Model.SelectedLossesId" selected>@Model.SelectedLosses.DESCRIPTION</option>
+                                        <option value="@Model.SelectedlossesId" selected>@Model.Selectedlosses.DESCRIPTION</option>
                                     }
                                 </select>
-                                @Html.ValidationMessageFor(model => model.SelectedLossesId, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.SelectedlossesId, "", new { @class = "text-danger" })
                                 <br />
                                 <br />
                             </div>
@@ -352,13 +352,13 @@
                         <div class="form-group">
                             @Html.Label("Duration (mins): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.SelectedLossesMins, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.SelectedLossesMins, "", new { @class = "text-danger" })
+                                @Html.EditorFor(model => model.SelectedlossesMins, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.SelectedlossesMins, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
-                        <button class="btn btn-success" title="Create" name="AddDetailLosses" type="submit" value="AddDetailLosses">
-                            <span class="fa fa-plus"></span> Create Detail Losses
+                        <button class="btn btn-success" title="Create" name="AddDetaillosses" type="submit" value="AddDetaillosses">
+                            <span class="fa fa-plus"></span> Create Detail losses
                         </button>
 
                     </div>
@@ -476,7 +476,7 @@
                                                 data-units="@Model.DetailsList[i].UNITS">
                                             <i class="fa fa-pencil"></i>
                                         </button>
-                                        <button class="btn btn-warning btn-sm" title="Add Losses" onclick="AddDetailLosses('@Model.DetailsList[i].AA');">
+                                        <button class="btn btn-warning btn-sm" title="Add losses" onclick="AddDetaillosses('@Model.DetailsList[i].AA');">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                         <button class="btn btn-danger btn-sm" title="Delete" onclick="DeleteDetail('@Model.DetailsList[i].AA');">
@@ -660,7 +660,7 @@
 
                     $(document).ready(function () {
                         document.getElementById("divDetails").style.display = "none";
-                        document.getElementById("divDetailLosses").style.display = "none";
+                        document.getElementById("divDetaillosses").style.display = "none";
                     });
 
                     $(function () {

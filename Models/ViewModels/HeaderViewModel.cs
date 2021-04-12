@@ -56,7 +56,7 @@ namespace ProductionHoursLosses.Models.ViewModels
 
         public List<DetailExtended> DetailsList { get; set; }
 
-        //public List<DETAIL_LOSSES> DetailLossesList { get; set; }
+        //public List<DETAIL_LOSSES> DetaillossesList { get; set; }
 
         public string SelectedDetailToAddLossAA { get; set; }
         

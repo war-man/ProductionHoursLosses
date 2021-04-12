@@ -20,14 +20,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Header", "Index", "Header")</li>
                     <li>@Html.ActionLink("Product", "Index", "Product")</li>
                     <li>@Html.ActionLink("Losses", "Index", "Losses")</li>
                     <li>@Html.ActionLink("Factory", "Index", "Factory")</li>
                     <li>@Html.ActionLink("Room", "Index", "Room")</li>
+                    <li>@Html.ActionLink("Status", "Index", "Status")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
                 </ul>
-
                 @*<p class="nav navbar-text navbar-right">Hello, @User.Identity.Name!</p>*@
             </div>
             @Html.Partial("_LoginPartial")

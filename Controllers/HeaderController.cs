@@ -239,7 +239,7 @@ namespace ProductionHoursLosses.Controllers
             if (model.SelectedStatus == null)
                 model.SelectedStatus = new STATUS();
 
-            if (!model.SelectedDate.HasValue && model.HeaderModel.DATE == null)
+            if (model.SelectedDate == null && model.HeaderModel.DATE == null)
                 errorList.Add("Enter a Date.");
             if (!model.SelectedFactoryID.HasValue)
                 errorList.Add("Select a Factory.");

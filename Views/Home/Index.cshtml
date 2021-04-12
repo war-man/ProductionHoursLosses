@@ -2,36 +2,361 @@
     ViewBag.Title = "Home Page";
 }
 
+@*<div class="jumbotron">
+    <h1>MEDOCHEMIE - Production Hours Losses</h1>
+</div>*@
+
+
+<style>
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background-color: #108d6f;
+        border-color: #108d6f;
+        box-shadow: none;
+        outline: none;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #305891;
+        border-color: #305893;
+    }
+
+    section {
+        padding: 60px 0;
+    }
+
+        section .section-title {
+            text-align: center;
+            color: #305893;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+        }
+
+    #team .card {
+        border: none;
+        background: #ffffff;
+    }
+
+    .image-flip:hover .backside,
+    .image-flip.hover .backside {
+        -webkit-transform: rotateY(0deg);
+        -moz-transform: rotateY(0deg);
+        -o-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+        border-radius: .25rem;
+    }
+
+    .image-flip:hover .frontside,
+    .image-flip.hover .frontside {
+        -webkit-transform: rotateY(180deg);
+        -moz-transform: rotateY(180deg);
+        -o-transform: rotateY(180deg);
+        transform: rotateY(180deg);
+    }
+
+    .mainflip {
+        -webkit-transition: 1s;
+        -webkit-transform-style: preserve-3d;
+        -ms-transition: 1s;
+        -moz-transition: 1s;
+        -moz-transform: perspective(1000px);
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        transition: 1s;
+        transform-style: preserve-3d;
+        position: relative;
+    }
+
+    .frontside {
+        position: relative;
+        -webkit-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        z-index: 2;
+        margin-bottom: 30px;
+    }
+
+    .backside {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: white;
+        -webkit-transform: rotateY(-180deg);
+        -moz-transform: rotateY(-180deg);
+        -o-transform: rotateY(-180deg);
+        -ms-transform: rotateY(-180deg);
+        transform: rotateY(-180deg);
+        -webkit-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
+        -moz-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
+        box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
+    }
+
+    .frontside,
+    .backside {
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        -ms-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transition: 1s;
+        -webkit-transform-style: preserve-3d;
+        -moz-transition: 1s;
+        -moz-transform-style: preserve-3d;
+        -o-transition: 1s;
+        -o-transform-style: preserve-3d;
+        -ms-transition: 1s;
+        -ms-transform-style: preserve-3d;
+        transition: 1s;
+        transform-style: preserve-3d;
+    }
+
+        .frontside .card,
+        .backside .card {
+            min-height: 312px;
+        }
+
+            .backside .card a {
+                font-size: 18px;
+                color: #305893 !important;
+            }
+
+            .frontside .card .card-title,
+            .backside .card .card-title {
+                color: #305893 !important;
+            }
+
+            .frontside .card .card-body img {
+                width: 120px;
+                height: 120px;
+                /*border-radius: 50%;*/
+            }
+</style>
+
 <div class="jumbotron">
-    <h1>MEDOCHEMIE - Production Hours</h1>
+    <div style="text-align: center">
+        <img height="200" width="200" src="~/Content/Images/mc_logo_sml.png" alt="logo" />
+        <h1 id="logo">
+            MEDOCHEMIE - Production Hours Losses
+        </h1>
+        <h5 id="logo">
+            version 0.1
+        </h5>
+    </div>
 </div>
 
-<div>
-    @Html.ActionLink("Header", "Index", "Header")<br />
-    @Html.ActionLink("Product", "Index", "Product")<br />
-    @Html.ActionLink("Factory", "Index", "Factory")<br />
-    @Html.ActionLink("Room", "Index", "Room")<br />
-    @Html.ActionLink("Losses", "Index", "Losses")<br />
-    @Html.ActionLink("Status", "Index", "Status")
-</div>
+<section id="team" class="pb-5">
+    <div class="container">
+        <h5 class="section-title h1">Production Hours Losses</h5>
+        <div class="row">
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Welcome to Medochemie - Production Hours application</h2>
-        <p>
-            Production Hours is an application that
-            will assist operators record the machine hours
-            and the losses.
-        </p>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p>
+                                        <img class=" img-fluid" alt="Team Cards Flipper" src="~/Content/Images/Header.png" />
+                                    </p>
+                                    <h4 class="card-title">Header</h4>
+                                    <p class="card-text"></p>
+                                    <a href="#" class="btn btn-primary btn-sm">More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+                                    <h4 class="card-title">Header</h4>
+                                    <p class="card-text">In Header screen the users can submit the hours spent during production including losses, as well as, the quantities produced and the human workload per factory per room.</p>
+                                    <ul class="list-inline">
+                                        <a href='@Url.Action("Index", "Header")' class="btn btn-default">
+                                            Go
+                                            <i class="fa fa-folder-open"> </i>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p>
+                                        <img class=" img-fluid" alt="Team Cards Flipper" src="~/Content/Images/Product.png" />
+                                    </p>
+                                    <h4 class="card-title">Product</h4>
+                                    <p class="card-text"></p>
+                                    <a href="#" class="btn btn-primary btn-sm">More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+                                    <h4 class="card-title">Product</h4>
+                                    <p class="card-text">Record new products and handle the existing ones.</p>
+                                    <ul class="list-inline">
+                                        <a href='@Url.Action("Index", "Product")' class="btn btn-default">
+                                            Go
+                                            <i class="fa fa-folder-open"> </i>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p>
+                                        <img class=" img-fluid" alt="Team Cards Flipper" src="~/Content/Images/losses.png" />
+                                    </p>
+                                    <h4 class="card-title">Losses</h4>
+                                    <p class="card-text"></p>
+                                    <a href="#" class="btn btn-primary btn-sm">More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+                                    <h4 class="card-title">Losses</h4>
+                                    <p class="card-text">Record new losses and handle the existing ones.</p>
+                                    <ul class="list-inline">
+                                        <a href='@Url.Action("Index", "Losses")' class="btn btn-default">
+                                            Go
+                                            <i class="fa fa-folder-open"> </i>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p>
+                                        <img class=" img-fluid" alt="Team Cards Flipper" src="~/Content/Images/Factory.png" />
+                                    </p>
+                                    <h4 class="card-title">Factory</h4>
+                                    <p class="card-text"></p>
+                                    <a href="#" class="btn btn-primary btn-sm">More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+                                    <h4 class="card-title">Factory</h4>
+                                    <p class="card-text">Record new factories and handle the existing ones.</p>
+                                    <ul class="list-inline">
+                                        <a href='@Url.Action("Index", "Factory")' class="btn btn-default">
+                                            Go
+                                            <i class="fa fa-folder-open"> </i>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p>
+                                        <img class=" img-fluid" alt="Team Cards Flipper" src="~/Content/Images/Room.png" />
+                                    </p>
+                                    <h4 class="card-title">Factory Room</h4>
+                                    <p class="card-text"></p>
+                                    <a href="#" class="btn btn-primary btn-sm">More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+                                    <h4 class="card-title">Factory Room</h4>
+                                    <p class="card-text">Record new rooms and handle the existing ones.</p>
+                                    <ul class="list-inline">
+                                        <a href='@Url.Action("Index", "Room")' class="btn btn-default">
+                                            Go
+                                            <i class="fa fa-folder-open"> </i>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p>
+                                        <img class=" img-fluid" alt="Team Cards Flipper" src="~/Content/Images/Status.png" />
+                                    </p>
+                                    <h4 class="card-title">Header Status</h4>
+                                    <p class="card-text"></p>
+                                    <a href="#" class="btn btn-primary btn-sm">More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+                                    <h4 class="card-title">Header Status</h4>
+                                    <p class="card-text">Record new statuses and handle the existing ones.</p>
+                                    <ul class="list-inline">
+                                        <a href='@Url.Action("Index", "Status")' class="btn btn-default">
+                                            Go
+                                            <i class="fa fa-folder-open"> </i>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
-    <div class="col-md-4">
-        <h2>Build it from scratch</h2>
-        <p>You can build the application by following the steps in the tutorial series on the ASP.NET site.</p>
-        <p><a class="btn btn-default" href="http://www.asp.net/mvc/tutorials/getting-started-with-ef-using-mvc/">See the tutorial &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Download it</h2>
-        <p>You can download the completed project.</p>
-        <p><a class="btn btn-default" href="https://webpifeed.blob.core.windows.net/webpifeed/Partners/ASP.NET%20MVC%20Application%20Using%20Entity%20Framework%20Code%20First.zip">Download &raquo;</a></p>
-    </div>
-</div>
+
+</section>
+
+
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
