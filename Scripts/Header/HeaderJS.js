@@ -16,11 +16,12 @@ function OnDropDownFactoryChange() {
     //}
 }
 
-
+var ajaxUrlGetFactory = $("#ajaxUrlGetFactory").val();
 $("#SelectedFactoryDropDownID").select2({
     width: '500px',
     ajax: {
-        url: "/Header/GetFactoryList",
+        //url: "/Header/GetFactoryList",
+        url: ajaxUrlGetFactory,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -80,11 +81,12 @@ function OnDropDownRoomChange() {
     //}
 }
 
-
+var ajaxUrlGetRoom = $("#ajaxUrlGetRoom").val();
 $("#SelectedRoomDropDownId").select2({
     width: '500px',
     ajax: {
-        url: "/Header/GetRoomList",
+        //url: "/Header/GetRoomList",
+        url: ajaxUrlGetRoom,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -142,10 +144,12 @@ function OnDropDownStatusChange() {
     //}
 }
 
+var ajaxUrlGetStatus = $("#ajaxUrlGetStatus").val();
 $("#SelectedStatusDropDownId").select2({
     width: '500px',
     ajax: {
-        url: "/Header/GetStatusList",
+        //url: "/Header/GetStatusList",
+        url: ajaxUrlGetStatus,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -186,10 +190,12 @@ function OnDropDownAvailHoursChange() {
     //}
 }
 
+var ajaxUrlGetAvailHours = $("#ajaxUrlGetAvailHours").val();
 $("#SelectedAvailHoursDropDownId").select2({
     width: '500px',
     ajax: {
-        url: "/Header/GetAvailHrsList",
+        //url: "/Header/GetAvailHrsList",
+        url: ajaxUrlGetAvailHours,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -226,10 +232,12 @@ function OnDropDownProductChange() {
     $('#SelectedProductId').val(selectItem);
 }
 
+var ajaxUrlGetProduct = $("#ajaxUrlGetProduct").val();
 $("#SelectedProductDropDownId").select2({
     width: '500px',
     ajax: {
-        url: "/Header/GetProductList",
+        //url: "/Header/GetProductList",
+        url: ajaxUrlGetProduct,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -285,10 +293,12 @@ function OnDropDownShiftChange() {
     //}
 }
 
+var ajaxUrlGetShift = $("#ajaxUrlGetShift").val();
 $("#SelectedShiftDropDownId").select2({
     width: '500px',
     ajax: {
-        url: "/Header/GetShiftList",
+        //url: "/Header/GetShiftList",
+        url: ajaxUrlGetShift,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -328,10 +338,12 @@ function OnDropDownActualHoursChange() {
     //}
 }
 
+var ajaxUrlGetActualHrs = $("#ajaxUrlGetActualHrs").val();
 $("#SelectedActualHoursDropDownId").select2({
     width: '500px',
     ajax: {
-        url: "/Header/GetAvailHrsList",
+        //url: "/Header/GetAvailHrsList",
+        url: ajaxUrlGetActualHrs,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -367,10 +379,12 @@ function OnDropDownLossesChange() {
     $('#SelectedLossesId').val(selectItem);
 }
 
+var ajaxUrlGetLosses = $("#ajaxUrlGetLosses").val();
 $("#SelectedLossesDropDownId").select2({
     width: '500px',
     ajax: {
-        url: "/Header/GetLossesList",
+        //url: "/Header/GetLossesList",
+        url: ajaxUrlGetLosses,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -474,7 +488,8 @@ function OnDropDownProductIdChangeCreateDetailFromModal() {
 $("#SelectProductIdDropDownIdCreateDetailFromModal").select2({
     width: '300px',
     ajax: {
-        url: "/Header/GetProductList",
+        //url: "/Header/GetProductList",
+        url: ajaxUrlGetProduct,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -513,7 +528,8 @@ function OnDropDownShiftChangeCreateDetailFromModal() {
 $("#SelectShiftDropDownIdCreateDetailFromModal").select2({
     width: '150px',
     ajax: {
-        url: "/Header/GetShiftList",
+        //url: "/Header/GetShiftList",
+        url: ajaxUrlGetShift,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -553,7 +569,8 @@ function OnDropDownActualHrsChangeCreateDetailFromModal() {
 $("#SelectActualHrsDropDownIdCreateDetailFromModal").select2({
     width: '150px',
     ajax: {
-        url: "/Header/GetAvailHrsList",
+        //url: "/Header/GetAvailHrsList",
+        url: ajaxUrlGetActualHrs,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -704,7 +721,8 @@ function OnDropDownLossIdChangeCreateDetailLossFromModal() {
 $("#SelectLossIdDropDownIdCreateDetailLossFromModal").select2({
     width: '450px',
     ajax: {
-        url: "/Header/GetLossesList",
+        //url: "/Header/GetLossesList",
+        url: ajaxUrlGetLosses,
         dataType: 'json',
         type: "POST",
         data: function (params) {
@@ -757,7 +775,8 @@ function OnDropDownLossIdChangeUpdateDetailLossFromModal() {
 $("#SelectLossIdDropDownIdUpdateDetailLossFromModal").select2({
     width: '450px',
     ajax: {
-        url: "/Header/GetLossesList",
+        //url: "/Header/GetLossesList",
+        url: ajaxUrlGetLosses,
         dataType: 'json',
         type: "POST",
         data: function (params) {

@@ -316,7 +316,8 @@
         $("#SelectHeaderStatusDropDownId").select2({
             width: '500px',
             ajax: {
-                url: "/Header/GetStatusList",
+                //url: "/Header/GetStatusList",
+                url: '@Url.Action("GetStatusList", "Header")',
                 dataType: 'json',
                 type: "POST",
                 quietMillis: 50,
@@ -377,7 +378,8 @@
         $("#SelectHeaderFactoryDropDownId").select2({
             width: '500px',
             ajax: {
-                url: "/Header/GetFactoryList",
+                //url: "/Header/GetFactoryList",
+                url: '@Url.Action("GetFactoryList", "Header")',
                 dataType: 'json',
                 type: "POST",
                 quietMillis: 50,
@@ -441,7 +443,8 @@
         $("#SelectHeaderRoomDropDownId").select2({
             width: '500px',
             ajax: {
-                url: "/Header/GetAllRoomList",
+                //url: "/Header/GetAllRoomList",
+                url: '@Url.Action("GetAllRoomList", "Header")',
                 dataType: 'json',
                 type: "POST",
                 quietMillis: 50,

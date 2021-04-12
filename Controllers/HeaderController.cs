@@ -1200,7 +1200,7 @@ namespace ProductionHoursLosses.Controllers
             return Json(results, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetStatusList(string q, int page)
+        public JsonResult GetStatusList(string q, int page) 
         {
             var results = new ResultSelect2<ItemIdText>();
             results.results = new List<ItemIdText>();

@@ -23,6 +23,7 @@
 </div>
 
 <div class="form-group">
+    <input type="hidden" id="ajaxUrlGetProduct" value='@Url.Action("GetProductList", "Header")' />
     @Html.Label("Product: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
     <div class="col-md-10">
         <select class="" id="SelectedProductDropDownId" style="" onchange="OnDropDownProductChange()">
@@ -56,6 +57,7 @@
 </div>
 
 <div class="form-group">
+    <input type="hidden" id="ajaxUrlGetShift" value='@Url.Action("GetShiftList", "Header")' />
     @Html.Label("Shift: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
     <div class="col-md-10">
         <select class="" id="SelectedShiftDropDownId" style="" onchange="OnDropDownShiftChange()">
@@ -71,6 +73,7 @@
 </div>
 
 <div class="form-group">
+    <input type="hidden" id="ajaxUrlGetActualHrs" value='@Url.Action("GetAvailHrsList", "Header")' />
     @Html.Label("Actual Hours:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
     <div class="col-md-10">
         <select class="" id="SelectedActualHoursDropDownId" style="" onchange="OnDropDownActualHoursChange()">
@@ -325,6 +328,7 @@
                 @Html.Hidden("RowTableDetailAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableDetailAA" })
                 @Html.Hidden("RowTableDetailLossAA", "", htmlAttributes: new { @class = "control-label", style = "color:#A93226", @id = "RowTableDetailLossAA" })
 
+                <input type="hidden" id="ajaxUrlGetLosses" value='@Url.Action("GetLossesList", "Header")' />
                 @Html.Label("Loss: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
                 <div id="divLossId2" style="display:block">
                     <select class="" id="SelectLossIdDropDownIdUpdateDetailLossFromModal" style="" onchange="OnDropDownLossIdChangeUpdateDetailLossFromModal()"></select>
@@ -337,7 +341,7 @@
                @class = "form-control required",
                @min = "0",
                @type = "number",
-               @id = "LossDurationModalFormId2",
+               @id = "LossDurationModalFormId2"
            })
                 <br />
 
@@ -436,7 +440,7 @@
            {
                @class = "form-control required",
                @min = "0",
-               @max="100",
+               @max = "100",
                @type = "number",
                @id = "SpeedMachineModalFormId",
            })
@@ -497,6 +501,7 @@
 
 
                 @Html.Label("Loss: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+                <input type="hidden" id="ajaxUrlGetLosses" value='@Url.Action("GetLossesList", "Header")' />
                 <div id="divLossId" style="display:block">
                     <select class="" id="SelectLossIdDropDownIdCreateDetailLossFromModal" style="" onchange="OnDropDownLossIdChangeCreateDetailLossFromModal()"></select>
                 </div>

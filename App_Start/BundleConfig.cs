@@ -26,6 +26,17 @@ namespace ProductionHoursLosses
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
+            bundles.Add(new StyleBundle("~/Content/allcss").Include(
+                      "~/Content/bootstrap.css",
+                      //"~/Content/font-awesome.min.css",
+                      //"~/Content/css/select2.css",
+                      "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Header").Include(
+                        //"~/Scripts/select2.js",
+                        //"~/Scripts/Header/HeaderJS.js",
+                        "~/Scripts/Header/showPassword.js"));
+
             //Create bundel for jQueryUI  
             //js  
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
