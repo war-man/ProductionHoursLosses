@@ -118,6 +118,30 @@ namespace ProductionHoursLosses.Controllers
             //return View(hEADER.ToList());
         }
 
+        public ActionResult Report(HeaderListViewModel model)
+        {
+            if (model == null)
+                model = new HeaderListViewModel();
+
+            model = InitializeListViewModel(model);
+
+            model.PageNumber = model.PageNumber ?? 1;
+            model.PageSize = model.PageSize ?? 20;
+
+            model.HeaderList = SearchInList(model);
+
+            model.IsNextPageRequest = false;
+
+            if (!string.IsNullOrWhiteSpace((string)TempData["errorMessage"]))
+                ViewBag.PasswordMessage = "Wrong user authentication password.";
+
+            return View("Report", model);
+
+
+            //var hEADER = db.HEADER.Include(h => h.FACTORY).Include(h => h.ROOM).Include(h => h.STATUS);
+            //return View(hEADER.ToList());
+        }
+
         private IPagedList<HEADER> SearchInList(HeaderListViewModel model)
         {
             var areSearchCriteriaEmpty = !model.SelectedStartDate.HasValue

@@ -21,7 +21,7 @@
         {
             @Html.TextBoxFor(model => model.SelectedDate, new { @class = "form-group", @type = "date", @id = "SelectedDate" })
         }
-        <span class="fa fa-calendar"> </span>
+        @*<span class="fa fa-calendar"> </span>*@
         @Html.ValidationMessageFor(model => model.SelectedDate, "", new { @class = "text-danger" })
     </div>
 </div>

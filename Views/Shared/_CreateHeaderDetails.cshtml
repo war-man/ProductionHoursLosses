@@ -94,7 +94,7 @@
 
 <div class="form-group">
     @Html.Label("Actual Duration:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-    <div class=" row row-cols-2 col-md-10">
+    <div class=" row row-cols-2 col-md-offset-2 col-md-10">
         <div class="col-md-6">
             @Html.EditorFor(model => model.SelectedActualHours, new { htmlAttributes = new { @class = "form-control" } }) hrs
             @Html.ValidationMessageFor(model => model.SelectedActualHours, "", new { @class = "text-danger" })

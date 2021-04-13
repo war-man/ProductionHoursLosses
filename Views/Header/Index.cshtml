@@ -78,235 +78,242 @@
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formSubmit" }))
 {
     <hr />
+
     <div class="form-group">
-        <button type="button" class="btn btn-primary" title="Create New Header" onclick="location.href='@Url.Action("Create", "Header")'">
-            <span class="fa fa-plus"></span> Create New
-        </button>
-    </div>
+        <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="btn btn-primary" title="Create New Header" onclick="location.href='@Url.Action("Create", "Header")'">
+                    <span class="fa fa-plus"></span> Create New
+                </button>
 
-    <hr />
+                <button type="button" class="btn btn-primary" title="Report" onclick="location.href='@Url.Action("Report", "Header")'">
+                    <span class="fa fa-file"></span> Report
+                </button>
+            </div>
+        </div>
 
-    if (!string.IsNullOrWhiteSpace(ViewBag.PasswordMessage))
-    {
+        <hr />
+
+        if (!string.IsNullOrWhiteSpace(ViewBag.PasswordMessage))
+        {
         <div class="alert alert-danger" style="font-size:18px !important;">
             @ViewBag.PasswordMessage
         </div>
-    }
+        }
 
-    if (Session["SaveMessage"] != null && Session["SaveMessage"] == "true")
-    {
+        if (Session["SaveMessage"] != null && Session["SaveMessage"] == "true")
+        {
         <div id="SuccessAlert" class="alert alert-success alert-dismissible fade in" style="font-size:18px !important;">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             @Html.Raw("The Header has been successfully saved.")
         </div>
 
         Session["SaveMessage"] = null;
-    }
+        }
 
-    @*@Html.HiddenFor(x => x.SelectedStartDate, new { @id = "SelectedStartDate" })
+        @*@Html.HiddenFor(x => x.SelectedStartDate, new { @id = "SelectedStartDate" })
         @Html.HiddenFor(x => x.SelectedEndDate, new { @id = "SelectedEndDate" })*@
-    @Html.HiddenFor(x => x.SelectedHeaderStatusIds, new { @id = "SelectedHeaderStatusIds" })
-    @Html.HiddenFor(x => x.SelectedHeaderFactoryIds, new { @id = "SelectedHeaderFactoryIds" })
-    @Html.HiddenFor(x => x.SelectedHeaderRoomIds, new { @id = "SelectedHeaderRoomIds" })
-    @Html.HiddenFor(x => x.IsNextPageRequest, new { @id = "IsNextPageRequestId" })
+        @Html.HiddenFor(x => x.SelectedHeaderStatusIds, new { @id = "SelectedHeaderStatusIds" })
+        @Html.HiddenFor(x => x.SelectedHeaderFactoryIds, new { @id = "SelectedHeaderFactoryIds" })
+        @Html.HiddenFor(x => x.SelectedHeaderRoomIds, new { @id = "SelectedHeaderRoomIds" })
+        @Html.HiddenFor(x => x.IsNextPageRequest, new { @id = "IsNextPageRequestId" })
 
 
-    <h4><strong> Search for Header using the following criteria: </strong></h4>
+        <h4><strong> Search for Header using the following criteria: </strong></h4>
 
-    <div class="form-group">
-        @Html.Label("Start Date:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.SelectedStartDate, new { @class = "form-group", @type = "date", @id = "SelectedStartDate" })
-            <span class="fa fa-calendar"> </span>
-            @Html.ValidationMessageFor(model => model.SelectedStartDate, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Start Date:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.SelectedStartDate, new { @class = "form-group", @type = "date", @id = "SelectedStartDate" })
+                @*<span class="fa fa-calendar"> </span>*@
+                @Html.ValidationMessageFor(model => model.SelectedStartDate, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.Label("End Date:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.SelectedEndDate, new { @class = "form-group", @type = "date", @id = "SelectedEndDate" })
-            <span class="fa fa-calendar"> </span>
-            @Html.ValidationMessageFor(model => model.SelectedEndDate, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("End Date:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.SelectedEndDate, new { @class = "form-group", @type = "date", @id = "SelectedEndDate" })
+                @*<span class="fa fa-calendar"> </span>*@
+                @Html.ValidationMessageFor(model => model.SelectedEndDate, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
 
-    <div class="form-group">
-        @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <select class="" id="SelectHeaderStatusDropDownId" style="" onchange="OnDropDownHeaderStatusIdChange()" multiple>
-                @if (Model != null && Model.SelectedHeaderStatusList != null)
-                {
-                    foreach (var item in Model.SelectedHeaderStatusList)
+        <div class="form-group">
+            @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="" id="SelectHeaderStatusDropDownId" style="" onchange="OnDropDownHeaderStatusIdChange()" multiple>
+                    @if (Model != null && Model.SelectedHeaderStatusList != null)
                     {
-                        <option value="@item.Id" selected>@item.Name</option>
+                        foreach (var item in Model.SelectedHeaderStatusList)
+                        {
+                            <option value="@item.Id" selected>@item.Name</option>
+                        }
                     }
-                }
-            </select>
-            <br />
-            <br />
+                </select>
+                <br />
+                <br />
+            </div>
         </div>
-    </div>
 
 
-    <div class="form-group">
-        @Html.Label("Factory:", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <select class="" id="SelectHeaderFactoryDropDownId" style="" onchange="OnDropDownHeaderFactoryIdChange()" multiple>
-                @if (Model != null && Model.SelectedHeaderFactoryList != null)
-                {
-                    foreach (var item in Model.SelectedHeaderFactoryList)
+        <div class="form-group">
+            @Html.Label("Factory:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="" id="SelectHeaderFactoryDropDownId" style="" onchange="OnDropDownHeaderFactoryIdChange()" multiple>
+                    @if (Model != null && Model.SelectedHeaderFactoryList != null)
                     {
-                        <option value="@item.Id" selected>@item.Name</option>
+                        foreach (var item in Model.SelectedHeaderFactoryList)
+                        {
+                            <option value="@item.Id" selected>@item.Name</option>
+                        }
                     }
-                }
-            </select>
-            <br />
-            <br />
+                </select>
+                <br />
+                <br />
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.Label("Room:", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <select class="" id="SelectHeaderRoomDropDownId" style="" onchange="OnDropDownHeaderRoomIdChange()" multiple>
-                @if (Model != null && Model.SelectedHeaderRoomList != null)
-                {
-                    foreach (var item in Model.SelectedHeaderRoomList)
+        <div class="form-group">
+            @Html.Label("Room:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="" id="SelectHeaderRoomDropDownId" style="" onchange="OnDropDownHeaderRoomIdChange()" multiple>
+                    @if (Model != null && Model.SelectedHeaderRoomList != null)
                     {
-                        <option value="@item.Id" selected>@item.Name</option>
+                        foreach (var item in Model.SelectedHeaderRoomList)
+                        {
+                            <option value="@item.Id" selected>@item.Name</option>
+                        }
                     }
-                }
-            </select>
-            <br />
-            <br />
+                </select>
+                <br />
+                <br />
+            </div>
         </div>
-    </div>
 
-    <div id="divButtonSubmit">
-        <button class="btn btn-primary" title="Search" type="submit">
-            <span class="fa fa-search"></span> Search
-        </button>
-    </div>
-    <br />
-    <br />
+        <div id="divButtonSubmit">
+            <button class="btn btn-primary" title="Search" type="submit">
+                <span class="fa fa-search"></span> Search
+            </button>
+        </div>
+        <br />
+        <br />
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th style="text-align:center">
-                    A/A
-                </th>
-                <th style="text-align:center">
-                    Date
-                </th>
-                <th style="text-align:center">
-                    Factory
-                </th>
-                <th style="text-align:center">
-                    Room
-                </th>
-                <th style="text-align:center">
-                    Avail. Hours
-                </th>
-                <th style="text-align:center">
-                    Status
-                </th>
-                <th style="text-align:center">
-                    Actions
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ var count = 1; }
-            @foreach (var item in Model.HeaderList)
-            {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.Raw(count)
-                    </td>
-                    <td>
-                        @*@Html.DisplayFor(modelItem => item.DATE)*@
-                        @item.DATE.ToString("dd/MM/yyyy")
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FACTORY.NAME)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ROOM.NAME)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AVAIL_HRS)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.STATUS.NAME)
-                    </td>
-                    <td>
-                        @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    <th style="text-align:center">
+                        A/A
+                    </th>
+                    <th style="text-align:center">
+                        Date
+                    </th>
+                    <th style="text-align:center">
+                        Factory
+                    </th>
+                    <th style="text-align:center">
+                        Room
+                    </th>
+                    <th style="text-align:center">
+                        Avail. Hours
+                    </th>
+                    <th style="text-align:center">
+                        Status
+                    </th>
+                    <th style="text-align:center">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var count = 1; }
+                @foreach (var item in Model.HeaderList)
+                {
+                    <tr>
+                        <td>
+                            @Html.Raw(count)
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.DATE)*@
+                            @item.DATE.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FACTORY.NAME)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ROOM.NAME)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AVAIL_HRS)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.STATUS.NAME)
+                        </td>
+                        <td>
+                            @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
                             @Html.ActionLink("Details", "Details", new { id = item.ID }) |
                             @Html.ActionLink("Delete", "Delete", new { id = item.ID })*@
 
-                        <button class="btn btn-success btn-sm" title="Edit" onclick="location.href='@Url.Action("Edit", "Header", new { headerId = item.ID })'" type="button">
-                            <i class="fa fa-pencil"></i>
-                        </button>
+                            <button class="btn btn-success btn-sm" title="Edit" onclick="location.href='@Url.Action("Edit", "Header", new { headerId = item.ID })'" type="button">
+                                <i class="fa fa-pencil"></i>
+                            </button>
 
-                        <button class="btn btn-danger btn-sm" title="Delete" onclick="location.href='@Url.Action("Delete", "Header", new { headerId = item.ID })'" type="button">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                            <button class="btn btn-danger btn-sm" title="Delete" onclick="location.href='@Url.Action("Delete", "Header", new { headerId = item.ID })'" type="button">
+                                <i class="fa fa-trash"></i>
+                            </button>
 
-                    </td>
-                </tr>
-                count++;
+                        </td>
+                    </tr>
+                    count++;
+                }
+            <tbody>
+
+        </table>
+
+        <br />
+
+        <div>
+            @if (Model.HeaderList.PageCount < Model.HeaderList.PageNumber)
+            {
+                @Html.Label(string.Format("Page 0 of {0}", @Model.HeaderList.PageCount))
             }
-        <tbody>
+            else
+            {
+                @Html.Label(string.Format("Page {0} of {1}", Model.HeaderList.PageNumber, @Model.HeaderList.PageCount))
+            }
 
-    </table>
+            @Html.PagedListPager(Model.HeaderList, page => Url.Action("Index", "Header", new ProductionHoursLosses.Models.ViewModels.HeaderListViewModel { SelectedStartDate = Model.SelectedStartDate, SelectedEndDate = Model.SelectedEndDate, SelectedHeaderStatusIds = Model.SelectedHeaderStatusIds, SelectedHeaderFactoryIds = Model.SelectedHeaderFactoryIds, SelectedHeaderRoomIds = Model.SelectedHeaderRoomIds, PageNumber = page, PageSize = Model.PageSize, IsNextPageRequest = true }))
+            Display @Html.DropDownListFor(m => m.PageSize, new SelectList(new Dictionary<string, int> { { "10", 10 }, { "20", 20 }, { "30", 30 }, { "50", 50 }, { "100", 100 }, { "120", 120 }, { "150", 150 }, { "1000", 1000 } }, "Key", "Value"), htmlAttributes: new { @class = "", @id = "PageSizeDropDownId" }) per page
+        </div>
 
-    <br />
 
-    <div>
-        @if (Model.HeaderList.PageCount < Model.HeaderList.PageNumber)
-        {
-            @Html.Label(string.Format("Page 0 of {0}", @Model.HeaderList.PageCount))
-        }
-        else
-        {
-            @Html.Label(string.Format("Page {0} of {1}", Model.HeaderList.PageNumber, @Model.HeaderList.PageCount))
         }
 
-        @Html.PagedListPager(Model.HeaderList, page => Url.Action("Index", "Header", new ProductionHoursLosses.Models.ViewModels.HeaderListViewModel { SelectedStartDate = Model.SelectedStartDate, SelectedEndDate = Model.SelectedEndDate, SelectedHeaderStatusIds = Model.SelectedHeaderStatusIds, SelectedHeaderFactoryIds = Model.SelectedHeaderFactoryIds, SelectedHeaderRoomIds = Model.SelectedHeaderRoomIds, PageNumber = page, PageSize = Model.PageSize, IsNextPageRequest = true }))
-        Display @Html.DropDownListFor(m => m.PageSize, new SelectList(new Dictionary<string, int> { { "10", 10 }, { "20", 20 }, { "30", 30 }, { "50", 50 }, { "100", 100 }, { "120", 120 }, { "150", 150 }, { "1000", 1000 } }, "Key", "Value"), htmlAttributes: new { @class = "", @id = "PageSizeDropDownId" }) per page
-    </div>
-
-
-}
-
-@section Scripts
+        @section Scripts
 {
 
-    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
-    <link href="~/Content/loadingImage.css" rel="stylesheet" />
-    <link href="~/Content/css/select2.css" rel="stylesheet" />
-    <script src="~/Scripts/select2.js"></script>
-    <script src="~/Scripts/Header/showPassword.js"></script>
+            <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+            <link href="~/Content/loadingImage.css" rel="stylesheet" />
+            <link href="~/Content/css/select2.css" rel="stylesheet" />
+            <script src="~/Scripts/select2.js"></script>
+            <script src="~/Scripts/Header/showPassword.js"></script>
 
-    <script type="text/javascript">
-        $('#PageSizeDropDownId').on('change', function (event) {
-            $('#IsNextPageRequestId').val(true);
+            <script type="text/javascript">
+                $('#PageSizeDropDownId').on('change', function (event) {
+                    $('#IsNextPageRequestId').val(true);
 
-            var form = $(event.target).parents('form');
-            form.submit();
-        });
-    </script>
+                    var form = $(event.target).parents('form');
+                    form.submit();
+                });
+            </script>
 
-    <script type="text/javascript">
-        $("#SuccessAlert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#SuccessAlert").slideUp(500);
-        });
-    </script>
+            <script type="text/javascript">
+                $("#SuccessAlert").fadeTo(2000, 500).slideUp(500, function () {
+                    $("#SuccessAlert").slideUp(500);
+                });
+            </script>
 
-    <script type="text/javascript">
+            <script type="text/javascript">
 
         function OnDropDownHeaderStatusIdChange() {
             var selectCategory = $('#SelectHeaderStatusDropDownId').val();
@@ -366,9 +373,9 @@
         function formatRepoSelection(repo) {
             return repo.text;
         }
-    </script>
+            </script>
 
-    <script type="text/javascript">
+            <script type="text/javascript">
 
         function OnDropDownHeaderFactoryIdChange() {
             var selectCategory = $('#SelectHeaderFactoryDropDownId').val();
@@ -431,9 +438,9 @@
         function formatRepoSelection(repo) {
             return repo.text;
         }
-    </script>
+            </script>
 
-    <script type="text/javascript">
+            <script type="text/javascript">
 
         function OnDropDownHeaderRoomIdChange() {
             var selectCategory = $('#SelectHeaderRoomDropDownId').val();
@@ -496,6 +503,6 @@
         function formatRepoSelection(repo) {
             return repo.text;
         }
-    </script>
+            </script>
 
-}
+        }

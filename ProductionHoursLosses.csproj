@@ -665,6 +665,7 @@
     <Content Include="Views\Shared\_CreateHeaderDetails.cshtml" />
     <Content Include="Views\Header\Index - Copy.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Header\Report.cshtml" />
     <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
