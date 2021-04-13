@@ -23,6 +23,7 @@
           <Property Name="ACTUAL_QTY" Type="decimal" Precision="7" Scale="3" />
           <Property Name="NUM_PEOPLE" Type="tinyint" />
           <Property Name="UNITS" Type="int" />
+          <Property Name="ACTUAL_MINS" Type="tinyint" />
         </EntityType>
         <EntityType Name="DETAIL_LOSSES">
           <Key>
@@ -300,6 +301,7 @@
           <Property Name="ACTUAL_QTY" Type="Decimal" Precision="7" Scale="3" />
           <Property Name="NUM_PEOPLE" Type="Byte" />
           <Property Name="UNITS" Type="Int32" />
+          <Property Name="ACTUAL_MINS" Type="Byte" />
           <NavigationProperty Name="HEADER" Relationship="PRD_HRS_DBModel.FK_DETAIL_HEADER" FromRole="DETAIL" ToRole="HEADER" />
           <NavigationProperty Name="DETAIL_LOSSES" Relationship="PRD_HRS_DBModel.FK_DETAIL_LOSSES_DETAIL" FromRole="DETAIL" ToRole="DETAIL_LOSSES" />
           <NavigationProperty Name="PRODUCT" Relationship="PRD_HRS_DBModel.FK_DETAIL_PRODUCT" FromRole="DETAIL" ToRole="PRODUCT" />
@@ -494,6 +496,7 @@
           <EntitySetMapping Name="DETAIL">
             <EntityTypeMapping TypeName="PRD_HRS_DBModel.DETAIL">
               <MappingFragment StoreEntitySet="DETAIL">
+                <ScalarProperty Name="ACTUAL_MINS" ColumnName="ACTUAL_MINS" />
                 <ScalarProperty Name="UNITS" ColumnName="UNITS" />
                 <ScalarProperty Name="NUM_PEOPLE" ColumnName="NUM_PEOPLE" />
                 <ScalarProperty Name="ACTUAL_QTY" ColumnName="ACTUAL_QTY" />

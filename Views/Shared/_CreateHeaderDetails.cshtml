@@ -72,19 +72,37 @@
     </div>
 </div>
 
-<div class="form-group">
+@*<div class="form-group">
     <input type="hidden" id="ajaxUrlGetActualHrs" value='@Url.Action("GetAvailHrsList", "Header")' />
     @Html.Label("Actual Hours:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
     <div class="col-md-10">
-        <select class="" id="SelectedActualHoursDropDownId" style="" onchange="OnDropDownActualHoursChange()">
-            @if (Model.SelectedActualHours != null)
-            {
-                <option value="@Model.SelectedActualHours" selected>@Model.SelectedActualHours</option>
-            }
-        </select>
+            <select class="" id="SelectedActualHoursDropDownId" style="" onchange="OnDropDownActualHoursChange()">
+                @if (Model.SelectedActualHours != null)
+                {
+                    <option value="@Model.SelectedActualHours" selected>@Model.SelectedActualHours</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.SelectedActualHours, "", new { @class = "text-danger" })
+            <br />
+            <br />
+        </div>
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.SelectedActualHours, new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.SelectedActualHours, "", new { @class = "text-danger" })
-        <br />
-        <br />
+    </div>
+</div>*@
+
+<div class="form-group">
+    @Html.Label("Actual Duration:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+    <div class=" row row-cols-2 col-md-10">
+        <div class="col-md-6">
+            @Html.EditorFor(model => model.SelectedActualHours, new { htmlAttributes = new { @class = "form-control" } }) hrs
+            @Html.ValidationMessageFor(model => model.SelectedActualHours, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-6">
+            @Html.EditorFor(model => model.SelectedActualMins, new { htmlAttributes = new { @class = "form-control" } }) mins
+            @Html.ValidationMessageFor(model => model.SelectedActualMins, "", new { @class = "text-danger" })
+        </div>
     </div>
 </div>
 
@@ -113,7 +131,7 @@
 </div>
 
 <div class="form-group">
-    @Html.Label("Num. of people:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+    @Html.Label("Number of people:", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
     <div class="col-md-10">
         @Html.EditorFor(model => model.SelectedNumPeople, new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.SelectedNumPeople, "", new { @class = "text-danger" })
@@ -159,7 +177,7 @@
                     @Html.DisplayName("Shift")
                 </th>
                 <th style="text-align:right">
-                    @Html.DisplayName("Actual Hours")
+                    @Html.DisplayName("Actual Duration")
                 </th>
                 <th style="text-align:right">
                     @Html.DisplayName("Tablet weight (mg)")
@@ -193,10 +211,12 @@
                     @*@Html.DisplayFor(modelDetail => Model.DetailsList[i].AA)*@
                 </td>
                 <td>
-                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].START_TIME)
+                    @*@Html.DisplayFor(modelDetail => Model.DetailsList[i].START_TIME)*@
+                    @Model.DetailsList[i].START_TIME.ToString("HH:mm")
                 </td>
                 <td>
-                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].END_TIME)
+                    @*@Html.DisplayFor(modelDetail => Model.DetailsList[i].END_TIME)*@
+                    @Model.DetailsList[i].END_TIME.ToString("HH:mm")
                 </td>
                 <td>
                     @Html.DisplayFor(modelDetail => Model.DetailsList[i].PRODUCT.DESCRIPTION)
@@ -211,22 +231,31 @@
                     @Html.DisplayFor(modelDetail => Model.DetailsList[i].SHIFT)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].ACTUAL_HRS)
+                    @*@Html.DisplayFor(modelDetail => Model.DetailsList[i].ACTUAL_HRS)*@
+                    @if (@Model.DetailsList[i].ACTUAL_HRS.HasValue)
+                    {@Html.Raw(string.Concat(@Model.DetailsList[i].ACTUAL_HRS, " hrs"))}
+                    <h6></h6>
+                    @if (@Model.DetailsList[i].ACTUAL_MINS.HasValue)
+                    {@Html.Raw(string.Concat(@Model.DetailsList[i].ACTUAL_MINS, " mins"))}
+
                 </td>
                 <td>
-                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].UNIT_WEIGHT)
+                    @*@Html.DisplayFor(modelDetail => Model.DetailsList[i].UNIT_WEIGHT)*@
+                    @Model.DetailsList[i].UNIT_WEIGHT.Value.ToString("N0", new System.Globalization.CultureInfo("en-US"))
                 </td>
                 <td>
                     @Html.DisplayFor(modelDetail => Model.DetailsList[i].SPEED_MACHINE_RPM)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].ACTUAL_QTY.Value) @*.ToString("N3", new System.Globalization.CultureInfo("en-US"))*@
+                    @*@Html.DisplayFor(modelDetail => Model.DetailsList[i].ACTUAL_QTY.Value)*@ @*.ToString("N3", new System.Globalization.CultureInfo("en-US"))*@
+                    @Model.DetailsList[i].ACTUAL_QTY.Value.ToString("N3", new System.Globalization.CultureInfo("en-US"))
                 </td>
                 <td>
                     @Html.DisplayFor(modelDetail => Model.DetailsList[i].NUM_PEOPLE)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelDetail => Model.DetailsList[i].UNITS) @*.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))*@
+                    @*@Html.DisplayFor(modelDetail => Model.DetailsList[i].UNITS)*@ @*.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))*@
+                    @Model.DetailsList[i].UNITS.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))
                 </td>
                 <td>
                     <button class="btn btn-warning btn-sm" title="Edit Detail" type="button" data-toggle="modal" data-target="#editTableRow"
@@ -239,6 +268,7 @@
                             data-workorder="@Model.DetailsList[i].WORK_ORDER"
                             data-shift="@Model.DetailsList[i].SHIFT"
                             data-actualhours="@Model.DetailsList[i].ACTUAL_HRS"
+                            data-actualmins="@Model.DetailsList[i].ACTUAL_MINS"
                             data-unitweight="@Model.DetailsList[i].UNIT_WEIGHT"
                             data-speedmachine="@Model.DetailsList[i].SPEED_MACHINE_RPM"
                             data-actualqty="@Model.DetailsList[i].ACTUAL_QTY"
@@ -257,53 +287,53 @@
                 <td>
                     @if (Model.DetailsList[i].DetailLossesList != null && Model.DetailsList[i].DetailLossesList.Any())
                     {
-                    <table class="tableStyle">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.Raw("A/A")
-                                </th>
-                                <th style="text-align:left">
-                                    @Html.DisplayName("Loss")
-                                </th>
-                                <th style="text-align:right">
-                                    @Html.DisplayName("Duration")
-                                </th>
-                                <th style="width:99px; max-width:99px;">
-                                    @Html.Label("Actions")
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (int j = 0; j < Model.DetailsList[i].DetailLossesList.Count; j++)
-                            {
+                        <table class="tableStyle">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @Html.Label((j + 1).ToString())
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelDetailLoss => Model.DetailsList[i].DetailLossesList[j].LOSSES.DESCRIPTION)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelDetailLoss => Model.DetailsList[i].DetailLossesList[j].DURATION)
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-warning btn-sm" title="Edit" type="button" data-toggle="modal" data-target="#editTableLossesRow"
-                                                data-id="@Model.DetailsList[i].DetailLossesList[j].AA"
-                                                data-detailid="@Model.DetailsList[i].AA"
-                                                data-duration="@Model.DetailsList[i].DetailLossesList[j].DURATION"
-                                                data-lossid="@Model.DetailsList[i].DetailLossesList[j].LOSSES_ID"
-                                                data-lossname="@Model.DetailsList[i].DetailLossesList[j].LOSSES.DESCRIPTION">
-                                            <i class="fa fa-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-danger btn-sm" title="Delete" onclick="DeleteDetailLoss('@Model.DetailsList[i].DetailLossesList[j].AA','@Model.DetailsList[i].AA');">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
+                                    <th>
+                                        @Html.Raw("A/A")
+                                    </th>
+                                    <th style="text-align:left">
+                                        @Html.DisplayName("Loss")
+                                    </th>
+                                    <th style="text-align:right">
+                                        @Html.DisplayName("Duration")
+                                    </th>
+                                    <th style="width:99px; max-width:99px;">
+                                        @Html.Label("Actions")
+                                    </th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @for (int j = 0; j < Model.DetailsList[i].DetailLossesList.Count; j++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.Label((j + 1).ToString())
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelDetailLoss => Model.DetailsList[i].DetailLossesList[j].LOSSES.DESCRIPTION)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelDetailLoss => Model.DetailsList[i].DetailLossesList[j].DURATION)
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm" title="Edit" type="button" data-toggle="modal" data-target="#editTableLossesRow"
+                                                    data-id="@Model.DetailsList[i].DetailLossesList[j].AA"
+                                                    data-detailid="@Model.DetailsList[i].AA"
+                                                    data-duration="@Model.DetailsList[i].DetailLossesList[j].DURATION"
+                                                    data-lossid="@Model.DetailsList[i].DetailLossesList[j].LOSSES_ID"
+                                                    data-lossname="@Model.DetailsList[i].DetailLossesList[j].LOSSES.DESCRIPTION">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm" title="Delete" onclick="DeleteDetailLoss('@Model.DetailsList[i].DetailLossesList[j].AA','@Model.DetailsList[i].AA');">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     }
                 </td>
             </tr>
@@ -419,11 +449,39 @@
                 </div>
                 <br />
 
-                @Html.Label("Actual Hours: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
-                <div id="divActHrs2" style="display:block">
-                    <select class="" id="SelectActualHrsDropDownIdCreateDetailFromModal" style="" onchange="OnDropDownActualHrsChangeCreateDetailFromModal()"></select>
+                @Html.Label("Actual Duration: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+
+                <div class="row row-cols-2 col-md-4">
+                    @Html.TextBox("ActualHoursModalFormId", "", new
+                    {
+                    @class = "form-control required",
+                    @min = "0",
+                    @max = "24",
+                    @type = "number",
+                    @id = "ActualHoursModalFormId",
+                    }) hrs
+                    @Html.TextBox("ActualMinsModalFormId", "", new
+                    {
+                    @class = "form-control required",
+                    @min = "0",
+                    @max = "60",
+                    @type = "number",
+                    @id = "ActualMinsModalFormId",
+                    }) mins
                 </div>
+                
                 <br />
+
+                @*@Html.Label("Actual Minutes: *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
+        @Html.TextBox("ActualMinsModalFormId", "", new
+        {
+        @class = "form-control required",
+        @min = "0",
+        @max = "60",
+        @type = "number",
+        @id = "ActualMinsModalFormId",
+        })
+        <br />*@
 
                 @Html.Label("Unit Weight (mg): *", htmlAttributes: new { @class = "control-label col-md-2", style = "color:#A93226" })
                 @Html.TextBox("UnitWeightModalFormId", "", new

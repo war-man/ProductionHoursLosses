@@ -28,7 +28,7 @@ namespace ProductionHoursLosses
 
             bundles.Add(new StyleBundle("~/Content/allcss").Include(
                       "~/Content/bootstrap.css",
-                      //"~/Content/font-awesome.min.css",
+                      "~/Content/font-awesome.min.css",
                       //"~/Content/css/select2.css",
                       "~/Content/site.css"));
 

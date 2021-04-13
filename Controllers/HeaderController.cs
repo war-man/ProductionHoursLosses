@@ -297,6 +297,35 @@ namespace ProductionHoursLosses.Controllers
             //            errorList.Add("Step 3: Wrong user authentication password.");
             //    }
             //}
+            if(model.HeaderModel != null)
+                if(model.HeaderModel.AVAIL_HRS != null && model.DetailsList != null)
+                {
+                    int availduration = (model.HeaderModel.AVAIL_HRS != null ? (int)model.HeaderModel.AVAIL_HRS : 0) * 60;
+                    int actduration = 0;
+                    if (model.DetailsList != null)
+                    {
+                        foreach (var det in model.DetailsList.ToList())
+                        {
+                            if (det.ACTUAL_HRS != null && det.ACTUAL_HRS.HasValue)
+                                actduration = actduration + ((int)det.ACTUAL_HRS * 60);
+                            if (det.ACTUAL_MINS != null && det.ACTUAL_MINS.HasValue)
+                                actduration = actduration + ((int)det.ACTUAL_MINS);
+                            if(det.DetailLossesList != null)
+                            {
+                                foreach (var detloss in det.DetailLossesList)
+                                {
+                                    if (detloss.DURATION != null)
+                                        actduration = actduration + detloss.DURATION;
+                                }
+                            }
+
+                        }
+
+                        if ((availduration - actduration) != 0)
+                            errorList.Add("Actual duration plus Losses entered not equal to Available hours.");
+                    }
+
+                }
 
             if (!errorList.Any() && !string.IsNullOrWhiteSpace(save))
             {
@@ -366,6 +395,7 @@ namespace ProductionHoursLosses.Controllers
                     detToAdd.WORK_ORDER = det.WORK_ORDER;
                     detToAdd.SHIFT = det.SHIFT;
                     detToAdd.ACTUAL_HRS = det.ACTUAL_HRS;
+                    detToAdd.ACTUAL_MINS = det.ACTUAL_MINS;
                     detToAdd.UNIT_WEIGHT = det.UNIT_WEIGHT;
                     detToAdd.SPEED_MACHINE_RPM = det.SPEED_MACHINE_RPM;
                     detToAdd.ACTUAL_QTY = det.ACTUAL_QTY;
@@ -530,6 +560,7 @@ namespace ProductionHoursLosses.Controllers
                                     newDetail.WORK_ORDER = detailExtended.WORK_ORDER;
                                     newDetail.SHIFT = detailExtended.SHIFT;
                                     newDetail.ACTUAL_HRS = detailExtended.ACTUAL_HRS;
+                                    newDetail.ACTUAL_MINS = detailExtended.ACTUAL_MINS;
                                     newDetail.UNIT_WEIGHT = detailExtended.UNIT_WEIGHT;
                                     newDetail.SPEED_MACHINE_RPM = detailExtended.SPEED_MACHINE_RPM;
                                     newDetail.ACTUAL_QTY = detailExtended.ACTUAL_QTY;
@@ -585,6 +616,7 @@ namespace ProductionHoursLosses.Controllers
                                     newDetail.WORK_ORDER = detailExtended.WORK_ORDER;
                                     newDetail.SHIFT = detailExtended.SHIFT;
                                     newDetail.ACTUAL_HRS = detailExtended.ACTUAL_HRS;
+                                    newDetail.ACTUAL_MINS = detailExtended.ACTUAL_MINS;
                                     newDetail.UNIT_WEIGHT = detailExtended.UNIT_WEIGHT;
                                     newDetail.SPEED_MACHINE_RPM = detailExtended.SPEED_MACHINE_RPM;
                                     newDetail.ACTUAL_QTY = detailExtended.ACTUAL_QTY;
@@ -688,7 +720,12 @@ namespace ProductionHoursLosses.Controllers
                 ++count;
 
             if (!model.SelectedActualHours.HasValue)
-                error.Add("Select Actual Hours.");
+                error.Add("Enter Actual Hours.");
+            else
+                ++count;
+
+            if (!model.SelectedActualMins.HasValue)
+                error.Add("Enter Actual Mins.");
             else
                 ++count;
 
@@ -717,7 +754,7 @@ namespace ProductionHoursLosses.Controllers
             else
                 ++count;
 
-            if(count == 12)
+            if(count == 13)
             {
                 var detailToAdd = new DetailExtended();
                 detailToAdd.START_TIME = model.SelectedStartTime.Value;
@@ -727,6 +764,7 @@ namespace ProductionHoursLosses.Controllers
                 detailToAdd.WORK_ORDER = model.SelectedWorkOrder;
                 detailToAdd.SHIFT = Convert.ToByte(model.SelectedShift);
                 detailToAdd.ACTUAL_HRS = Convert.ToByte(model.SelectedActualHours);
+                detailToAdd.ACTUAL_MINS = Convert.ToByte(model.SelectedActualMins);
                 detailToAdd.UNIT_WEIGHT = model.SelectedUnitWeight;
                 detailToAdd.SPEED_MACHINE_RPM = Convert.ToByte(model.SelectedSpeedMachineRpm);
                 detailToAdd.ACTUAL_QTY = model.SelectedActualQuantity;
@@ -748,6 +786,7 @@ namespace ProductionHoursLosses.Controllers
                 model.SelectedWorkOrder = string.Empty;
                 model.SelectedShift = new int?();
                 model.SelectedActualHours = new int?();
+                model.SelectedActualMins = new int?();
                 model.SelectedUnitWeight = new decimal?();
                 model.SelectedSpeedMachineRpm = new int?();
                 model.SelectedActualQuantity = new decimal?();
@@ -809,7 +848,7 @@ namespace ProductionHoursLosses.Controllers
             if (string.IsNullOrWhiteSpace(model.SelectedDetailToUpdateAA) || 
                 (!model.SelectedDetailToUpdateStartTime.HasValue || !model.SelectedDetailToUpdateEndTime.HasValue || !model.SelectedDetailToUpdateProductId.HasValue
                 || string.IsNullOrEmpty(model.SelectedDetailToUpdateBatchNo) ||  string.IsNullOrEmpty(model.SelectedDetailToUpdateWorkOrder) || !model.SelectedDetailToUpdateShift.HasValue
-                || !model.SelectedDetailToUpdateActualHours.HasValue || !model.SelectedDetailToUpdateUnitWeight.HasValue || !model.SelectedDetailToUpdateSpeedMachineRpm.HasValue
+                || !model.SelectedDetailToUpdateActualHours.HasValue || !model.SelectedDetailToUpdateActualMins.HasValue || !model.SelectedDetailToUpdateUnitWeight.HasValue || !model.SelectedDetailToUpdateSpeedMachineRpm.HasValue
                 || !model.SelectedDetailToUpdateActualQuantity.HasValue || !model.SelectedDetailToUpdateNumPeople.HasValue || !model.SelectedDetailToUpdateUnits.HasValue))
                 return;
 
@@ -822,6 +861,7 @@ namespace ProductionHoursLosses.Controllers
                 det.WORK_ORDER = model.SelectedDetailToUpdateWorkOrder;
                 det.SHIFT = Convert.ToByte(model.SelectedDetailToUpdateShift);
                 det.ACTUAL_HRS = Convert.ToByte(model.SelectedDetailToUpdateActualHours);
+                det.ACTUAL_MINS = Convert.ToByte(model.SelectedDetailToUpdateActualMins);
                 det.UNIT_WEIGHT = model.SelectedDetailToUpdateUnitWeight;
                 det.SPEED_MACHINE_RPM = Convert.ToByte(model.SelectedDetailToUpdateSpeedMachineRpm);
                 det.ACTUAL_QTY = model.SelectedDetailToUpdateActualQuantity;
@@ -837,6 +877,7 @@ namespace ProductionHoursLosses.Controllers
                 model.SelectedDetailToUpdateWorkOrder = string.Empty;
                 model.SelectedDetailToUpdateShift = new int?();
                 model.SelectedDetailToUpdateActualHours = new int?();
+                model.SelectedDetailToUpdateActualMins = new int?();
                 model.SelectedDetailToUpdateUnitWeight = new decimal?();
                 model.SelectedDetailToUpdateSpeedMachineRpm = new int?();
                 model.SelectedDetailToUpdateActualQuantity = new decimal?();

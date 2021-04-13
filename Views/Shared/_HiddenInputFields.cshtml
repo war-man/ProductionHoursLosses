@@ -16,7 +16,8 @@
     @*@Html.HiddenFor(x => Model.SelectedBatchNo, new { @id = "SelectedBatchNo" })
         @Html.HiddenFor(x => Model.SelectedWorkOrder, new { @id = "SelectedWorkOrder" })*@
     @Html.HiddenFor(x => Model.SelectedShift, new { @id = "SelectedShift" })
-    @Html.HiddenFor(x => Model.SelectedActualHours, new { @id = "SelectedActualHours" })
+    @*@Html.HiddenFor(x => Model.SelectedActualHours, new { @id = "SelectedActualHours" })
+        @Html.HiddenFor(x => Model.SelectedActualMins, new { @id = "SelectedActualMins" })*@
     @*@Html.HiddenFor(x => Model.SelectedUnitWeight, new { @id = "SelectedUnitWeight" })
         @Html.HiddenFor(x => Model.SelectedSpeedMachineRpm, new { @id = "SelectedSpeedMachineRpm" })
         @Html.HiddenFor(x => Model.SelectedActualQuantity, new { @id = "SelectedActualQuantity" })
@@ -43,6 +44,7 @@
     @Html.HiddenFor(x => Model.SelectedDetailToUpdateShift)
 
     @Html.HiddenFor(x => Model.SelectedDetailToUpdateActualHours)
+    @Html.HiddenFor(x => Model.SelectedDetailToUpdateActualMins)
 
     @Html.HiddenFor(x => Model.SelectedDetailToUpdateUnitWeight)
 
@@ -89,6 +91,7 @@
                 @Html.HiddenFor(x => Model.DetailsList[i].WORK_ORDER)
                 @Html.HiddenFor(x => Model.DetailsList[i].SHIFT)
                 @Html.HiddenFor(x => Model.DetailsList[i].ACTUAL_HRS)
+                @Html.HiddenFor(x => Model.DetailsList[i].ACTUAL_MINS)
                 @Html.HiddenFor(x => Model.DetailsList[i].UNIT_WEIGHT)
                 @Html.HiddenFor(x => Model.DetailsList[i].SPEED_MACHINE_RPM)
                 @Html.HiddenFor(x => Model.DetailsList[i].ACTUAL_QTY)

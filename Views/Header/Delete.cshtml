@@ -17,7 +17,8 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.HeaderModel.DATE)
+            @*@Html.DisplayFor(model => model.HeaderModel.DATE)*@
+            @Model.HeaderModel.DATE.ToString("dd/MM/yyyy")
         </dd>
 
         <dt>
@@ -76,7 +77,7 @@
                     Shift
                 </th>
                 <th style="text-align:center; width:100px">
-                    Actual Hours
+                    Actual Duration
                 </th>
                 <th style="text-align:center; width:100px">
                     Unit Weight (mg)
@@ -98,44 +99,45 @@
         <tbody>
             @foreach (var det in Model.DetailsList)
             {
-                <tr data-tt-id='@det.AA' data-tt-parent-id=''>
-                    <td>
-                        <span class='folder'>@det.PRODUCT.DESCRIPTION</span>
-                    </td>
-                    <td>
-                        @det.START_TIME.ToString("HH:mm")
-                    </td>
-                    <td>
-                        @det.END_TIME.ToString("HH:mm")
-                    </td>
-                    <td>
-                        @det.BATCH_NO
-                    </td>
-                    <td>
-                        @det.WORK_ORDER
-                    </td>
-                    <td>
-                        @det.SHIFT
-                    </td>
-                    <td>
-                        @det.ACTUAL_HRS
-                    </td>
-                    <td>
-                        @det.UNIT_WEIGHT
-                    </td>
-                    <td>
-                        @det.SPEED_MACHINE_RPM
-                    </td>
-                    <td>
-                        @det.ACTUAL_QTY.Value.ToString("N3", new System.Globalization.CultureInfo("en-US"))
-                    </td>
-                    <td>
-                        @det.NUM_PEOPLE
-                    </td>
-                    <td>
-                        @det.UNITS.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))
-                    </td>
-                </tr>
+            <tr data-tt-id='@det.AA' data-tt-parent-id=''>
+                <td>
+                    <span class='folder'>@det.PRODUCT.DESCRIPTION</span>
+                </td>
+                <td>
+                    @det.START_TIME.ToString("HH:mm")
+                </td>
+                <td>
+                    @det.END_TIME.ToString("HH:mm")
+                </td>
+                <td>
+                    @det.BATCH_NO
+                </td>
+                <td>
+                    @det.WORK_ORDER
+                </td>
+                <td>
+                    @det.SHIFT
+                </td>
+                <td>
+                    @if (@det.ACTUAL_HRS.HasValue)  {@Html.Raw(string.Concat(@det.ACTUAL_HRS, " hrs"))} 
+                    @if (@det.ACTUAL_MINS.HasValue) {@Html.Raw(string.Concat(@det.ACTUAL_MINS, " mins"))}
+                </td>
+                <td>
+                    @det.UNIT_WEIGHT
+                </td>
+                <td>
+                    @det.SPEED_MACHINE_RPM
+                </td>
+                <td>
+                    @det.ACTUAL_QTY.Value.ToString("N3", new System.Globalization.CultureInfo("en-US"))
+                </td>
+                <td>
+                    @det.NUM_PEOPLE
+                </td>
+                <td>
+                    @det.UNITS.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))
+                </td>
+            </tr>
 
                 foreach (var loss in det.DetailLossesList)
                 {

@@ -34,6 +34,7 @@ namespace ProductionHoursLosses.Models
         public Nullable<decimal> ACTUAL_QTY { get; set; }
         public Nullable<byte> NUM_PEOPLE { get; set; }
         public Nullable<int> UNITS { get; set; }
+        public Nullable<byte> ACTUAL_MINS { get; set; }
     
         public virtual HEADER HEADER { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

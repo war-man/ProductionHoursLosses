@@ -441,7 +441,8 @@ function Update() {
     var batchNo = $('#editTableRow #BatchNoModalFormId').val();
     var workOrder = $('#editTableRow #WorkOrderModalFormId').val();
     //var shift = $('#editTableRow #ShiftModalFormId').val();
-    //var actualHours = $('#editTableRow #ActualHrsModalFormId').val();
+    var actualHours = $('#editTableRow #ActualHoursModalFormId').val();
+    var actualMins = $('#editTableRow #ActualMinsModalFormId').val();
     var unitWeight = $('#editTableRow #UnitWeightModalFormId').val();
     var speedMachine = $('#editTableRow #SpeedMachineModalFormId').val();
     var actualQty = $('#editTableRow #ActualQtyModalFormId').val();
@@ -456,7 +457,8 @@ function Update() {
     $('#SelectedDetailToUpdateBatchNo').val(batchNo);
     $('#SelectedDetailToUpdateWorkOrder').val(workOrder);
     //$('#SelectedDetailToUpdateShift').val(shift);
-    //$('#SelectedDetailToUpdateActualHours').val(actualHours);
+    $('#SelectedDetailToUpdateActualHours').val(actualHours);
+    $('#SelectedDetailToUpdateActualMins').val(actualMins);
     $('#SelectedDetailToUpdateUnitWeight').val(unitWeight);
     $('#SelectedDetailToUpdateSpeedMachineRpm').val(speedMachine);
     $('#SelectedDetailToUpdateActualQuantity').val(actualQty);
@@ -612,6 +614,7 @@ $(document).ready(function () {
         var workOrder = $(e.relatedTarget).data('workorder');
         var shift = $(e.relatedTarget).data('shift');
         var actualHours = $(e.relatedTarget).data('actualhours');
+        var actualMins = $(e.relatedTarget).data('actualmins');
         var unitWeight = $(e.relatedTarget).data('unitweight');
         var speedMachine = $(e.relatedTarget).data('speedmachine');
         var actualQty = $(e.relatedTarget).data('actualqty');
@@ -627,7 +630,8 @@ $(document).ready(function () {
         $('#editTableRow #BatchNoModalFormId').val(batchNo);
         $('#editTableRow #WorkOrderModalFormId').val(workOrder);
         $('#editTableRow #ShiftModalFormId').val(shift);
-        $('#editTableRow #ActualHrsModalFormId').val(actualHours);
+        $('#editTableRow #ActualHoursModalFormId').val(actualHours);
+        $('#editTableRow #ActualMinsModalFormId').val(actualMins);
         $('#editTableRow #UnitWeightModalFormId').val(unitWeight);
         $('#editTableRow #SpeedMachineModalFormId').val(speedMachine);
         $('#editTableRow #ActualQtyModalFormId').val(actualQty);
@@ -637,8 +641,8 @@ $(document).ready(function () {
         var selectOption = new Option(productName, product, true, true);
         $('#SelectProductIdDropDownIdCreateDetailFromModal').append(selectOption).trigger('change');
 
-        var selectOption2 = new Option((actualHours+" hrs"), actualHours, true, true);
-        $('#SelectActualHrsDropDownIdCreateDetailFromModal').append(selectOption2).trigger('change');
+        //var selectOption2 = new Option((actualHours+" hrs"), actualHours, true, true);
+        //$('#SelectActualHrsDropDownIdCreateDetailFromModal').append(selectOption2).trigger('change');
 
         var shiftname;
         if (shift == '1')

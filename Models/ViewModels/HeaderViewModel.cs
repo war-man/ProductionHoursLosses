@@ -38,7 +38,13 @@ namespace ProductionHoursLosses.Models.ViewModels
         public string SelectedBatchNo { get; set; }
         public string SelectedWorkOrder { get; set; }
         public int? SelectedShift { get; set; }
+        
+        [Range(0, 24)]
         public int? SelectedActualHours { get; set; }
+
+        [Range(0, 60)]
+        public int? SelectedActualMins { get; set; }
+
         public decimal? SelectedUnitWeight { get; set; }
 
         [Range (0,100)]
@@ -69,7 +75,10 @@ namespace ProductionHoursLosses.Models.ViewModels
         public string SelectedDetailToUpdateBatchNo { get; set; }
         public string SelectedDetailToUpdateWorkOrder { get; set; }
         public int? SelectedDetailToUpdateShift { get; set; }
+        [Range(0, 24)]
         public int? SelectedDetailToUpdateActualHours { get; set; }
+        [Range(0, 60)]
+        public int? SelectedDetailToUpdateActualMins { get; set; }
         public decimal? SelectedDetailToUpdateUnitWeight { get; set; }
 
         [Range(0, 100)]
