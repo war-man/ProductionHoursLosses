@@ -64,171 +64,126 @@
     }
 </style>
 
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formSubmit" }))
+{
+    <div class="form-group col-md-10">
+        <button type="button" class="btn btn-primary" title="Export" onclick="location.href='@Url.Action("Export2Excel", "Header")'">
+            <span class="fa fa-file"></span> Export 2 Excel
+        </button>
+    </div>
 
-<table id="example-advanced" class="treetable">
-    <thead>
-        <tr>
-            <th style="text-align:center">
-                A/A
-            </th>
-            <th style="text-align:center">
-                Date
-            </th>
-            <th style="text-align:center">
-                Factory
-            </th>
-            <th style="text-align:center">
-                Room
-            </th>
-            <th style="text-align:center">
-                Avail. Hours
-            </th>
-            <th style="text-align:center">
-                Status
-            </th>
-            <th style="text-align:center">
-                Product
-            </th>
-            <th style="text-align:center">
-                Start Time
-            </th>
-            <th style="text-align:center">
-                End Time
-            </th>
-            <th style="text-align:center">
-                Batch No.
-            </th>
-            <th style="text-align:center">
-                Work Order
-            </th>
-            <th style="width:100px; text-align:center">
-                Shift
-            </th>
-            <th style="text-align:center; width:100px">
-                Actual Duration
-            </th>
-            <th style="text-align:center; width:100px">
-                Unit Weight (mg)
-            </th>
-            <th style="text-align:center; width:100px">
-                Speed Machine RPM
-            </th>
-            <th style="text-align:center; width:100px">
-                Actual Quantity
-            </th>
-            <th style="text-align:center; width:100px">
-                Num. People
-            </th>
-            <th style="text-align:center; width:100px">
-                Units
-            </th>
-            <th style="text-align:center">
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @{ var count = 1; }
-        @foreach (var item in Model.HeaderList)
-        {
+    <table id="example-advanced" class="treetable">
+        <thead>
             <tr>
-                <td>
-                    @Html.Raw(count)
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.DATE)*@
-                    @item.DATE.ToString("dd/MM/yyyy")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FACTORY.NAME)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ROOM.NAME)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AVAIL_HRS)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.STATUS.NAME)
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <button class="btn btn-success btn-sm" title="Edit" onclick="location.href='@Url.Action("Edit", "Header", new { headerId = item.ID })'" type="button">
-                        <i class="fa fa-pencil"></i>
-                    </button>
-
-                    <button class="btn btn-danger btn-sm" title="Delete" onclick="location.href='@Url.Action("Delete", "Header", new { headerId = item.ID })'" type="button">
-                        <i class="fa fa-trash"></i>
-                    </button>
-
-                </td>
+                <th style="text-align:center">
+                    A/A
+                </th>
+                <th style="text-align:center">
+                    Date
+                </th>
+                <th style="text-align:center">
+                    Factory
+                </th>
+                <th style="text-align:center">
+                    Room
+                </th>
+                <th style="text-align:center">
+                    Avail. Hours
+                </th>
+                <th style="text-align:center">
+                    Status
+                </th>
+                <th style="text-align:center">
+                    Product
+                </th>
+                <th style="text-align:center">
+                    Start Time
+                </th>
+                <th style="text-align:center">
+                    End Time
+                </th>
+                <th style="text-align:center">
+                    Batch No.
+                </th>
+                <th style="text-align:center">
+                    Work Order
+                </th>
+                <th style="width:100px; text-align:center">
+                    Shift
+                </th>
+                <th style="text-align:center; width:100px">
+                    Actual Duration
+                </th>
+                <th style="text-align:center; width:100px">
+                    Unit Weight (mg)
+                </th>
+                <th style="text-align:center; width:100px">
+                    Speed Machine RPM
+                </th>
+                <th style="text-align:center; width:100px">
+                    Actual Quantity
+                </th>
+                <th style="text-align:center; width:100px">
+                    Num. People
+                </th>
+                <th style="text-align:center; width:100px">
+                    Units
+                </th>
+                <th style="text-align:center">
+                    Actions
+                </th>
             </tr>
-            foreach (var det in item.DETAIL)
+        </thead>
+        <tbody>
+            @{ var count = 1; }
+            @foreach (var item in Model.HeaderList)
             {
-                <tr data-tt-id='@det.ID' data-tt-parent-id=''>
+                <tr>
+                    <td>
+                        @Html.Raw(count)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.DATE)*@
+                        @item.DATE.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FACTORY.NAME)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ROOM.NAME)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AVAIL_HRS)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.STATUS.NAME)
+                    </td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>
-                        <span class='folder'>@det.PRODUCT.DESCRIPTION</span>
-                    </td>
-                    <td>
-                        @det.START_TIME.ToString("HH:mm")
-                    </td>
-                    <td>
-                        @det.END_TIME.ToString("HH:mm")
-                    </td>
-                    <td>
-                        @det.BATCH_NO
-                    </td>
-                    <td>
-                        @det.WORK_ORDER
-                    </td>
-                    <td>
-                        @det.SHIFT
-                    </td>
-                    <td>
-                        @if (@det.ACTUAL_HRS.HasValue)
-                        {@Html.Raw(string.Concat(@det.ACTUAL_HRS, " hrs"))}
-                        @if (@det.ACTUAL_MINS.HasValue)
-                        {@Html.Raw(string.Concat(@det.ACTUAL_MINS, " mins"))}
-                    </td>
-                    <td>
-                        @det.UNIT_WEIGHT
-                    </td>
-                    <td>
-                        @det.SPEED_MACHINE_RPM
-                    </td>
-                    <td>
-                        @det.ACTUAL_QTY.Value.ToString("N3", new System.Globalization.CultureInfo("en-US"))
-                    </td>
-                    <td>
-                        @det.NUM_PEOPLE
-                    </td>
-                    <td>
-                        @det.UNITS.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))
-                    </td>
                     <td></td>
-                </tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-success btn-sm" title="Edit" onclick="location.href='@Url.Action("Edit", "Header", new { headerId = item.ID })'" type="button">
+                            <i class="fa fa-pencil"></i>
+                        </button>
 
-                foreach (var loss in det.DETAIL_LOSSES)
+                        <button class="btn btn-danger btn-sm" title="Delete" onclick="location.href='@Url.Action("Delete", "Header", new { headerId = item.ID })'" type="button">
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                    </td>
+                </tr>
+                foreach (var det in item.DETAIL)
                 {
-                    <tr data-tt-id='' data-tt-parent-id='@det.ID'>
-                        <td></td>
+                    <tr data-tt-id='@det.ID' data-tt-parent-id=''>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -236,66 +191,118 @@
                         <td></td>
                         <td></td>
                         <td>
-                            <span class='file'>@loss.LOSSES.DESCRIPTION</span>
+                            <span class='folder'>@det.PRODUCT.DESCRIPTION</span>
                         </td>
                         <td>
-                            <span>@loss.DURATION mins</span>
+                            @det.START_TIME.ToString("HH:mm")
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>
+                            @det.END_TIME.ToString("HH:mm")
+                        </td>
+                        <td>
+                            @det.BATCH_NO
+                        </td>
+                        <td>
+                            @det.WORK_ORDER
+                        </td>
+                        <td>
+                            @det.SHIFT
+                        </td>
+                        <td>
+                            @if (@det.ACTUAL_HRS.HasValue)
+                            {@Html.Raw(string.Concat(@det.ACTUAL_HRS, " hrs"))}
+                            @if (@det.ACTUAL_MINS.HasValue)
+                            {@Html.Raw(string.Concat(@det.ACTUAL_MINS, " mins"))}
+                        </td>
+                        <td>
+                            @det.UNIT_WEIGHT
+                        </td>
+                        <td>
+                            @det.SPEED_MACHINE_RPM
+                        </td>
+                        <td>
+                            @det.ACTUAL_QTY.Value.ToString("N3", new System.Globalization.CultureInfo("en-US"))
+                        </td>
+                        <td>
+                            @det.NUM_PEOPLE
+                        </td>
+                        <td>
+                            @det.UNITS.Value.ToString("N0", new System.Globalization.CultureInfo("it-IT"))
+                        </td>
                         <td></td>
                     </tr>
+
+                    foreach (var loss in det.DETAIL_LOSSES)
+                    {
+                        <tr data-tt-id='' data-tt-parent-id='@det.ID'>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <span class='file'>@loss.LOSSES.DESCRIPTION</span>
+                            </td>
+                            <td>
+                                <span>@loss.DURATION mins</span>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+
                 }
-
+                count++;
             }
-            count++;
+        <tbody>
+
+    </table>
+
+    <br />
+
+    <div>
+        @if (Model.HeaderList.PageCount < Model.HeaderList.PageNumber)
+        {
+            @Html.Label(string.Format("Page 0 of {0}", @Model.HeaderList.PageCount))
         }
-    <tbody>
+        else
+        {
+            @Html.Label(string.Format("Page {0} of {1}", Model.HeaderList.PageNumber, @Model.HeaderList.PageCount))
+        }
 
-</table>
+        @Html.PagedListPager(Model.HeaderList, page => Url.Action("Report", "Header", new ProductionHoursLosses.Models.ViewModels.HeaderListViewModel { SelectedStartDate = Model.SelectedStartDate, SelectedEndDate = Model.SelectedEndDate, SelectedHeaderStatusIds = Model.SelectedHeaderStatusIds, SelectedHeaderFactoryIds = Model.SelectedHeaderFactoryIds, SelectedHeaderRoomIds = Model.SelectedHeaderRoomIds, PageNumber = page, PageSize = Model.PageSize, IsNextPageRequest = true }))
+        Display @Html.DropDownListFor(m => m.PageSize, new SelectList(new Dictionary<string, int> { { "10", 10 }, { "20", 20 }, { "30", 30 }, { "50", 50 }, { "100", 100 }, { "120", 120 }, { "150", 150 }, { "1000", 1000 } }, "Key", "Value"), htmlAttributes: new { @class = "", @id = "PageSizeDropDownId" }) per page
+    </div>
 
-<br />
-
-<div>
-    @if (Model.HeaderList.PageCount < Model.HeaderList.PageNumber)
-    {
-        @Html.Label(string.Format("Page 0 of {0}", @Model.HeaderList.PageCount))
-    }
-    else
-    {
-        @Html.Label(string.Format("Page {0} of {1}", Model.HeaderList.PageNumber, @Model.HeaderList.PageCount))
-    }
-
-    @Html.PagedListPager(Model.HeaderList, page => Url.Action("Report", "Header", new ProductionHoursLosses.Models.ViewModels.HeaderListViewModel { SelectedStartDate = Model.SelectedStartDate, SelectedEndDate = Model.SelectedEndDate, SelectedHeaderStatusIds = Model.SelectedHeaderStatusIds, SelectedHeaderFactoryIds = Model.SelectedHeaderFactoryIds, SelectedHeaderRoomIds = Model.SelectedHeaderRoomIds, PageNumber = page, PageSize = Model.PageSize, IsNextPageRequest = true }))
-    Display @Html.DropDownListFor(m => m.PageSize, new SelectList(new Dictionary<string, int> { { "10", 10 }, { "20", 20 }, { "30", 30 }, { "50", 50 }, { "100", 100 }, { "120", 120 }, { "150", 150 }, { "1000", 1000 } }, "Key", "Value"), htmlAttributes: new { @class = "", @id = "PageSizeDropDownId" }) per page
-</div>
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts
-{
-    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
-
-    <link href="~/Content/loadingImage.css" rel="stylesheet" />
-
-    <link href="~/Content/treetable/jquery.treetable.theme.default.css" rel="stylesheet" />
-    <script src="~/Scripts/treetable/jquery.treetable.js"></script>
-
-    <script>
-        $("#example-advanced").treetable({
-            expandable: true,
-            expanderTemplate: '<a href="#">&nbsp;&nbsp;&nbsp;&nbsp;</a>',
-            initialState: "expanded",
-        });
-        $("#example-advanced2").treetable({ expandable: true });
-    </script>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
 }
+    @section Scripts
+{
+        <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+        <link href="~/Content/loadingImage.css" rel="stylesheet" />
+
+        <link href="~/Content/treetable/jquery.treetable.theme.default.css" rel="stylesheet" />
+        <script src="~/Scripts/treetable/jquery.treetable.js"></script>
+
+        <script>
+            $("#example-advanced").treetable({
+                expandable: true,
+                expanderTemplate: '<a href="#">&nbsp;&nbsp;&nbsp;&nbsp;</a>',
+                initialState: "expanded",
+            });
+            $("#example-advanced2").treetable({ expandable: true });
+        </script>
+    }

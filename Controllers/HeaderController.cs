@@ -132,14 +132,104 @@ namespace ProductionHoursLosses.Controllers
 
             model.IsNextPageRequest = false;
 
-            if (!string.IsNullOrWhiteSpace((string)TempData["errorMessage"]))
-                ViewBag.PasswordMessage = "Wrong user authentication password.";
+            //if (!string.IsNullOrWhiteSpace((string)TempData["errorMessage"]))
+            //    ViewBag.PasswordMessage = "Wrong user authentication password.";
 
             return View("Report", model);
 
 
             //var hEADER = db.HEADER.Include(h => h.FACTORY).Include(h => h.ROOM).Include(h => h.STATUS);
             //return View(hEADER.ToList());
+        }
+
+
+        public void Export2Excel()
+        {
+
+
+            List<HEADER> HeaderList = db.HEADER
+                        .OrderBy(x => x.ID).ToList();
+
+            DataTable table = new DataTable();
+            table.Columns.Add("ID", typeof(int));
+            table.Columns.Add("DATE", typeof(DateTime));
+            table.Columns.Add("FACTORY", typeof(string));
+            table.Columns.Add("ROOM", typeof(string));
+            table.Columns.Add("AVAILHRS", typeof(int));
+            table.Columns.Add("STATUS", typeof(string));
+            table.Columns.Add("PRODUCT", typeof(string));
+            table.Columns.Add("STARTTIME", typeof(DateTime));
+            table.Columns.Add("ENDTIME", typeof(DateTime));
+            table.Columns.Add("BATCHNO", typeof(string));
+            table.Columns.Add("WORKORDER", typeof(string));
+            table.Columns.Add("SHIFT", typeof(int));
+            table.Columns.Add("ACTUALHRS", typeof(int));
+            table.Columns.Add("ACTUALMINS", typeof(int));
+            table.Columns.Add("UNITWEIGHT", typeof(decimal));
+            table.Columns.Add("SPEEDMACHINE", typeof(int));
+            table.Columns.Add("ACTUALQTY", typeof(decimal));
+            table.Columns.Add("NUMPEOPLE", typeof(int));
+            table.Columns.Add("UNITS", typeof(int));
+            table.Columns.Add("LOSS", typeof(string));
+            table.Columns.Add("DURATION", typeof(int));
+
+            DataRow row;
+            
+            foreach (var hdr in HeaderList)
+            {
+                row = table.NewRow();
+                row[0] = hdr.ID;
+                row[1] = hdr.DATE;
+                row[2] = hdr.FACTORY.NAME;
+                row[3] = hdr.ROOM.NAME;
+                row[4] = hdr.AVAIL_HRS;
+                row[5] = hdr.STATUS;
+
+                if(hdr.DETAIL != null && hdr.DETAIL.Count > 0)
+                {
+                    foreach (var det in hdr.DETAIL.ToList())
+                    {
+                        row[6] = (det.PRODUCT.DESCRIPTION != null ? det.PRODUCT.DESCRIPTION : string.Empty);
+                        row[7] = (det.START_TIME != null ? det.START_TIME : Convert.ToDateTime("00:00"));
+                        row[8] = (det.END_TIME != null ? det.END_TIME : Convert.ToDateTime("00:00"));
+                        row[9] = (det.BATCH_NO != null ? det.BATCH_NO : string.Empty);
+                        row[10] = (det.WORK_ORDER != null ? det.WORK_ORDER : string.Empty);
+                        row[11] = (det.SHIFT != null ? det.SHIFT : 0);
+                        row[12] = (det.ACTUAL_HRS != null ? det.ACTUAL_HRS : 0);
+                        row[13] = (det.ACTUAL_MINS != null ? det.ACTUAL_MINS : 0);
+                        row[14] = (det.UNIT_WEIGHT != null ? det.UNIT_WEIGHT : 0);
+                        row[15] = (det.SPEED_MACHINE_RPM != null ? det.SPEED_MACHINE_RPM : 0);
+                        row[16] = (det.ACTUAL_QTY != null ? det.ACTUAL_QTY : 0);
+                        row[17] = (det.NUM_PEOPLE != null ? det.NUM_PEOPLE : 0);
+                        row[18] = (det.UNITS != null ? det.UNITS : 0);
+
+                        if(det.DETAIL_LOSSES != null && det.DETAIL_LOSSES.Count > 0)
+                        {
+                            foreach(var loss in det.DETAIL_LOSSES.ToList())
+                            {
+                                row[19] = loss.LOSSES.DESCRIPTION;
+                                row[20] = loss.DURATION;
+
+                                table.Rows.Add(row);
+                                row = table.NewRow();
+                                row.ItemArray = table.Rows[table.Rows.Count-1].ItemArray;
+                            }
+                        }
+                        else
+                        {
+                            table.Rows.Add(row);
+                            row = table.NewRow();
+                            row.ItemArray = table.Rows[table.Rows.Count - 1].ItemArray;
+                        }
+                    }
+                }
+                else
+                {
+                    table.Rows.Add(row);
+                }
+            }
+
+            SharedHelp.CommonFunctions.Write2Excel(table);
         }
 
         private IPagedList<HEADER> SearchInList(HeaderListViewModel model)
