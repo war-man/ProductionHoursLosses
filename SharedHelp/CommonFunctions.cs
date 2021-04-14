@@ -76,8 +76,8 @@ namespace ProductionHoursLosses.SharedHelp
             //border.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
             //border.Weight = 2d;
 
-            excelCellrange1 = (Microsoft.Office.Interop.Excel.Range)excelSheet.Cells[3, 1];
-            excelCellrange2 = (Microsoft.Office.Interop.Excel.Range)excelSheet.Cells[3 + dataTable.Rows.Count - 1, dataTable.Columns.Count];
+            excelCellrange1 = (Microsoft.Office.Interop.Excel.Range)excelSheet.Cells[4, 1];
+            excelCellrange2 = (Microsoft.Office.Interop.Excel.Range)excelSheet.Cells[4 + dataTable.Rows.Count - 1, dataTable.Columns.Count];
             Microsoft.Office.Interop.Excel.Range range = excelSheet.get_Range(excelCellrange1, excelCellrange2);
             range.Value = arr;
 

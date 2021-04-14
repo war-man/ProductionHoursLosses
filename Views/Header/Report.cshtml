@@ -67,7 +67,10 @@
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formSubmit" }))
 {
     <div class="form-group col-md-10">
-        <button type="button" class="btn btn-primary" title="Export" onclick="location.href='@Url.Action("Export2Excel", "Header")'">
+        @*<button type="button" class="btn btn-primary" title="Export" onclick="location.href='@Url.Action("Export2Excel", "Header")'">
+                <span class="fa fa-file"></span> Export 2 Excel
+            </button>*@
+        <button type="button" class="btn btn-primary" title="Export" onclick="Export2Excel()">
             <span class="fa fa-file"></span> Export 2 Excel
         </button>
     </div>
@@ -288,21 +291,42 @@
         @Html.ActionLink("Back to List", "Index")
     </div>
 }
-    @section Scripts
+@section Scripts
 {
-        <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 
-        <link href="~/Content/loadingImage.css" rel="stylesheet" />
+    <link href="~/Content/loadingImage.css" rel="stylesheet" />
 
-        <link href="~/Content/treetable/jquery.treetable.theme.default.css" rel="stylesheet" />
-        <script src="~/Scripts/treetable/jquery.treetable.js"></script>
+    <link href="~/Content/treetable/jquery.treetable.theme.default.css" rel="stylesheet" />
+    <script src="~/Scripts/treetable/jquery.treetable.js"></script>
 
-        <script>
-            $("#example-advanced").treetable({
-                expandable: true,
-                expanderTemplate: '<a href="#">&nbsp;&nbsp;&nbsp;&nbsp;</a>',
-                initialState: "expanded",
+    <script>
+        $("#example-advanced").treetable({
+            expandable: true,
+            expanderTemplate: '<a href="#">&nbsp;&nbsp;&nbsp;&nbsp;</a>',
+            initialState: "expanded",
+        });
+        $("#example-advanced2").treetable({ expandable: true });
+    </script>
+
+    <script type="text/javascript">
+        function Export2Excel() {
+            $.ajax({
+                url: '@Url.Action("Export2Excel", "Header")',
+                //url: '/Header/Export2Excel',
+                type: "GET",
+                dataType: "JSON",
+                data: {},
+                success: function (result) {
+                    alert("The Report has been successfully exported!");
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                    alert(xhr.responseText);
+                }
             });
-            $("#example-advanced2").treetable({ expandable: true });
-        </script>
-    }
+        }
+    </script>
+
+}
